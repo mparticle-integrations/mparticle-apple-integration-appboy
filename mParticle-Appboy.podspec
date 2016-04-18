@@ -15,6 +15,6 @@ Pod::Spec.new do |s|
 
   s.source_files = 'mParticle-Appboy/*.{h,m,mm}'
 
-  s.dependency 'mParticle-Apple-SDK', '6.0.0'
+  s.dependency 'mParticle-Apple-SDK/mParticle', '6.0.0'
   s.dependency 'Appboy-iOS-SDK', '2.19.0'
 end
