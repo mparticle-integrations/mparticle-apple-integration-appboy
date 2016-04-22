@@ -17,8 +17,9 @@ Pod::Spec.new do |s|
     s.ios.source_files      = 'mParticle-Appboy/*.{h,m,mm}'
     s.ios.dependency 'mParticle-Apple-SDK/mParticle', '~> 6.0'
     s.ios.dependency 'Appboy-iOS-SDK', '2.19.0'
+
     s.ios.pod_target_xcconfig = {
-      'LIBRARY_SEARCH_PATHS' => '$(inherited) $(PODS_ROOT)/Appboy-iOS-SDK/**',
-      'OTHER_LDFLAGS' => '$(inherited) -l"AppboyKitLibrary"'
+        'LIBRARY_SEARCH_PATHS' => '$(inherited) $(PODS_ROOT)/Appboy-iOS-SDK/**',
+        'OTHER_LDFLAGS' => '$(inherited) -l"AppboyKitLibrary"'
     }
 end
