@@ -53,6 +53,7 @@ NSString *const eabOptions = @"options";
     [MParticle registerExtension:kitRegister];
 }
 
+#pragma mark Private methods
 - (NSString *)stringRepresentation:(id)value {
     NSString *stringRepresentation = nil;
 
@@ -69,6 +70,18 @@ NSString *const eabOptions = @"options";
     }
 
     return stringRepresentation;
+}
+
+- (NSString *)stripCharacter:(NSString *)character fromString:(NSString *)originalString {
+    NSRange range = [originalString rangeOfString:character];
+
+    if (range.location == 0) {
+        NSMutableString *strippedString = [originalString mutableCopy];
+        [strippedString replaceOccurrencesOfString:character withString:@"" options:NSCaseInsensitiveSearch range:range];
+        return [strippedString copy];
+    } else {
+        return originalString;
+    }
 }
 
 #pragma mark MPKitInstanceProtocol methods
@@ -193,10 +206,17 @@ NSString *const eabOptions = @"options";
 
 - (MPKitExecStatus *)logEvent:(MPEvent *)event {
     void (^logCustomEvent)(void) = ^{
-        [appboyInstance logCustomEvent:event.name withProperties:event.info];
+        NSDictionary *transformedEventInfo = [event.info transformValuesToString];
+
+        NSMutableDictionary *eventInfo = [[NSMutableDictionary alloc] initWithCapacity:event.info.count];
+        [transformedEventInfo enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, id _Nonnull obj, BOOL * _Nonnull stop) {
+            NSString *strippedKey = [self stripCharacter:@"$" fromString:key];
+            eventInfo[strippedKey] = obj;
+        }];
+
+        [appboyInstance logCustomEvent:event.name withProperties:eventInfo];
 
         NSString *eventTypeString = [@(event.type) stringValue];
-        NSDictionary *eventInfo = [event.info transformValuesToString];
 
         for (NSString *key in eventInfo) {
             NSString *eventTypePlusNamePlusKey = [[NSString stringWithFormat:@"%@%@%@", eventTypeString, event.name, key] lowercaseString];
@@ -230,74 +250,6 @@ NSString *const eabOptions = @"options";
     } else {
         dispatch_async(dispatch_get_main_queue(), logCustomEvent);
     }
-
-    MPKitExecStatus *execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
-    return execStatus;
-}
-
-- (MPKitExecStatus *)logTransaction:(NSString *)productName affiliation:(NSString *)affiliation sku:(NSString *)sku unitPrice:(double)unitPrice quantity:(NSInteger)quantity revenueAmount:(double)revenueAmount taxAmount:(double)taxAmount shippingAmount:(double)shippingAmount transactionId:(NSString *)transactionId productCategory:(NSString *)productCategory currencyCode:(NSString *)currencyCode {
-    NSString *productId = sku ? sku : productName;
-
-    NSMutableDictionary *properties = [[NSMutableDictionary alloc] initWithCapacity:1];
-    if (affiliation.length > 0) {
-        properties[kMPProductAffiliation] = affiliation;
-    }
-
-    if (productName.length > 0) {
-        properties[kMPProductName] = productName;
-    }
-
-    if (productCategory.length > 0) {
-        properties[kMPProductCategory] = productCategory;
-    }
-
-    if (transactionId.length > 0) {
-        properties[kMPProductTransactionId] = transactionId;
-    }
-
-    if (revenueAmount > 0) {
-        properties[kMPProductRevenue] = @(revenueAmount);
-    }
-
-    if (taxAmount > 0) {
-        properties[kMPProductTax] = @(taxAmount);
-    }
-
-    if (shippingAmount > 0) {
-        properties[kMPProductShipping] = @(shippingAmount);
-    }
-
-    [appboyInstance logPurchase:productId
-                     inCurrency:currencyCode
-                        atPrice:[[NSDecimalNumber alloc] initWithDouble:unitPrice]
-                   withQuantity:quantity
-                  andProperties:properties];
-
-    MPKitExecStatus *execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
-    return execStatus;
-}
-
-- (MPKitExecStatus *)logTransaction:(MPProduct *)product {
-    NSString *productId = product.sku ? product.sku : product.name;
-
-    __block NSMutableDictionary *properties = [[NSMutableDictionary alloc] init];
-    NSDictionary *productDictionary = [product beautifiedDictionaryRepresentation];
-    if (productDictionary) {
-        [properties addEntriesFromDictionary:productDictionary];
-    }
-
-    NSArray *removeKeys = @[@"ProductSKU", @"CurrencyCode", @"ProductUnitPrice", @"ProductQuantity", @"TransactionAffiliation", @"ProductCategory", @"ProductName",
-                            kMPExpProductSKU, kMPProductCurrency, kMPExpProductUnitPrice, kMPExpProductQuantity, kMPProductAffiliation, kMPExpProductCategory, kMPExpProductName];
-    [properties removeObjectsForKeys:removeKeys];
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    [appboyInstance logPurchase:productId
-                     inCurrency:product.currency ? : @"USD"
-                        atPrice:[NSDecimalNumber decimalNumberWithDecimal:[product.price decimalValue]]
-                   withQuantity:[product.quantity integerValue]
-                  andProperties:properties];
-#pragma clang diagnostic pop
 
     MPKitExecStatus *execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
     return execStatus;
@@ -386,11 +338,7 @@ NSString *const eabOptions = @"options";
     } else if ([key isEqualToString:mParticleUserAttributeMobileNumber] || [key isEqualToString:@"$MPUserMobile"]) {
         appboyInstance.user.phone = value;
     } else {
-        if ([key containsString:@"$"]) {
-            NSMutableString *editedKey = [key mutableCopy];
-            [editedKey replaceOccurrencesOfString:@"$" withString:@"" options:NSCaseInsensitiveSearch range:NSMakeRange(0, key.length)];
-            key = editedKey;
-        }
+        key = [self stripCharacter:@"$" fromString:key];
 
         [appboyInstance.user setCustomAttributeWithKey:key andStringValue:value];
     }
