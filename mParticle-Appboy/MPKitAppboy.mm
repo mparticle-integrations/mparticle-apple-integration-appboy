@@ -334,7 +334,7 @@ NSString *const eabOptions = @"options";
     } else if ([key isEqualToString:mParticleUserAttributeCity]) {
         appboyInstance.user.homeCity = value;
     } else if ([key isEqualToString:mParticleUserAttributeGender]) {
-        [appboyInstance.user setCustomAttributeWithKey:@"gender" andStringValue:value];
+        appboyInstance.user.gender = [value isEqualToString:@"M"] ? ABKUserGenderMale : ABKUserGenderFemale;
     } else if ([key isEqualToString:mParticleUserAttributeMobileNumber] || [key isEqualToString:@"$MPUserMobile"]) {
         appboyInstance.user.phone = value;
     } else {
