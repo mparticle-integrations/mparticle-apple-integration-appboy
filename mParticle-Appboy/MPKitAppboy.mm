@@ -17,21 +17,27 @@
 //
 
 #import "MPKitAppboy.h"
-#import "MPEvent.h"
-#import "MPProduct.h"
-#import "MPProduct+Dictionary.h"
-#import "MPCommerceEvent.h"
-#import "MPCommerceEvent+Dictionary.h"
-#import "MPCommerceEventInstruction.h"
-#import "MPTransactionAttributes.h"
-#import "MPTransactionAttributes+Dictionary.h"
-#import "MPHasher.h"
-#import "mParticle.h"
-#import "MPKitRegister.h"
-#import "NSDictionary+MPCaseInsensitive.h"
-#import "MPDateFormatter.h"
-#import "MPEnums.h"
-#import "AppboyKit.h"
+
+#ifdef COCOAPODS
+    #import "MPEvent.h"
+    #import "MPProduct.h"
+    #import "MPProduct+Dictionary.h"
+    #import "MPCommerceEvent.h"
+    #import "MPCommerceEvent+Dictionary.h"
+    #import "MPCommerceEventInstruction.h"
+    #import "MPTransactionAttributes.h"
+    #import "MPTransactionAttributes+Dictionary.h"
+    #import "MPIHasher.h"
+    #import "mParticle.h"
+    #import "MPKitRegister.h"
+    #import "NSDictionary+MPCaseInsensitive.h"
+    #import "MPDateFormatter.h"
+    #import "MPEnums.h"
+    #import "AppboyKit.h"
+#else
+    #import <Appboy_iOS_SDK/Appboy-iOS-SDK-umbrella.h>
+#endif
+
 
 NSString *const eabAPIKey = @"apiKey";
 NSString *const eabOptions = @"options";
@@ -221,8 +227,7 @@ NSString *const eabOptions = @"options";
 
         for (NSString *key in eventInfo) {
             NSString *eventTypePlusNamePlusKey = [[NSString stringWithFormat:@"%@%@%@", eventTypeString, event.name, key] lowercaseString];
-            NSString *hashValue = [NSString stringWithCString:mParticle::Hasher::hashString([eventTypePlusNamePlusKey cStringUsingEncoding:NSUTF8StringEncoding]).c_str()
-                                                     encoding:NSUTF8StringEncoding];
+            NSString *hashValue = [MPIHasher hashString:eventTypePlusNamePlusKey];
 
             NSDictionary *forwardUserAttributes;
 
