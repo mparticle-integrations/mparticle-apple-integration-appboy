@@ -108,7 +108,7 @@ NSString *const eabOptions = @"options";
     return self;
 }
 
-- (id const)kitInstance {
+- (id const)providerKitInstance {
     return [self started] ? appboyInstance : nil;
 }
 
