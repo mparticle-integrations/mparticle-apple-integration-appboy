@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name             = "mParticle-Appboy"
-    s.version          = "6.2.0"
+    s.version          = "6.3.0"
     s.summary          = "Appboy integration for mParticle"
 
     s.description      = <<-DESC
@@ -15,8 +15,8 @@ Pod::Spec.new do |s|
 
     s.ios.deployment_target = "7.0"
     s.ios.source_files      = 'mParticle-Appboy/*.{h,m,mm}'
-    s.ios.dependency 'mParticle-Apple-SDK/mParticle', '~> 6.2'
-    s.ios.dependency 'Appboy-iOS-SDK', '2.20.1'
+    s.ios.dependency 'mParticle-Apple-SDK/mParticle', '~> 6.3'
+    s.ios.dependency 'Appboy-iOS-SDK', '2.21.0'
     s.frameworks = 'CoreTelephony', 'SystemConfiguration'
     s.libraries = 'z'
 
