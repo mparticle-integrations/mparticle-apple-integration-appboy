@@ -17,11 +17,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#ifdef COCOAPODS
-    #import "MPKitExecStatus.h"
-    #import "MPKitProtocol.h"
+#if defined(__has_include) && __has_include(<mParticle_Apple_SDK/mParticle.h>)
+#import <mParticle_Apple_SDK/mParticle.h>
 #else
-    #import <mParticle_Apple_SDK/mParticle.h>
+#import "mParticle.h"
 #endif
 
 
