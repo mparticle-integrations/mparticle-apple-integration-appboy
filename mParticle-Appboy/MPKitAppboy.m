@@ -1,5 +1,5 @@
 //
-//  MPKitAppboy.mm
+//  MPKitAppboy.m
 //
 //  Copyright 2016 mParticle, Inc.
 //
@@ -137,7 +137,13 @@ NSString *const eabOptions = @"options";
 }
 
 - (MPKitExecStatus *)handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo {
+#if TARGET_OS_IOS == 1
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     [appboyInstance getActionWithIdentifier:identifier forRemoteNotification:userInfo completionHandler:^{}];
+#pragma clang diagnostic pop
+
+#endif
 
     MPKitExecStatus *execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
     return execStatus;
@@ -262,7 +268,9 @@ NSString *const eabOptions = @"options";
 }
 
 - (MPKitExecStatus *)receivedUserNotification:(NSDictionary *)userInfo {
+#if TARGET_OS_IOS == 1
     [appboyInstance registerApplication:[UIApplication sharedApplication] didReceiveRemoteNotification:userInfo fetchCompletionHandler:^(UIBackgroundFetchResult fetchResult) {}];
+#endif
 
     MPKitExecStatus *execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
     return execStatus;
@@ -276,7 +284,9 @@ NSString *const eabOptions = @"options";
 }
 
 - (MPKitExecStatus *)setDeviceToken:(NSData *)deviceToken {
+#if TARGET_OS_IOS == 1
     [appboyInstance registerPushToken:[NSString stringWithFormat:@"%@", deviceToken]];
+#endif
 
     MPKitExecStatus *execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
     return execStatus;
@@ -383,5 +393,14 @@ NSString *const eabOptions = @"options";
 
     return execStatus;
 }
+
+#if TARGET_OS_IOS == 1 && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
+- (nonnull MPKitExecStatus *)userNotificationCenter:(nonnull UNUserNotificationCenter *)center didReceiveNotificationResponse:(nonnull UNNotificationResponse *)response {
+    [appboyInstance userNotificationCenter:center didReceiveNotificationResponse:response withCompletionHandler:^{}];
+
+    MPKitExecStatus *execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
+    return execStatus;
+}
+#endif
 
 @end

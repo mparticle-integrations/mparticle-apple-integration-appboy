@@ -7,17 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DB4602FA1CDCC6B5006E590D /* MPKitAppboy.mm in Sources */ = {isa = PBXBuildFile; fileRef = DB4602F91CDCC6B5006E590D /* MPKitAppboy.mm */; };
+		C911FDA91D8B098F002A3516 /* MPKitAppboy.m in Sources */ = {isa = PBXBuildFile; fileRef = C911FDA81D8B098F002A3516 /* MPKitAppboy.m */; };
 		DB4603421CDCD749006E590D /* Appboy_iOS_SDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4603411CDCD749006E590D /* Appboy_iOS_SDK.framework */; };
 		DB4603441CDCD75A006E590D /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4603431CDCD75A006E590D /* SDWebImage.framework */; };
 		DB4603461CDCDD2B006E590D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4603451CDCDD2B006E590D /* UIKit.framework */; };
-		DB7E05A61CB819D300967FDF /* MPKitAppboy.h in Headers */ = {isa = PBXBuildFile; fileRef = DB7E05A41CB819D300967FDF /* MPKitAppboy.h */; };
+		DB7E05A61CB819D300967FDF /* MPKitAppboy.h in Headers */ = {isa = PBXBuildFile; fileRef = DB7E05A41CB819D300967FDF /* MPKitAppboy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DB9401701CB703F2007ABB18 /* mParticle_Appboy.h in Headers */ = {isa = PBXBuildFile; fileRef = DB94016F1CB703F2007ABB18 /* mParticle_Appboy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DB94017A1CB70C58007ABB18 /* mParticle_Apple_SDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB9401781CB70C58007ABB18 /* mParticle_Apple_SDK.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		DB4602F91CDCC6B5006E590D /* MPKitAppboy.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MPKitAppboy.mm; sourceTree = "<group>"; };
+		C911FDA81D8B098F002A3516 /* MPKitAppboy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPKitAppboy.m; sourceTree = "<group>"; };
 		DB4603411CDCD749006E590D /* Appboy_iOS_SDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Appboy_iOS_SDK.framework; path = Carthage/Build/iOS/Appboy_iOS_SDK.framework; sourceTree = "<group>"; };
 		DB4603431CDCD75A006E590D /* SDWebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDWebImage.framework; path = Carthage/Build/iOS/SDWebImage.framework; sourceTree = "<group>"; };
 		DB4603451CDCDD2B006E590D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -66,7 +66,7 @@
 		DB94016E1CB703F2007ABB18 /* mParticle-Appboy */ = {
 			isa = PBXGroup;
 			children = (
-				DB4602F91CDCC6B5006E590D /* MPKitAppboy.mm */,
+				C911FDA81D8B098F002A3516 /* MPKitAppboy.m */,
 				DB7E05A41CB819D300967FDF /* MPKitAppboy.h */,
 				DB94016F1CB703F2007ABB18 /* mParticle_Appboy.h */,
 				DB9401711CB703F2007ABB18 /* Info.plist */,
@@ -154,7 +154,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DB4602FA1CDCC6B5006E590D /* MPKitAppboy.mm in Sources */,
+				C911FDA91D8B098F002A3516 /* MPKitAppboy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
