@@ -116,10 +116,29 @@ NSString *const eabOptions = @"options";
     static dispatch_once_t appboyPredicate;
 
     dispatch_once(&appboyPredicate, ^{
+        NSArray <NSString *> *serverKeys = @[@"ABKRequestProcessingPolicyOptionKey", @"ABKFlushIntervalOptionKey", @"ABKSessionTimeoutKey", @"ABKMinimumTriggerTimeIntervalKey"];
+        NSArray <NSString *> *appboyKeys = @[ABKRequestProcessingPolicyOptionKey, ABKFlushIntervalOptionKey, ABKSessionTimeoutKey, ABKMinimumTriggerTimeIntervalKey];
+        NSMutableDictionary<NSString *, NSNumber *> *optionsDictionary = [[NSMutableDictionary alloc] initWithCapacity:serverKeys.count];
+        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+        numberFormatter.numberStyle = NSNumberFormatterNoStyle;
+        
+        [serverKeys enumerateObjectsUsingBlock:^(NSString * _Nonnull serverKey, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSString *optionValue = self.configuration[serverKey];
+            
+            if (optionValue) {
+                NSString *appboyKey = appboyKeys[idx];
+                optionsDictionary[appboyKey] = [numberFormatter numberFromString:optionValue];
+            }
+        }];
+        
+        if (optionsDictionary.count == 0) {
+            optionsDictionary = nil;
+        }
+        
         [Appboy startWithApiKey:self.configuration[eabAPIKey]
                   inApplication:[UIApplication sharedApplication]
               withLaunchOptions:self.launchOptions
-              withAppboyOptions:self.configuration[eabOptions]];
+              withAppboyOptions:optionsDictionary];
 
         CFTypeRef appboyRef = CFRetain((__bridge CFTypeRef)[Appboy sharedInstance]);
         appboyInstance = (__bridge Appboy *)appboyRef;
