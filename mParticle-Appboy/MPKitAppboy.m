@@ -33,7 +33,20 @@
     #import "NSDictionary+MPCaseInsensitive.h"
     #import "MPDateFormatter.h"
     #import "MPEnums.h"
-    #import "AppboyKit.h"
+
+    #if TARGET_OS_IOS == 1
+        #if defined(__has_include) && __has_include(<Appboy-iOS-SDK/AppboyKit.h>)
+            #import <Appboy-iOS-SDK/AppboyKit.h>
+        #else
+            #import "AppboyKit.h"
+        #endif
+    #elif TARGET_OS_TV == 1
+        #if defined(__has_include) && __has_include(<AppboyTVOSKit/AppboyKit.h>)
+            #import <AppboyTVOSKit/AppboyKit.h>
+        #else
+            #import "AppboyKit.h"
+        #endif
+    #endif
 #else
     #import <Appboy_iOS_SDK/Appboy-iOS-SDK-umbrella.h>
 #endif
@@ -114,7 +127,7 @@ NSString *const eabOptions = @"options";
 
 - (void)start {
     static dispatch_once_t appboyPredicate;
-
+    
     dispatch_once(&appboyPredicate, ^{
         NSArray <NSString *> *serverKeys = @[@"ABKRequestProcessingPolicyOptionKey", @"ABKFlushIntervalOptionKey", @"ABKSessionTimeoutKey", @"ABKMinimumTriggerTimeIntervalKey"];
         NSArray <NSString *> *appboyKeys = @[ABKRequestProcessingPolicyOptionKey, ABKFlushIntervalOptionKey, ABKSessionTimeoutKey, ABKMinimumTriggerTimeIntervalKey];
@@ -139,15 +152,15 @@ NSString *const eabOptions = @"options";
                   inApplication:[UIApplication sharedApplication]
               withLaunchOptions:self.launchOptions
               withAppboyOptions:optionsDictionary];
-
+        
         CFTypeRef appboyRef = CFRetain((__bridge CFTypeRef)[Appboy sharedInstance]);
         appboyInstance = (__bridge Appboy *)appboyRef;
-
+        
         _started = YES;
-
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             NSDictionary *userInfo = @{mParticleKitInstanceKey:[[self class] kitCode]};
-
+            
             [[NSNotificationCenter defaultCenter] postNotificationName:mParticleKitDidBecomeActiveNotification
                                                                 object:nil
                                                               userInfo:userInfo];
