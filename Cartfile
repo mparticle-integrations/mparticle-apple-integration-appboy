@@ -1,2 +1,2 @@
 github "Appboy/appboy-ios-sdk" == 2.24.3
-github "mparticle/mparticle-apple-sdk" ~> 6.10.5
+github "mparticle/mparticle-apple-sdk" ~> 6.11.0
