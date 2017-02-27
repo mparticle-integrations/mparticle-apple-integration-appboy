@@ -55,8 +55,9 @@
 NSString *const eabAPIKey = @"apiKey";
 NSString *const eabOptions = @"options";
 
-@interface MPKitAppboy() {
+@interface MPKitAppboy() <ABKIDFADelegate> {
     Appboy *appboyInstance;
+    BOOL collectIDFA;
 }
 
 @end
@@ -104,6 +105,52 @@ NSString *const eabOptions = @"options";
     }
 }
 
+#pragma mark ABKIDFADelegate
+- (BOOL)isAdvertisingTrackingEnabled {
+    BOOL advertisingTrackingEnabled = NO;
+    Class MPIdentifierManager = NSClassFromString(@"ASIdentifierManager");
+
+    if (MPIdentifierManager) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+        SEL selector = NSSelectorFromString(@"sharedManager");
+        id<NSObject> adIdentityManager = [MPIdentifierManager performSelector:selector];
+        selector = NSSelectorFromString(@"isAdvertisingTrackingEnabled");
+        advertisingTrackingEnabled = (BOOL)[adIdentityManager performSelector:selector];
+#pragma clang diagnostic pop
+#pragma clang diagnostic pop
+    }
+
+    return advertisingTrackingEnabled && collectIDFA;
+}
+
+- (NSString *)advertisingIdentifierString {
+    NSString *_advertiserId = nil;
+    Class MPIdentifierManager = NSClassFromString(@"ASIdentifierManager");
+
+    if (MPIdentifierManager) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+        SEL selector = NSSelectorFromString(@"sharedManager");
+        id<NSObject> adIdentityManager = [MPIdentifierManager performSelector:selector];
+
+        selector = NSSelectorFromString(@"isAdvertisingTrackingEnabled");
+        BOOL advertisingTrackingEnabled = (BOOL)[adIdentityManager performSelector:selector];
+        if (advertisingTrackingEnabled) {
+            selector = NSSelectorFromString(@"advertisingIdentifier");
+            _advertiserId = [[adIdentityManager performSelector:selector] UUIDString];
+        }
+#pragma clang diagnostic pop
+#pragma clang diagnostic pop
+    }
+
+    return _advertiserId;
+}
+
 #pragma mark MPKitInstanceProtocol methods
 - (instancetype)initWithConfiguration:(NSDictionary *)configuration startImmediately:(BOOL)startImmediately {
     self = [super init];
@@ -113,6 +160,7 @@ NSString *const eabOptions = @"options";
 
     _configuration = configuration;
     _started = startImmediately;
+    collectIDFA = NO;
 
     if (startImmediately) {
         [self start];
@@ -143,7 +191,15 @@ NSString *const eabOptions = @"options";
                 optionsDictionary[appboyKey] = [numberFormatter numberFromString:optionValue];
             }
         }];
-        
+
+        collectIDFA = self.configuration[@"ABKCollectIDFA"] && [self.configuration[@"ABKCollectIDFA"] caseInsensitiveCompare:@"true"] == NSOrderedSame;
+        if (collectIDFA) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wincompatible-pointer-types"
+            optionsDictionary[ABKIDFADelegateKey] = self;
+#pragma clang diagnostic pop
+        }
+
         if (optionsDictionary.count == 0) {
             optionsDictionary = nil;
         }
@@ -155,6 +211,10 @@ NSString *const eabOptions = @"options";
         
         CFTypeRef appboyRef = CFRetain((__bridge CFTypeRef)[Appboy sharedInstance]);
         appboyInstance = (__bridge Appboy *)appboyRef;
+
+        if (collectIDFA) {
+            appboyInstance.idfaDelegate = self;
+        }
         
         _started = YES;
         
