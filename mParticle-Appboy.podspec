@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name             = "mParticle-Appboy"
-    s.version          = "6.12.4"
+    s.version          = "7.0.0-beta1"
     s.summary          = "Appboy integration for mParticle"
 
     s.description      = <<-DESC
@@ -15,10 +15,10 @@ Pod::Spec.new do |s|
 
     s.ios.deployment_target = "8.0"
     s.ios.source_files      = 'mParticle-Appboy/*.{h,m,mm}'
-    s.ios.dependency 'mParticle-Apple-SDK/mParticle', '~> 6.12.3'
+    s.ios.dependency 'mParticle-Apple-SDK/mParticle', '~> 7.0.0-beta1'
     s.ios.frameworks = 'CoreTelephony', 'SystemConfiguration'
     s.libraries = 'z'
-    s.ios.dependency 'Appboy-iOS-SDK', '2.26.0'
+    s.ios.dependency 'Appboy-iOS-SDK', '2.27.0'
 
     s.ios.pod_target_xcconfig = {
         'LIBRARY_SEARCH_PATHS' => '$(inherited) $(PODS_ROOT)/Appboy-iOS-SDK/**',
