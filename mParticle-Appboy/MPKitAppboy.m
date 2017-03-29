@@ -105,6 +105,56 @@ NSString *const eabOptions = @"options";
     }
 }
 
+- (MPKitExecStatus *)logAppboyCustomEvent:(MPEvent *)event eventType:(NSUInteger)eventType {
+    void (^logCustomEvent)(void) = ^{
+        NSDictionary *transformedEventInfo = [event.info transformValuesToString];
+
+        NSMutableDictionary *eventInfo = [[NSMutableDictionary alloc] initWithCapacity:event.info.count];
+        [transformedEventInfo enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, id _Nonnull obj, BOOL * _Nonnull stop) {
+            NSString *strippedKey = [self stripCharacter:@"$" fromString:key];
+            eventInfo[strippedKey] = obj;
+        }];
+
+        [appboyInstance logCustomEvent:event.name withProperties:eventInfo];
+
+        NSString *eventTypeString = [@(eventType) stringValue];
+
+        for (NSString *key in eventInfo) {
+            NSString *eventTypePlusNamePlusKey = [[NSString stringWithFormat:@"%@%@%@", eventTypeString, event.name, key] lowercaseString];
+            NSString *hashValue = [MPIHasher hashString:eventTypePlusNamePlusKey];
+
+            NSDictionary *forwardUserAttributes;
+
+            // Delete from array
+            forwardUserAttributes = self.configuration[@"ear"];
+            if (forwardUserAttributes[hashValue]) {
+                [appboyInstance.user removeFromCustomAttributeArrayWithKey:forwardUserAttributes[hashValue] value:eventInfo[key]];
+            }
+
+            // Add to array
+            forwardUserAttributes = self.configuration[@"eaa"];
+            if (forwardUserAttributes[hashValue]) {
+                [appboyInstance.user addToCustomAttributeArrayWithKey:forwardUserAttributes[hashValue] value:eventInfo[key]];
+            }
+
+            // Add key/value pair
+            forwardUserAttributes = self.configuration[@"eas"];
+            if (forwardUserAttributes[hashValue]) {
+                [appboyInstance.user setCustomAttributeWithKey:forwardUserAttributes[hashValue] andStringValue:eventInfo[key]];
+            }
+        }
+    };
+
+    if ([NSThread isMainThread]) {
+        logCustomEvent();
+    } else {
+        dispatch_async(dispatch_get_main_queue(), logCustomEvent);
+    }
+
+    MPKitExecStatus *execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
+    return execStatus;
+}
+
 #pragma mark ABKIDFADelegate
 - (BOOL)isAdvertisingTrackingEnabled {
     BOOL advertisingTrackingEnabled = NO;
@@ -310,53 +360,11 @@ NSString *const eabOptions = @"options";
 }
 
 - (MPKitExecStatus *)logEvent:(MPEvent *)event {
-    void (^logCustomEvent)(void) = ^{
-        NSDictionary *transformedEventInfo = [event.info transformValuesToString];
+    return [self logAppboyCustomEvent:event eventType:event.type];
+}
 
-        NSMutableDictionary *eventInfo = [[NSMutableDictionary alloc] initWithCapacity:event.info.count];
-        [transformedEventInfo enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, id _Nonnull obj, BOOL * _Nonnull stop) {
-            NSString *strippedKey = [self stripCharacter:@"$" fromString:key];
-            eventInfo[strippedKey] = obj;
-        }];
-
-        [appboyInstance logCustomEvent:event.name withProperties:eventInfo];
-
-        NSString *eventTypeString = [@(event.type) stringValue];
-
-        for (NSString *key in eventInfo) {
-            NSString *eventTypePlusNamePlusKey = [[NSString stringWithFormat:@"%@%@%@", eventTypeString, event.name, key] lowercaseString];
-            NSString *hashValue = [MPIHasher hashString:eventTypePlusNamePlusKey];
-
-            NSDictionary *forwardUserAttributes;
-
-            // Delete from array
-            forwardUserAttributes = self.configuration[@"ear"];
-            if (forwardUserAttributes[hashValue]) {
-                [appboyInstance.user removeFromCustomAttributeArrayWithKey:forwardUserAttributes[hashValue] value:eventInfo[key]];
-            }
-
-            // Add to array
-            forwardUserAttributes = self.configuration[@"eaa"];
-            if (forwardUserAttributes[hashValue]) {
-                [appboyInstance.user addToCustomAttributeArrayWithKey:forwardUserAttributes[hashValue] value:eventInfo[key]];
-            }
-
-            // Add key/value pair
-            forwardUserAttributes = self.configuration[@"eas"];
-            if (forwardUserAttributes[hashValue]) {
-                [appboyInstance.user setCustomAttributeWithKey:forwardUserAttributes[hashValue] andStringValue:eventInfo[key]];
-            }
-        }
-    };
-
-    if ([NSThread isMainThread]) {
-        logCustomEvent();
-    } else {
-        dispatch_async(dispatch_get_main_queue(), logCustomEvent);
-    }
-
-    MPKitExecStatus *execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
-    return execStatus;
+- (MPKitExecStatus *)logScreen:(MPEvent *)event {
+    return [self logAppboyCustomEvent:event eventType:0];
 }
 
 - (MPKitExecStatus *)receivedUserNotification:(NSDictionary *)userInfo {
