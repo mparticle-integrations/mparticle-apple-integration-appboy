@@ -58,6 +58,7 @@ NSString *const eabOptions = @"options";
 @interface MPKitAppboy() <ABKIDFADelegate> {
     Appboy *appboyInstance;
     BOOL collectIDFA;
+    BOOL forwardScreenViews;
 }
 
 @end
@@ -211,6 +212,7 @@ NSString *const eabOptions = @"options";
     _configuration = configuration;
     _started = startImmediately;
     collectIDFA = NO;
+    forwardScreenViews = NO;
 
     if (startImmediately) {
         [self start];
@@ -225,17 +227,17 @@ NSString *const eabOptions = @"options";
 
 - (void)start {
     static dispatch_once_t appboyPredicate;
-    
+
     dispatch_once(&appboyPredicate, ^{
         NSArray <NSString *> *serverKeys = @[@"ABKRequestProcessingPolicyOptionKey", @"ABKFlushIntervalOptionKey", @"ABKSessionTimeoutKey", @"ABKMinimumTriggerTimeIntervalKey"];
         NSArray <NSString *> *appboyKeys = @[ABKRequestProcessingPolicyOptionKey, ABKFlushIntervalOptionKey, ABKSessionTimeoutKey, ABKMinimumTriggerTimeIntervalKey];
         NSMutableDictionary<NSString *, NSNumber *> *optionsDictionary = [[NSMutableDictionary alloc] initWithCapacity:serverKeys.count];
         NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
         numberFormatter.numberStyle = NSNumberFormatterNoStyle;
-        
+
         [serverKeys enumerateObjectsUsingBlock:^(NSString * _Nonnull serverKey, NSUInteger idx, BOOL * _Nonnull stop) {
             NSString *optionValue = self.configuration[serverKey];
-            
+
             if (optionValue) {
                 NSString *appboyKey = appboyKeys[idx];
                 optionsDictionary[appboyKey] = [numberFormatter numberFromString:optionValue];
@@ -250,27 +252,31 @@ NSString *const eabOptions = @"options";
 #pragma clang diagnostic pop
         }
 
+        if (self.configuration[@"forwardScreenViews"]) {
+            forwardScreenViews = [self.configuration[@"forwardScreenViews"] caseInsensitiveCompare:@"true"] == NSOrderedSame;
+        }
+
         if (optionsDictionary.count == 0) {
             optionsDictionary = nil;
         }
-        
+
         [Appboy startWithApiKey:self.configuration[eabAPIKey]
                   inApplication:[UIApplication sharedApplication]
               withLaunchOptions:self.launchOptions
               withAppboyOptions:optionsDictionary];
-        
+
         CFTypeRef appboyRef = CFRetain((__bridge CFTypeRef)[Appboy sharedInstance]);
         appboyInstance = (__bridge Appboy *)appboyRef;
 
         if (collectIDFA) {
             appboyInstance.idfaDelegate = self;
         }
-        
+
         _started = YES;
-        
+
         dispatch_async(dispatch_get_main_queue(), ^{
             NSDictionary *userInfo = @{mParticleKitInstanceKey:[[self class] kitCode]};
-            
+
             [[NSNotificationCenter defaultCenter] postNotificationName:mParticleKitDidBecomeActiveNotification
                                                                 object:nil
                                                               userInfo:userInfo];
@@ -364,7 +370,15 @@ NSString *const eabOptions = @"options";
 }
 
 - (MPKitExecStatus *)logScreen:(MPEvent *)event {
-    return [self logAppboyCustomEvent:event eventType:0];
+    MPKitExecStatus *execStatus = nil;
+
+    if (forwardScreenViews) {
+        execStatus = [self logAppboyCustomEvent:event eventType:0];
+    } else {
+        execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeCannotExecute];
+    }
+
+    return execStatus;
 }
 
 - (MPKitExecStatus *)receivedUserNotification:(NSDictionary *)userInfo {
