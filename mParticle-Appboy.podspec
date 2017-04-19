@@ -27,7 +27,7 @@ Pod::Spec.new do |s|
 
     # s.tvos.deployment_target = "9.0"
     # s.tvos.source_files      = 'mParticle-Appboy/*.{h,m,mm}'
-    # s.tvos.dependency 'mParticle-Apple-SDK/mParticle', '~> 6.12.3'
+    # s.tvos.dependency 'mParticle-Apple-SDK/mParticle', '~> 6.13.0'
     # s.tvos.frameworks = 'SystemConfiguration'
     # s.tvos.dependency 'Appboy-tvOS-SDK', '2.24.3'
     #
