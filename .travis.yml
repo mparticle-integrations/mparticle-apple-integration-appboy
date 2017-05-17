@@ -3,4 +3,4 @@ language: objective-c
 script:
 - sudo gem install cocoapods -v 1.1.0.rc.2
 - pod repo update > /dev/null
-- pod lib lint --use-libraries
+- pod lib lint --use-libraries --allow-warnings
