@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name             = "mParticle-Appboy"
-    s.version          = "6.13.2"
+    s.version          = "6.14.0"
     s.summary          = "Appboy integration for mParticle"
 
     s.description      = <<-DESC
@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
 
     s.ios.deployment_target = "8.0"
     s.ios.source_files      = 'mParticle-Appboy/*.{h,m,mm}'
-    s.ios.dependency 'mParticle-Apple-SDK/mParticle', '~> 6.13.2'
+    s.ios.dependency 'mParticle-Apple-SDK/mParticle', '~> 6.14.0'
     s.ios.frameworks = 'CoreTelephony', 'SystemConfiguration'
     s.libraries = 'z'
     s.ios.dependency 'Appboy-iOS-SDK', '2.27.0'
@@ -27,7 +27,7 @@ Pod::Spec.new do |s|
 
     # s.tvos.deployment_target = "9.0"
     # s.tvos.source_files      = 'mParticle-Appboy/*.{h,m,mm}'
-    # s.tvos.dependency 'mParticle-Apple-SDK/mParticle', '~> 6.13.2'
+    # s.tvos.dependency 'mParticle-Apple-SDK/mParticle', '~> 6.14.0'
     # s.tvos.frameworks = 'SystemConfiguration'
     # s.tvos.dependency 'Appboy-tvOS-SDK', '2.24.3'
     #
