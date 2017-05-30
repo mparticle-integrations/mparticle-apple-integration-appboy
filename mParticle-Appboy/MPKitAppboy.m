@@ -257,10 +257,12 @@ NSString *const eabOptions = @"options";
         }
 
         if (optionsDictionary.count == 0) {
+#pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wincompatible-pointer-types"
           optionsDictionary = @{ ABKSDKFlavorKey : @(MPARTICLE) };
         } else {
           optionsDictionary[ABKSDKFlavorKey] = @(MPARTICLE);
+#pragma clang diagnostic pop
         }
 
         [Appboy startWithApiKey:self.configuration[eabAPIKey]
