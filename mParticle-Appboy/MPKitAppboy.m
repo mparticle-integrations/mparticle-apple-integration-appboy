@@ -55,7 +55,7 @@
 NSString *const eabAPIKey = @"apiKey";
 NSString *const eabOptions = @"options";
 
-@interface MPKitAppboy() <ABKIDFADelegate> {
+@interface MPKitAppboy() <ABKIDFADelegate, ABKAppboyEndpointDelegate> {
     Appboy *appboyInstance;
     BOOL collectIDFA;
     BOOL forwardScreenViews;
@@ -202,6 +202,11 @@ NSString *const eabOptions = @"options";
     return _advertiserId;
 }
 
+#pragma mark ABKAppboyEndpointDelegate
+- (NSString *)getApiEndpoint:(NSString *)appboyApiEndpoint {
+    return [appboyApiEndpoint stringByReplacingOccurrencesOfString:@"dev.appboy.com" withString:@"sdk.api.appboy.eu"];
+}
+
 #pragma mark MPKitInstanceProtocol methods
 - (instancetype)initWithConfiguration:(NSDictionary *)configuration startImmediately:(BOOL)startImmediately {
     self = [super init];
@@ -249,6 +254,13 @@ NSString *const eabOptions = @"options";
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wincompatible-pointer-types"
             optionsDictionary[ABKIDFADelegateKey] = self;
+#pragma clang diagnostic pop
+        }
+        
+        if (self.configuration[@"dataCenterLocation"] &&  [self.configuration[@"dataCenterLocation"] isEqualToString:@"EU"]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wincompatible-pointer-types"
+            optionsDictionary[ABKAppboyEndpointDelegateKey] = self;
 #pragma clang diagnostic pop
         }
 
