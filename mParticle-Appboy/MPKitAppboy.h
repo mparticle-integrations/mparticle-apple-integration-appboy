@@ -23,11 +23,31 @@
 #import "mParticle.h"
 #endif
 
+#ifdef COCOAPODS
+    #if TARGET_OS_IOS == 1
+        #if defined(__has_include) && __has_include(<Appboy-iOS-SDK/AppboyKit.h>)
+            #import <Appboy-iOS-SDK/AppboyKit.h>
+        #else
+            #import "AppboyKit.h"
+        #endif
+    #elif TARGET_OS_TV == 1
+        #if defined(__has_include) && __has_include(<AppboyTVOSKit/AppboyKit.h>)
+            #import <AppboyTVOSKit/AppboyKit.h>
+        #else
+            #import "AppboyKit.h"
+        #endif
+    #endif
+#else
+    #import <Appboy_iOS_SDK/Appboy-iOS-SDK-umbrella.h>
+#endif
+
 
 @interface MPKitAppboy : NSObject <MPKitProtocol>
 
 @property (nonatomic, strong, nonnull) NSDictionary *configuration;
 @property (nonatomic, strong, nullable) NSDictionary *launchOptions;
 @property (nonatomic, unsafe_unretained, readonly) BOOL started;
+
++ (void)setInAppMessageControllerDelegate:(nonnull id<ABKInAppMessageControllerDelegate>)delegate;
 
 @end

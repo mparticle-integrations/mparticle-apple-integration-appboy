@@ -18,42 +18,10 @@
 
 #import "MPKitAppboy.h"
 
-#ifdef COCOAPODS
-    #import "MPEvent.h"
-    #import "MPProduct.h"
-    #import "MPProduct+Dictionary.h"
-    #import "MPCommerceEvent.h"
-    #import "MPCommerceEvent+Dictionary.h"
-    #import "MPCommerceEventInstruction.h"
-    #import "MPTransactionAttributes.h"
-    #import "MPTransactionAttributes+Dictionary.h"
-    #import "MPIHasher.h"
-    #import "mParticle.h"
-    #import "MPKitRegister.h"
-    #import "NSDictionary+MPCaseInsensitive.h"
-    #import "MPDateFormatter.h"
-    #import "MPEnums.h"
-
-    #if TARGET_OS_IOS == 1
-        #if defined(__has_include) && __has_include(<Appboy-iOS-SDK/AppboyKit.h>)
-            #import <Appboy-iOS-SDK/AppboyKit.h>
-        #else
-            #import "AppboyKit.h"
-        #endif
-    #elif TARGET_OS_TV == 1
-        #if defined(__has_include) && __has_include(<AppboyTVOSKit/AppboyKit.h>)
-            #import <AppboyTVOSKit/AppboyKit.h>
-        #else
-            #import "AppboyKit.h"
-        #endif
-    #endif
-#else
-    #import <Appboy_iOS_SDK/Appboy-iOS-SDK-umbrella.h>
-#endif
-
-
 NSString *const eabAPIKey = @"apiKey";
 NSString *const eabOptions = @"options";
+
+static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = nil;
 
 @interface MPKitAppboy() <ABKIDFADelegate, ABKAppboyEndpointDelegate> {
     Appboy *appboyInstance;
@@ -73,6 +41,10 @@ NSString *const eabOptions = @"options";
 + (void)load {
     MPKitRegister *kitRegister = [[MPKitRegister alloc] initWithName:@"Appboy" className:@"MPKitAppboy" startImmediately:NO];
     [MParticle registerExtension:kitRegister];
+}
+
++ (void)setInAppMessageControllerDelegate:(id<ABKInAppMessageControllerDelegate>)delegate {
+    inAppMessageControllerDelegate = delegate;
 }
 
 #pragma mark Private methods
