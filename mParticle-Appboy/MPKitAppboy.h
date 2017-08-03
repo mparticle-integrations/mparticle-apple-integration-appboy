@@ -27,6 +27,8 @@
     #if TARGET_OS_IOS == 1
         #if defined(__has_include) && __has_include(<Appboy-iOS-SDK/AppboyKit.h>)
             #import <Appboy-iOS-SDK/AppboyKit.h>
+        #elif defined(__has_include) && __has_include(<Appboy_iOS_SDK/AppboyKit.h>)
+            #import <Appboy_iOS_SDK/AppboyKit.h>
         #else
             #import "AppboyKit.h"
         #endif
