@@ -18,6 +18,27 @@
 
 #import "MPKitAppboy.h"
 
+#ifdef COCOAPODS
+    #if TARGET_OS_IOS == 1
+        #if defined(__has_include) && __has_include(<Appboy-iOS-SDK/AppboyKit.h>)
+            #import <Appboy-iOS-SDK/AppboyKit.h>
+        #elif defined(__has_include) && __has_include(<Appboy_iOS_SDK/AppboyKit.h>)
+            #import <Appboy_iOS_SDK/AppboyKit.h>
+        #else
+            #import "AppboyKit.h"
+        #endif
+    #elif TARGET_OS_TV == 1
+        #if defined(__has_include) && __has_include(<AppboyTVOSKit/AppboyKit.h>)
+            #import <AppboyTVOSKit/AppboyKit.h>
+        #else
+            #import "AppboyKit.h"
+        #endif
+    #endif
+#else
+    #import <Appboy_iOS_SDK/Appboy-iOS-SDK-umbrella.h>
+#endif
+
+
 NSString *const eabAPIKey = @"apiKey";
 NSString *const eabOptions = @"options";
 
@@ -43,8 +64,8 @@ static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = ni
     [MParticle registerExtension:kitRegister];
 }
 
-+ (void)setInAppMessageControllerDelegate:(id<ABKInAppMessageControllerDelegate>)delegate {
-    inAppMessageControllerDelegate = delegate;
++ (void)setInAppMessageControllerDelegate:(id)delegate {
+    inAppMessageControllerDelegate = (id<ABKInAppMessageControllerDelegate>)delegate;
 }
 
 #pragma mark Private methods
