@@ -41,6 +41,12 @@
 
 NSString *const eabAPIKey = @"apiKey";
 NSString *const eabOptions = @"options";
+NSString *const hostConfigKey = @"host";
+NSString *const dataCenterLocationConfigKey = @"dataCenterLocation";
+NSString *const usDataCenterLocation = @"US";
+NSString *const euDataCenterLocation = @"EU";
+NSString *const originalHost = @"dev.appboy.com";
+NSString *const euHost = @"sdk.api.appboy.eu";
 
 static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = nil;
 
@@ -49,6 +55,9 @@ static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = ni
     BOOL collectIDFA;
     BOOL forwardScreenViews;
 }
+
+@property (nonatomic) NSString *host;
+@property (nonatomic) NSString *dataCenterLocation;
 
 @end
 
@@ -197,7 +206,14 @@ static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = ni
 
 #pragma mark ABKAppboyEndpointDelegate
 - (NSString *)getApiEndpoint:(NSString *)appboyApiEndpoint {
-    return [appboyApiEndpoint stringByReplacingOccurrencesOfString:@"dev.appboy.com" withString:@"sdk.api.appboy.eu"];
+    NSString *host = self.host;
+    
+    if (!host.length) {
+        host = euHost;
+    }
+    
+    NSString *endpoint = [appboyApiEndpoint stringByReplacingOccurrencesOfString:originalHost withString:host];
+    return endpoint;
 }
 
 #pragma mark MPKitInstanceProtocol methods
@@ -211,6 +227,8 @@ static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = ni
     _started = startImmediately;
     collectIDFA = NO;
     forwardScreenViews = NO;
+    _host = configuration[hostConfigKey];
+    _dataCenterLocation = configuration[dataCenterLocationConfigKey];
 
     if (startImmediately) {
         [self start];
@@ -250,7 +268,7 @@ static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = ni
 #pragma clang diagnostic pop
         }
         
-        if (self.configuration[@"dataCenterLocation"] &&  [self.configuration[@"dataCenterLocation"] isEqualToString:@"EU"]) {
+        if (self.host.length || (self.dataCenterLocation && [self.dataCenterLocation isEqualToString:euDataCenterLocation])) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wincompatible-pointer-types"
             optionsDictionary[ABKAppboyEndpointDelegateKey] = self;
