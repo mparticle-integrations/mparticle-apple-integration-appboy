@@ -64,7 +64,7 @@ static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = ni
 }
 
 + (void)load {
-    MPKitRegister *kitRegister = [[MPKitRegister alloc] initWithName:@"Appboy" className:@"MPKitAppboy" startImmediately:NO];
+    MPKitRegister *kitRegister = [[MPKitRegister alloc] initWithName:@"Appboy" className:@"MPKitAppboy"];
     [MParticle registerExtension:kitRegister];
 }
 
@@ -207,23 +207,22 @@ static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = ni
 }
 
 #pragma mark MPKitInstanceProtocol methods
-- (instancetype)initWithConfiguration:(NSDictionary *)configuration startImmediately:(BOOL)startImmediately {
-    self = [super init];
-    if (!self || !configuration[eabAPIKey]) {
-        return nil;
+- (MPKitExecStatus *)didFinishLaunchingWithConfiguration:(NSDictionary *)configuration {
+    MPKitExecStatus *execStatus = nil;
+
+    if (!configuration[eabAPIKey]) {
+        execStatus = [[MPKitExecStatus alloc] initWithSDKCode:[[self class] kitCode] returnCode:MPKitReturnCodeRequirementsNotMet];
+        return execStatus;
     }
 
     _configuration = configuration;
-    _started = startImmediately;
+    _started = NO;
     collectIDFA = NO;
     forwardScreenViews = NO;
     _host = configuration[hostConfigKey];
 
-    if (startImmediately) {
-        [self start];
-    }
-
-    return self;
+    execStatus = [[MPKitExecStatus alloc] initWithSDKCode:[[self class] kitCode] returnCode:MPKitReturnCodeSuccess];
+    return execStatus;
 }
 
 - (id const)providerKitInstance {
