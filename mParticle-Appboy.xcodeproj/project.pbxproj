@@ -270,6 +270,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mparticle.mParticle-Appboy";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				"VALID_ARCHS[sdk=iphonesimulator*]" = x86_64;
 			};
 			name = Debug;
 		};
@@ -291,6 +292,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mparticle.mParticle-Appboy";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				"VALID_ARCHS[sdk=iphonesimulator*]" = x86_64;
 			};
 			name = Release;
 		};
