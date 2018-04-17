@@ -493,6 +493,19 @@ static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = ni
     return execStatus;
 }
 
+- (nonnull MPKitExecStatus *)setUserAttribute:(nonnull NSString *)key values:(nullable NSArray<NSString *> *)values {
+    MPKitExecStatus *execStatus;
+
+    if (!values) {
+        execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeFail];
+    } else {
+        [appboyInstance.user setCustomAttributeArrayWithKey:key array:values];
+        execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
+    }
+    
+    return execStatus;
+}
+
 - (MPKitExecStatus *)setUserIdentity:(NSString *)identityString identityType:(MPUserIdentity)identityType {
     MPKitExecStatus *execStatus = nil;
 
