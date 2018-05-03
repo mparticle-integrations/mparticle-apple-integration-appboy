@@ -252,14 +252,14 @@ static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = ni
         if (self->collectIDFA) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wincompatible-pointer-types"
-            optionsDictionary[ABKIDFADelegateKey] = self;
+            optionsDictionary[ABKIDFADelegateKey] = (id)self;
 #pragma clang diagnostic pop
         }
         
         if (self.host.length) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wincompatible-pointer-types"
-            optionsDictionary[ABKAppboyEndpointDelegateKey] = self;
+            optionsDictionary[ABKAppboyEndpointDelegateKey] = (id)self;
 #pragma clang diagnostic pop
         }
 
