@@ -113,7 +113,7 @@ static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = ni
             eventInfo[strippedKey] = obj;
         }];
 
-        [appboyInstance logCustomEvent:event.name withProperties:eventInfo];
+        [self->appboyInstance logCustomEvent:event.name withProperties:eventInfo];
 
         NSString *eventTypeString = [@(eventType) stringValue];
 
@@ -126,19 +126,19 @@ static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = ni
             // Delete from array
             forwardUserAttributes = self.configuration[@"ear"];
             if (forwardUserAttributes[hashValue]) {
-                [appboyInstance.user removeFromCustomAttributeArrayWithKey:forwardUserAttributes[hashValue] value:eventInfo[key]];
+                [self->appboyInstance.user removeFromCustomAttributeArrayWithKey:forwardUserAttributes[hashValue] value:eventInfo[key]];
             }
 
             // Add to array
             forwardUserAttributes = self.configuration[@"eaa"];
             if (forwardUserAttributes[hashValue]) {
-                [appboyInstance.user addToCustomAttributeArrayWithKey:forwardUserAttributes[hashValue] value:eventInfo[key]];
+                [self->appboyInstance.user addToCustomAttributeArrayWithKey:forwardUserAttributes[hashValue] value:eventInfo[key]];
             }
 
             // Add key/value pair
             forwardUserAttributes = self.configuration[@"eas"];
             if (forwardUserAttributes[hashValue]) {
-                [appboyInstance.user setCustomAttributeWithKey:forwardUserAttributes[hashValue] andStringValue:eventInfo[key]];
+                [self->appboyInstance.user setCustomAttributeWithKey:forwardUserAttributes[hashValue] andStringValue:eventInfo[key]];
             }
         }
     };
@@ -248,8 +248,8 @@ static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = ni
             }
         }];
 
-        collectIDFA = self.configuration[@"ABKCollectIDFA"] && [self.configuration[@"ABKCollectIDFA"] caseInsensitiveCompare:@"true"] == NSOrderedSame;
-        if (collectIDFA) {
+        self->collectIDFA = self.configuration[@"ABKCollectIDFA"] && [self.configuration[@"ABKCollectIDFA"] caseInsensitiveCompare:@"true"] == NSOrderedSame;
+        if (self->collectIDFA) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wincompatible-pointer-types"
             optionsDictionary[ABKIDFADelegateKey] = self;
@@ -264,7 +264,7 @@ static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = ni
         }
 
         if (self.configuration[@"forwardScreenViews"]) {
-            forwardScreenViews = [self.configuration[@"forwardScreenViews"] caseInsensitiveCompare:@"true"] == NSOrderedSame;
+            self->forwardScreenViews = [self.configuration[@"forwardScreenViews"] caseInsensitiveCompare:@"true"] == NSOrderedSame;
         }
 
         if (optionsDictionary.count == 0) {
@@ -282,13 +282,13 @@ static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = ni
               withAppboyOptions:optionsDictionary];
 
         CFTypeRef appboyRef = CFRetain((__bridge CFTypeRef)[Appboy sharedInstance]);
-        appboyInstance = (__bridge Appboy *)appboyRef;
+        self->appboyInstance = (__bridge Appboy *)appboyRef;
 
-        if (collectIDFA) {
-            appboyInstance.idfaDelegate = self;
+        if (self->collectIDFA) {
+            self->appboyInstance.idfaDelegate = self;
         }
 
-        _started = YES;
+        self->_started = YES;
 
         dispatch_async(dispatch_get_main_queue(), ^{
             NSDictionary *userInfo = @{mParticleKitInstanceKey:[[self class] kitCode]};
@@ -512,7 +512,7 @@ static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = ni
     switch (identityType) {
         case MPUserIdentityCustomerId: {
             void (^changeUser)(void) = ^ {
-                [appboyInstance changeUser:identityString];
+                [self->appboyInstance changeUser:identityString];
             };
 
             if ([NSThread isMainThread]) {
