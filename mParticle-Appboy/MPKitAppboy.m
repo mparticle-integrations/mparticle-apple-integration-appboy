@@ -35,9 +35,14 @@
         #endif
     #endif
 #else
-    #import <Appboy_iOS_SDK/Appboy-iOS-SDK-umbrella.h>
+
+#if TARGET_OS_IOS == 1
+#import <Appboy_iOS_SDK/Appboy-iOS-SDK-umbrella.h>
+#elif TARGET_OS_TV == 1
+#import "AppboyKit.h"
 #endif
 
+#endif
 
 NSString *const eabAPIKey = @"apiKey";
 NSString *const eabOptions = @"options";
@@ -46,7 +51,7 @@ NSString *const originalHost = @"dev.appboy.com";
 
 static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = nil;
 
-@interface MPKitAppboy() <ABKIDFADelegate, ABKAppboyEndpointDelegate> {
+@interface MPKitAppboy() <ABKAppboyEndpointDelegate> {
     Appboy *appboyInstance;
     BOOL collectIDFA;
     BOOL forwardScreenViews;
@@ -285,7 +290,7 @@ static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = ni
         self->appboyInstance = (__bridge Appboy *)appboyRef;
 
         if (self->collectIDFA) {
-            self->appboyInstance.idfaDelegate = self;
+            self->appboyInstance.idfaDelegate = (id)self;
         }
 
         self->_started = YES;
