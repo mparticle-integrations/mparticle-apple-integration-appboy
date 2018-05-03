@@ -480,7 +480,14 @@ static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = ni
     } else if ([key isEqualToString:mParticleUserAttributeCity]) {
         appboyInstance.user.homeCity = value;
     } else if ([key isEqualToString:mParticleUserAttributeGender]) {
-        appboyInstance.user.gender = [value isEqualToString:mParticleGenderMale] ? ABKUserGenderMale : ABKUserGenderFemale;
+        appboyInstance.user.gender = ABKUserGenderOther;
+        if ([value isEqualToString:mParticleGenderMale]) {
+            appboyInstance.user.gender = ABKUserGenderMale;
+        } else if ([value isEqualToString:mParticleGenderFemale]) {
+            appboyInstance.user.gender = ABKUserGenderFemale;
+        } else if ([value isEqualToString:mParticleGenderNotAvailable]) {
+            appboyInstance.user.gender = ABKUserGenderNotApplicable;
+        }
     } else if ([key isEqualToString:mParticleUserAttributeMobileNumber] || [key isEqualToString:@"$MPUserMobile"]) {
         appboyInstance.user.phone = value;
     } else {
