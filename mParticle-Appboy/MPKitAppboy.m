@@ -498,7 +498,7 @@ static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = ni
     return execStatus;
 }
 
-- (nonnull MPKitExecStatus *)setUserAttribute:(nonnull NSString *)key values:(nullable NSArray<NSString *> *)values {
+- (nonnull MPKitExecStatus *)setUserAttribute:(nonnull NSString *)key values:(nonnull NSArray<NSString *> *)values {
     MPKitExecStatus *execStatus;
 
     if (!values) {
