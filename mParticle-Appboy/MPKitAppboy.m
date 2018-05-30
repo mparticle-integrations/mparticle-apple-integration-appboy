@@ -280,6 +280,13 @@ static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = ni
           optionsDictionary[ABKSDKFlavorKey] = @(MPARTICLE);
 #pragma clang diagnostic pop
         }
+        
+        optionsDictionary[ABKDisableAutomaticLocationCollectionKey] = @(NO);
+        if (self.configuration[@"ABKDisableAutomaticLocationCollectionKey"]) {
+            if ([self.configuration[@"ABKDisableAutomaticLocationCollectionKey"] caseInsensitiveCompare:@"true"] == NSOrderedSame) {
+                optionsDictionary[ABKDisableAutomaticLocationCollectionKey] = @(YES);
+            }
+        }
 
         [Appboy startWithApiKey:self.configuration[eabAPIKey]
                   inApplication:[UIApplication sharedApplication]
