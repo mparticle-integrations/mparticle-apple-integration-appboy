@@ -518,15 +518,33 @@ static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = ni
     return execStatus;
 }
 
-- (MPKitExecStatus *)setUserIdentity:(NSString *)identityString identityType:(MPUserIdentity)identityType {
+- (nonnull MPKitExecStatus *)onIdentifyComplete:(FilteredMParticleUser *)user request:(FilteredMPIdentityApiRequest *)request {
+    return [self updateUser:user request:request];
+}
+
+- (nonnull MPKitExecStatus *)onLoginComplete:(FilteredMParticleUser *)user request:(FilteredMPIdentityApiRequest *)request {
+    return [self updateUser:user request:request];
+}
+
+- (nonnull MPKitExecStatus *)onLogoutComplete:(FilteredMParticleUser *)user request:(FilteredMPIdentityApiRequest *)request {
+    return [self updateUser:user request:request];
+}
+
+- (nonnull MPKitExecStatus *)onModifyComplete:(FilteredMParticleUser *)user request:(FilteredMPIdentityApiRequest *)request {
+    return [self updateUser:user request:request];
+}
+
+- (nonnull MPKitExecStatus *)updateUser:(FilteredMParticleUser *)user request:(FilteredMPIdentityApiRequest *)request {
     MPKitExecStatus *execStatus = nil;
-
-    switch (identityType) {
-        case MPUserIdentityCustomerId: {
+    
+    if (request.userIdentities) {
+        NSMutableDictionary *userIDsCopy = [request.userIdentities copy];
+        
+        if (userIDsCopy[@(MPUserIdentityCustomerId)]) {
             void (^changeUser)(void) = ^ {
-                [self->appboyInstance changeUser:identityString];
+                [self->appboyInstance changeUser:userIDsCopy[@(MPUserIdentityCustomerId)]];
             };
-
+            
             if ([NSThread isMainThread]) {
                 changeUser();
             } else {
@@ -534,19 +552,18 @@ static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = ni
             }
             execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
         }
-            break;
-
-        case MPUserIdentityEmail:
-            appboyInstance.user.email = identityString;
-        execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
-            break;
-
-        default:
-            execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeUnavailable];
-            break;
+        
+        if (userIDsCopy[@(MPUserIdentityEmail)]) {
+            appboyInstance.user.email = userIDsCopy[@(MPUserIdentityEmail)];
+            execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
+        }
     }
-
+    
     return execStatus;
+}
+
+- (MPKitExecStatus *)setUserIdentity:(NSString *)identityString identityType:(MPUserIdentity)identityType {
+    return [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
 }
 
 #if TARGET_OS_IOS == 1 && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
