@@ -238,60 +238,12 @@ static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = ni
     static dispatch_once_t appboyPredicate;
 
     dispatch_once(&appboyPredicate, ^{
-        NSArray <NSString *> *serverKeys = @[@"ABKRequestProcessingPolicyOptionKey", @"ABKFlushIntervalOptionKey", @"ABKSessionTimeoutKey", @"ABKMinimumTriggerTimeIntervalKey"];
-        NSArray <NSString *> *appboyKeys = @[ABKRequestProcessingPolicyOptionKey, ABKFlushIntervalOptionKey, ABKSessionTimeoutKey, ABKMinimumTriggerTimeIntervalKey];
-        NSMutableDictionary<NSString *, NSNumber *> *optionsDictionary = [[NSMutableDictionary alloc] initWithCapacity:serverKeys.count];
-        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-        numberFormatter.numberStyle = NSNumberFormatterNoStyle;
-
-        [serverKeys enumerateObjectsUsingBlock:^(NSString * _Nonnull serverKey, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSString *optionValue = self.configuration[serverKey];
-
-            if (optionValue) {
-                NSString *appboyKey = appboyKeys[idx];
-                optionsDictionary[appboyKey] = [numberFormatter numberFromString:optionValue];
-            }
-        }];
-
-        self->collectIDFA = self.configuration[@"ABKCollectIDFA"] && [self.configuration[@"ABKCollectIDFA"] caseInsensitiveCompare:@"true"] == NSOrderedSame;
-        if (self->collectIDFA) {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wincompatible-pointer-types"
-            optionsDictionary[ABKIDFADelegateKey] = (id)self;
-#pragma clang diagnostic pop
-        }
-        
-        if (self.host.length) {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wincompatible-pointer-types"
-            optionsDictionary[ABKAppboyEndpointDelegateKey] = (id)self;
-#pragma clang diagnostic pop
-        }
-
-        if (self.configuration[@"forwardScreenViews"]) {
-            self->forwardScreenViews = [self.configuration[@"forwardScreenViews"] caseInsensitiveCompare:@"true"] == NSOrderedSame;
-        }
-
-        if (optionsDictionary.count == 0) {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wincompatible-pointer-types"
-          optionsDictionary = @{ ABKSDKFlavorKey : @(MPARTICLE) };
-        } else {
-          optionsDictionary[ABKSDKFlavorKey] = @(MPARTICLE);
-#pragma clang diagnostic pop
-        }
-        
-        optionsDictionary[ABKDisableAutomaticLocationCollectionKey] = @(NO);
-        if (self.configuration[@"ABKDisableAutomaticLocationCollectionKey"]) {
-            if ([self.configuration[@"ABKDisableAutomaticLocationCollectionKey"] caseInsensitiveCompare:@"true"] == NSOrderedSame) {
-                optionsDictionary[ABKDisableAutomaticLocationCollectionKey] = @(YES);
-            }
-        }
+        NSMutableDictionary<NSString *, NSNumber *> *optionsDict = [self optionsDictionary];
 
         [Appboy startWithApiKey:self.configuration[eabAPIKey]
                   inApplication:[UIApplication sharedApplication]
               withLaunchOptions:self.launchOptions
-              withAppboyOptions:optionsDictionary];
+              withAppboyOptions:optionsDict];
 
         CFTypeRef appboyRef = CFRetain((__bridge CFTypeRef)[Appboy sharedInstance]);
         self->appboyInstance = (__bridge Appboy *)appboyRef;
@@ -310,6 +262,62 @@ static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = ni
                                                               userInfo:userInfo];
         });
     });
+}
+
+- (NSMutableDictionary<NSString *, NSNumber *> *)optionsDictionary {
+    NSArray <NSString *> *serverKeys = @[@"ABKRequestProcessingPolicyOptionKey", @"ABKFlushIntervalOptionKey", @"ABKSessionTimeoutKey", @"ABKMinimumTriggerTimeIntervalKey"];
+    NSArray <NSString *> *appboyKeys = @[ABKRequestProcessingPolicyOptionKey, ABKFlushIntervalOptionKey, ABKSessionTimeoutKey, ABKMinimumTriggerTimeIntervalKey];
+    NSMutableDictionary<NSString *, NSNumber *> *optionsDictionary = [[NSMutableDictionary alloc] initWithCapacity:serverKeys.count];
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    numberFormatter.numberStyle = NSNumberFormatterNoStyle;
+    
+    [serverKeys enumerateObjectsUsingBlock:^(NSString * _Nonnull serverKey, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSString *optionValue = self.configuration[serverKey];
+        
+        if (optionValue) {
+            NSString *appboyKey = appboyKeys[idx];
+            optionsDictionary[appboyKey] = [numberFormatter numberFromString:optionValue];
+        }
+    }];
+    
+    self->collectIDFA = self.configuration[@"ABKCollectIDFA"] && [self.configuration[@"ABKCollectIDFA"] caseInsensitiveCompare:@"true"] == NSOrderedSame;
+    if (self->collectIDFA) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wincompatible-pointer-types"
+        optionsDictionary[ABKIDFADelegateKey] = (id)self;
+#pragma clang diagnostic pop
+    }
+    
+    if (self.host.length) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wincompatible-pointer-types"
+        optionsDictionary[ABKAppboyEndpointDelegateKey] = (id)self;
+#pragma clang diagnostic pop
+    }
+    
+    if (self.configuration[@"forwardScreenViews"]) {
+        self->forwardScreenViews = [self.configuration[@"forwardScreenViews"] caseInsensitiveCompare:@"true"] == NSOrderedSame;
+    }
+    
+    if (optionsDictionary.count == 0) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wincompatible-pointer-types"
+        optionsDictionary = [[NSMutableDictionary alloc] initWithCapacity:serverKeys.count];
+    }
+    optionsDictionary[ABKSDKFlavorKey] = @(MPARTICLE);
+#pragma clang diagnostic pop
+    
+    optionsDictionary[ABKDisableAutomaticLocationCollectionKey] = @(NO);
+    if (self.configuration[@"ABKDisableAutomaticLocationCollectionKey"]) {
+        if ([self.configuration[@"ABKDisableAutomaticLocationCollectionKey"] caseInsensitiveCompare:@"true"] == NSOrderedSame) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wincompatible-pointer-types"
+            optionsDictionary[ABKDisableAutomaticLocationCollectionKey] = @(YES);
+#pragma clang diagnostic pop
+        }
+    }
+    
+    return optionsDictionary;
 }
 
 - (MPKitExecStatus *)handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo {
