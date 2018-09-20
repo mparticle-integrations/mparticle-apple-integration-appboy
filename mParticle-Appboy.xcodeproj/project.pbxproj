@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		C911FDA91D8B098F002A3516 /* MPKitAppboy.m in Sources */ = {isa = PBXBuildFile; fileRef = C911FDA81D8B098F002A3516 /* MPKitAppboy.m */; };
+		D31A98A92153F73400358293 /* mParticle_AppboyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D31A98A82153F73400358293 /* mParticle_AppboyTests.m */; };
+		D31A98AB2153F73400358293 /* mParticle_Appboy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB94016C1CB703F2007ABB18 /* mParticle_Appboy.framework */; };
+		D34D5D8C21541BB1009518C6 /* mParticle_Apple_SDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB9401781CB70C58007ABB18 /* mParticle_Apple_SDK.framework */; };
+		D34D5D8D21541BC4009518C6 /* Appboy_iOS_SDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4603411CDCD749006E590D /* Appboy_iOS_SDK.framework */; };
+		D34D5D8E21541BC6009518C6 /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4603431CDCD75A006E590D /* SDWebImage.framework */; };
+		D34D5D8F21541BCA009518C6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4603451CDCDD2B006E590D /* UIKit.framework */; };
 		DB4603421CDCD749006E590D /* Appboy_iOS_SDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4603411CDCD749006E590D /* Appboy_iOS_SDK.framework */; };
 		DB4603441CDCD75A006E590D /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4603431CDCD75A006E590D /* SDWebImage.framework */; };
 		DB4603461CDCDD2B006E590D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4603451CDCDD2B006E590D /* UIKit.framework */; };
@@ -21,8 +27,21 @@
 		DBDEDDA7209BA96E00DD3B9B /* MPKitAppboy.h in Headers */ = {isa = PBXBuildFile; fileRef = DB7E05A41CB819D300967FDF /* MPKitAppboy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		D31A98AC2153F73400358293 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DB9401631CB703F2007ABB18 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DB94016B1CB703F2007ABB18;
+			remoteInfo = "mParticle-Appboy";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		C911FDA81D8B098F002A3516 /* MPKitAppboy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPKitAppboy.m; sourceTree = "<group>"; };
+		D31A98A62153F73400358293 /* mParticle_AppboyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = mParticle_AppboyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D31A98A82153F73400358293 /* mParticle_AppboyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = mParticle_AppboyTests.m; sourceTree = "<group>"; };
+		D31A98AA2153F73400358293 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DB4603411CDCD749006E590D /* Appboy_iOS_SDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Appboy_iOS_SDK.framework; path = Carthage/Build/iOS/Appboy_iOS_SDK.framework; sourceTree = "<group>"; };
 		DB4603431CDCD75A006E590D /* SDWebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDWebImage.framework; path = Carthage/Build/iOS/SDWebImage.framework; sourceTree = "<group>"; };
 		DB4603451CDCDD2B006E590D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -39,6 +58,18 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		D31A98A32153F73400358293 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D34D5D8E21541BC6009518C6 /* SDWebImage.framework in Frameworks */,
+				D34D5D8C21541BB1009518C6 /* mParticle_Apple_SDK.framework in Frameworks */,
+				D34D5D8D21541BC4009518C6 /* Appboy_iOS_SDK.framework in Frameworks */,
+				D31A98AB2153F73400358293 /* mParticle_Appboy.framework in Frameworks */,
+				D34D5D8F21541BCA009518C6 /* UIKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DB9401681CB703F2007ABB18 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -62,6 +93,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D31A98A72153F73400358293 /* mParticle_AppboyTests */ = {
+			isa = PBXGroup;
+			children = (
+				D31A98A82153F73400358293 /* mParticle_AppboyTests.m */,
+				D31A98AA2153F73400358293 /* Info.plist */,
+			);
+			path = mParticle_AppboyTests;
+			sourceTree = "<group>";
+		};
 		DB9401621CB703F2007ABB18 = {
 			isa = PBXGroup;
 			children = (
@@ -72,6 +112,7 @@
 				DB9401781CB70C58007ABB18 /* mParticle_Apple_SDK.framework */,
 				DB94016E1CB703F2007ABB18 /* mParticle-Appboy */,
 				DBDEDD99209B8FD600DD3B9B /* mParticle-Appboy-tvOS */,
+				D31A98A72153F73400358293 /* mParticle_AppboyTests */,
 				DB94016D1CB703F2007ABB18 /* Products */,
 				DBDEDDA3209BA34E00DD3B9B /* Frameworks */,
 			);
@@ -82,6 +123,7 @@
 			children = (
 				DB94016C1CB703F2007ABB18 /* mParticle_Appboy.framework */,
 				DBDEDD98209B8FD600DD3B9B /* mParticle_Appboy.framework */,
+				D31A98A62153F73400358293 /* mParticle_AppboyTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -138,6 +180,24 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		D31A98A52153F73400358293 /* mParticle_AppboyTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D31A98B02153F73400358293 /* Build configuration list for PBXNativeTarget "mParticle_AppboyTests" */;
+			buildPhases = (
+				D31A98A22153F73400358293 /* Sources */,
+				D31A98A32153F73400358293 /* Frameworks */,
+				D31A98A42153F73400358293 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D31A98AD2153F73400358293 /* PBXTargetDependency */,
+			);
+			name = mParticle_AppboyTests;
+			productName = mParticle_AppboyTests;
+			productReference = D31A98A62153F73400358293 /* mParticle_AppboyTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		DB94016B1CB703F2007ABB18 /* mParticle-Appboy */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DB9401741CB703F2007ABB18 /* Build configuration list for PBXNativeTarget "mParticle-Appboy" */;
@@ -183,6 +243,10 @@
 				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = mParticle;
 				TargetAttributes = {
+					D31A98A52153F73400358293 = {
+						CreatedOnToolsVersion = 10.0;
+						ProvisioningStyle = Automatic;
+					};
 					DB94016B1CB703F2007ABB18 = {
 						CreatedOnToolsVersion = 7.3;
 						DevelopmentTeam = Q948K5LXGZ;
@@ -208,11 +272,19 @@
 			targets = (
 				DB94016B1CB703F2007ABB18 /* mParticle-Appboy */,
 				DBDEDD97209B8FD600DD3B9B /* mParticle-Appboy-tvOS */,
+				D31A98A52153F73400358293 /* mParticle_AppboyTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		D31A98A42153F73400358293 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DB94016A1CB703F2007ABB18 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -230,6 +302,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		D31A98A22153F73400358293 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D31A98A92153F73400358293 /* mParticle_AppboyTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DB9401671CB703F2007ABB18 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -248,7 +328,68 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		D31A98AD2153F73400358293 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DB94016B1CB703F2007ABB18 /* mParticle-Appboy */;
+			targetProxy = D31A98AC2153F73400358293 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		D31A98AE2153F73400358293 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Carthage/Checkouts/appboy-ios-sdk/Appboy-tvOS-SDK",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = mParticle_AppboyTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/Carthage/Build/iOS";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.mparticle.mParticle-AppboyTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D31A98AF2153F73400358293 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Carthage/Checkouts/appboy-ios-sdk/Appboy-tvOS-SDK",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = mParticle_AppboyTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/Carthage/Build/iOS";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.mparticle.mParticle-AppboyTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		DB9401721CB703F2007ABB18 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -517,6 +658,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		D31A98B02153F73400358293 /* Build configuration list for PBXNativeTarget "mParticle_AppboyTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D31A98AE2153F73400358293 /* Debug */,
+				D31A98AF2153F73400358293 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		DB9401661CB703F2007ABB18 /* Build configuration list for PBXProject "mParticle-Appboy" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
