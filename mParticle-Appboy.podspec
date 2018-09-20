@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name             = "mParticle-Appboy"
-    s.version          = "7.6.0"
+    s.version          = "7.6.1"
     s.summary          = "Appboy integration for mParticle"
 
     s.description      = <<-DESC
