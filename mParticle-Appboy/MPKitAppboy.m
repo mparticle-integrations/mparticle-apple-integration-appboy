@@ -245,6 +245,9 @@ static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = ni
               withLaunchOptions:self.launchOptions
               withAppboyOptions:optionsDict];
 
+        if (![Appboy sharedInstance] ) {
+            return;
+        }
         CFTypeRef appboyRef = CFRetain((__bridge CFTypeRef)[Appboy sharedInstance]);
         self->appboyInstance = (__bridge Appboy *)appboyRef;
 
