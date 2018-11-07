@@ -17,6 +17,7 @@
 @interface MPKitAppboy ()
 
 - (NSMutableDictionary<NSString *, NSNumber *> *)optionsDictionary;
++ (id<ABKInAppMessageControllerDelegate>)inAppMessageControllerDelegate;
 
 @end
 
@@ -79,6 +80,42 @@
     
     NSDictionary *optionsDictionary = [appBoy optionsDictionary];
     XCTAssertEqualObjects(optionsDictionary, testOptionsDictionary);
+}
+
+- (void)testSetMessageDelegate {
+    id<ABKInAppMessageControllerDelegate> delegate = (id)[NSObject new];
+    
+    XCTAssertNil([MPKitAppboy inAppMessageControllerDelegate]);
+    
+    [MPKitAppboy setInAppMessageControllerDelegate:delegate];
+    
+    XCTAssertEqualObjects([MPKitAppboy inAppMessageControllerDelegate], delegate);
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"async work"];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        XCTAssertEqualObjects([MPKitAppboy inAppMessageControllerDelegate], delegate);
+        [expectation fulfill];
+    });
+    
+    [self waitForExpectationsWithTimeout:1 handler:nil];
+}
+
+- (void)testWeakMessageDelegate {
+    id<ABKInAppMessageControllerDelegate> delegate = (id)[NSObject new];
+    
+    [MPKitAppboy setInAppMessageControllerDelegate:delegate];
+    
+    delegate = nil;
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"async work"];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        XCTAssertNil([MPKitAppboy inAppMessageControllerDelegate]);
+        [expectation fulfill];
+    });
+    
+    [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
 @end

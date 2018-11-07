@@ -49,7 +49,7 @@ NSString *const eabOptions = @"options";
 NSString *const hostConfigKey = @"host";
 NSString *const originalHost = @"dev.appboy.com";
 
-static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = nil;
+__weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = nil;
 
 @interface MPKitAppboy() <ABKAppboyEndpointDelegate> {
     Appboy *appboyInstance;
@@ -75,6 +75,10 @@ static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = ni
 
 + (void)setInAppMessageControllerDelegate:(id)delegate {
     inAppMessageControllerDelegate = (id<ABKInAppMessageControllerDelegate>)delegate;
+}
+
++ (id<ABKInAppMessageControllerDelegate>)inAppMessageControllerDelegate {
+    return inAppMessageControllerDelegate;
 }
 
 #pragma mark Private methods
@@ -255,9 +259,11 @@ static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = ni
             self->appboyInstance.idfaDelegate = (id)self;
         }
 
+#if TARGET_OS_IOS == 1
         if ([MPKitAppboy inAppMessageControllerDelegate]) {
-            self->appboyInstance.inAppMessageController.delegate = [MPKitAppboy inAppMessageControllerDelegate]
+            self->appboyInstance.inAppMessageController.delegate = [MPKitAppboy inAppMessageControllerDelegate];
         }
+#endif
 
         self->_started = YES;
 
@@ -582,7 +588,7 @@ static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = ni
 }
 
 #if TARGET_OS_IOS == 1 && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
-- (nonnull MPKitExecStatus *)userNotificationCenter:(nonnull UNUserNotificationCenter *)center didReceiveNotificationResponse:(nonnull UNNotificationResponse *)response {
+- (nonnull MPKitExecStatus *)userNotificationCenter:(nonnull UNUserNotificationCenter *)center didReceiveNotificationResponse:(nonnull UNNotificationResponse *)response API_AVAILABLE(ios(10.0)) {
     [appboyInstance userNotificationCenter:center didReceiveNotificationResponse:response withCompletionHandler:^{}];
 
     MPKitExecStatus *execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
