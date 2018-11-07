@@ -255,6 +255,10 @@ static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = ni
             self->appboyInstance.idfaDelegate = (id)self;
         }
 
+        if ([MPKitAppboy inAppMessageControllerDelegate]) {
+            self->appboyInstance.inAppMessageController.delegate = [MPKitAppboy inAppMessageControllerDelegate]
+        }
+
         self->_started = YES;
 
         dispatch_async(dispatch_get_main_queue(), ^{
