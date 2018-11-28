@@ -7,5 +7,8 @@
 	},
 	{
 		"7.8.0": "https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/releases/download/7.8.0/mParticle_Appboy.framework.zip"
+	},
+	{
+		"7.8.1": "https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/releases/download/7.8.1/mParticle_Appboy.framework.zip"
 	}
 ]
