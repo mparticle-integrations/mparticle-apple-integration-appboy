@@ -519,7 +519,7 @@ __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelega
         } else if ([value isEqualToString:mParticleGenderFemale]) {
             appboyInstance.user.gender = ABKUserGenderFemale;
         } else if ([value isEqualToString:mParticleGenderNotAvailable]) {
-            appboyInstance.user.gender = ABKUserGenderNotApplicable;
+            appboyInstance.user.gender = ABKUserGenderOther;
         }
     } else if ([key isEqualToString:mParticleUserAttributeMobileNumber] || [key isEqualToString:@"$MPUserMobile"]) {
         appboyInstance.user.phone = value;
