@@ -513,14 +513,18 @@ __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelega
     } else if ([key isEqualToString:mParticleUserAttributeCity]) {
         appboyInstance.user.homeCity = value;
     } else if ([key isEqualToString:mParticleUserAttributeGender]) {
+        #if TARGET_OS_IOS == 1
         appboyInstance.user.gender = ABKUserGenderOther;
         if ([value isEqualToString:mParticleGenderMale]) {
             appboyInstance.user.gender = ABKUserGenderMale;
         } else if ([value isEqualToString:mParticleGenderFemale]) {
             appboyInstance.user.gender = ABKUserGenderFemale;
         } else if ([value isEqualToString:mParticleGenderNotAvailable]) {
-            appboyInstance.user.gender = ABKUserGenderOther;
+            appboyInstance.user.gender = ABKUserGenderNotApplicable;
         }
+        #elif TARGET_OS_TV == 1
+        appboyInstance.user.gender = [value isEqualToString:mParticleGenderMale] ? ABKUserGenderMale : ABKUserGenderFemale;
+        #endif
     } else if ([key isEqualToString:mParticleUserAttributeMobileNumber] || [key isEqualToString:@"$MPUserMobile"]) {
         appboyInstance.user.phone = value;
     } else {
