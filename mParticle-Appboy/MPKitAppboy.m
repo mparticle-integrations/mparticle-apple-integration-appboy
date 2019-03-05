@@ -287,9 +287,17 @@ __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelega
     [serverKeys enumerateObjectsUsingBlock:^(NSString * _Nonnull serverKey, NSUInteger idx, BOOL * _Nonnull stop) {
         NSString *optionValue = self.configuration[serverKey];
         
-        if (optionValue) {
+        if (optionValue != nil && (NSNull *)optionValue != [NSNull null]) {
             NSString *appboyKey = appboyKeys[idx];
-            optionsDictionary[appboyKey] = [numberFormatter numberFromString:optionValue];
+            NSNumber *numberValue = nil;
+            @try {
+                numberValue = [numberFormatter numberFromString:optionValue];
+            } @catch (NSException *exception) {
+                numberValue = nil;
+            }
+            if (numberValue != nil) {
+                optionsDictionary[appboyKey] = numberValue;
+            }
         }
     }];
     
