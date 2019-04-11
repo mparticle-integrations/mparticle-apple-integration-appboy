@@ -1,11 +1,3 @@
-//
-//  mParticle_Appboy.h
-//  mParticle-Appboy
-//
-//  Created by Peter Jenkins on 4/7/16.
-//  Copyright © 2016 mParticle. All rights reserved.
-//
-
 #import <UIKit/UIKit.h>
 
 //! Project version number for mParticle-Appboy.
