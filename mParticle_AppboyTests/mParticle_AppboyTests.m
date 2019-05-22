@@ -39,13 +39,13 @@
 
 - (void)testStartwithSimpleConfig {
     MPKitAppboy *appBoy = [[MPKitAppboy alloc] init];
-
+    
     NSDictionary *kitConfiguration = @{@"apiKey":@"BrazeID",
                                        @"id":@42
                                        };
-
+    
     [appBoy didFinishLaunchingWithConfiguration:kitConfiguration];
-
+    
     NSDictionary *testOptionsDictionary = @{ABKDisableAutomaticLocationCollectionKey:@(NO),
                                             ABKSDKFlavorKey:@6
                                        };
