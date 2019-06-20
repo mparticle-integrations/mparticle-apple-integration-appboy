@@ -14,7 +14,7 @@
 #import "AppboyKit.h"
 #endif
 
-@interface MPKitAppboy ()
+@interface MPKitAppboy () <ABKAppboyEndpointDelegate>
 
 - (NSMutableDictionary<NSString *, NSNumber *> *)optionsDictionary;
 + (id<ABKInAppMessageControllerDelegate>)inAppMessageControllerDelegate;
@@ -80,6 +80,165 @@
     
     NSDictionary *optionsDictionary = [appBoy optionsDictionary];
     XCTAssertEqualObjects(optionsDictionary, testOptionsDictionary);
+}
+
+- (void)testEndpointOverride {
+    MPKitAppboy *appBoy = [[MPKitAppboy alloc] init];
+    
+    NSDictionary *kitConfiguration = @{@"apiKey":@"BrazeID",
+                                       @"host":@"https://foo.bar.com",
+                                       @"id":@42,
+                                       @"ABKCollectIDFA":@"true",
+                                       @"ABKRequestProcessingPolicyOptionKey": @"1",
+                                       @"ABKFlushIntervalOptionKey":@"2",
+                                       @"ABKSessionTimeoutKey":@"3",
+                                       @"ABKMinimumTriggerTimeIntervalKey":@"4",
+                                       @"ABKCollectIDFA":@"true"
+                                       };
+    
+    [appBoy didFinishLaunchingWithConfiguration:kitConfiguration];
+    
+    XCTAssertEqualObjects(@"https://foo.bar.com", [appBoy getApiEndpoint:@"https://original.com"]);
+    XCTAssertEqualObjects(@"https://foo.bar.com/param1", [appBoy getApiEndpoint:@"https://original.com/param1"]);
+    XCTAssertEqualObjects(@"https://foo.bar.com/param1/param2", [appBoy getApiEndpoint:@"https://original.com/param1/param2"]);
+    
+    NSString *testEndpoint;
+    XCTAssertNil([appBoy getApiEndpoint:testEndpoint]);
+    XCTAssertEqualObjects(@"moo.far.com", [appBoy getApiEndpoint:@"moo.far.com"]);
+    XCTAssertEqualObjects(@"http://moo.far.com", [appBoy getApiEndpoint:@"http://moo.far.com"]);
+}
+
+- (void)testEndpointOverride2 {
+    MPKitAppboy *appBoy = [[MPKitAppboy alloc] init];
+    
+    NSDictionary *kitConfiguration = @{@"apiKey":@"BrazeID",
+                                       @"host":@"http://foo.bar.com",
+                                       @"id":@42,
+                                       @"ABKCollectIDFA":@"true",
+                                       @"ABKRequestProcessingPolicyOptionKey": @"1",
+                                       @"ABKFlushIntervalOptionKey":@"2",
+                                       @"ABKSessionTimeoutKey":@"3",
+                                       @"ABKMinimumTriggerTimeIntervalKey":@"4",
+                                       @"ABKCollectIDFA":@"true"
+                                       };
+    
+    [appBoy didFinishLaunchingWithConfiguration:kitConfiguration];
+    
+    XCTAssertEqualObjects(@"http://foo.bar.com", [appBoy getApiEndpoint:@"https://original.com"]);
+    XCTAssertEqualObjects(@"http://foo.bar.com/param1", [appBoy getApiEndpoint:@"https://original.com/param1"]);
+    XCTAssertEqualObjects(@"http://foo.bar.com/param1/param2", [appBoy getApiEndpoint:@"https://original.com/param1/param2"]);
+    
+    NSString *testEndpoint;
+    XCTAssertNil([appBoy getApiEndpoint:testEndpoint]);
+    XCTAssertEqualObjects(@"moo.far.com", [appBoy getApiEndpoint:@"moo.far.com"]);
+    XCTAssertEqualObjects(@"http://moo.far.com", [appBoy getApiEndpoint:@"http://moo.far.com"]);
+}
+
+- (void)testEndpointOverride3 {
+    MPKitAppboy *appBoy = [[MPKitAppboy alloc] init];
+    
+    NSDictionary *kitConfiguration = @{@"apiKey":@"BrazeID",
+                                       @"host":@"foo.bar.com",
+                                       @"id":@42,
+                                       @"ABKCollectIDFA":@"true",
+                                       @"ABKRequestProcessingPolicyOptionKey": @"1",
+                                       @"ABKFlushIntervalOptionKey":@"2",
+                                       @"ABKSessionTimeoutKey":@"3",
+                                       @"ABKMinimumTriggerTimeIntervalKey":@"4",
+                                       @"ABKCollectIDFA":@"true"
+                                       };
+    
+    [appBoy didFinishLaunchingWithConfiguration:kitConfiguration];
+    
+    XCTAssertEqualObjects(@"foo.bar.com", [appBoy getApiEndpoint:@"https://original.com"]);
+    XCTAssertEqualObjects(@"foo.bar.com/param1", [appBoy getApiEndpoint:@"https://original.com/param1"]);
+    XCTAssertEqualObjects(@"foo.bar.com/param1/param2", [appBoy getApiEndpoint:@"https://original.com/param1/param2"]);
+    
+    
+    NSString *testEndpoint;
+    XCTAssertNil([appBoy getApiEndpoint:testEndpoint]);
+    XCTAssertEqualObjects(@"moo.far.com", [appBoy getApiEndpoint:@"moo.far.com"]);
+    XCTAssertEqualObjects(@"http://moo.far.com", [appBoy getApiEndpoint:@"http://moo.far.com"]);
+}
+
+- (void)testEndpointOverride4 {
+    MPKitAppboy *appBoy = [[MPKitAppboy alloc] init];
+    
+    NSDictionary *kitConfiguration = @{@"apiKey":@"BrazeID",
+                                       @"host":@"https://foo.bar.com/baz",
+                                       @"id":@42,
+                                       @"ABKCollectIDFA":@"true",
+                                       @"ABKRequestProcessingPolicyOptionKey": @"1",
+                                       @"ABKFlushIntervalOptionKey":@"2",
+                                       @"ABKSessionTimeoutKey":@"3",
+                                       @"ABKMinimumTriggerTimeIntervalKey":@"4",
+                                       @"ABKCollectIDFA":@"true"
+                                       };
+    
+    [appBoy didFinishLaunchingWithConfiguration:kitConfiguration];
+    
+    XCTAssertEqualObjects(@"https://foo.bar.com/baz", [appBoy getApiEndpoint:@"https://original.com"]);
+    XCTAssertEqualObjects(@"https://foo.bar.com/baz/param1", [appBoy getApiEndpoint:@"https://original.com/param1"]);
+    XCTAssertEqualObjects(@"https://foo.bar.com/baz/param1/param2", [appBoy getApiEndpoint:@"https://original.com/param1/param2"]);
+    
+    
+    NSString *testEndpoint;
+    XCTAssertNil([appBoy getApiEndpoint:testEndpoint]);
+    XCTAssertEqualObjects(@"moo.far.com", [appBoy getApiEndpoint:@"moo.far.com"]);
+    XCTAssertEqualObjects(@"http://moo.far.com", [appBoy getApiEndpoint:@"http://moo.far.com"]);
+}
+
+- (void)testEndpointOverride5 {
+    MPKitAppboy *appBoy = [[MPKitAppboy alloc] init];
+    
+    NSDictionary *kitConfiguration = @{@"apiKey":@"BrazeID",
+                                       @"host":@"https://foo.bar.com/baz/baz",
+                                       @"id":@42,
+                                       @"ABKCollectIDFA":@"true",
+                                       @"ABKRequestProcessingPolicyOptionKey": @"1",
+                                       @"ABKFlushIntervalOptionKey":@"2",
+                                       @"ABKSessionTimeoutKey":@"3",
+                                       @"ABKMinimumTriggerTimeIntervalKey":@"4",
+                                       @"ABKCollectIDFA":@"true"
+                                       };
+    
+    [appBoy didFinishLaunchingWithConfiguration:kitConfiguration];
+    
+    XCTAssertEqualObjects(@"https://foo.bar.com/baz/baz", [appBoy getApiEndpoint:@"https://original.com"]);
+    XCTAssertEqualObjects(@"https://foo.bar.com/baz/baz/param1", [appBoy getApiEndpoint:@"https://original.com/param1"]);
+    XCTAssertEqualObjects(@"https://foo.bar.com/baz/baz/param1/param2", [appBoy getApiEndpoint:@"https://original.com/param1/param2"]);
+    
+    
+    NSString *testEndpoint;
+    XCTAssertNil([appBoy getApiEndpoint:testEndpoint]);
+    XCTAssertEqualObjects(@"moo.far.com", [appBoy getApiEndpoint:@"moo.far.com"]);
+    XCTAssertEqualObjects(@"http://moo.far.com", [appBoy getApiEndpoint:@"http://moo.far.com"]);
+}
+
+- (void)testEndpointOverrideNilHost {
+    MPKitAppboy *appBoy = [[MPKitAppboy alloc] init];
+    
+    NSDictionary *kitConfiguration = @{@"apiKey":@"BrazeID",
+                                       @"id":@42,
+                                       @"ABKCollectIDFA":@"true",
+                                       @"ABKRequestProcessingPolicyOptionKey": @"1",
+                                       @"ABKFlushIntervalOptionKey":@"2",
+                                       @"ABKSessionTimeoutKey":@"3",
+                                       @"ABKMinimumTriggerTimeIntervalKey":@"4",
+                                       @"ABKCollectIDFA":@"true"
+                                       };
+    
+    [appBoy didFinishLaunchingWithConfiguration:kitConfiguration];
+    
+    XCTAssertEqualObjects(@"https://original.com", [appBoy getApiEndpoint:@"https://original.com"]);
+    XCTAssertEqualObjects(@"https://original.com/param1", [appBoy getApiEndpoint:@"https://original.com/param1"]);
+    XCTAssertEqualObjects(@"https://original.com/param1/param2", [appBoy getApiEndpoint:@"https://original.com/param1/param2"]);
+    
+    
+    NSString *testEndpoint;
+    XCTAssertNil([appBoy getApiEndpoint:testEndpoint]);
+    XCTAssertEqualObjects(@"moo.far.com", [appBoy getApiEndpoint:@"moo.far.com"]);
+    XCTAssertEqualObjects(@"http://moo.far.com", [appBoy getApiEndpoint:@"http://moo.far.com"]);
 }
 
 - (void)testSetMessageDelegate {

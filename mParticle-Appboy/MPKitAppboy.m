@@ -29,7 +29,6 @@
 NSString *const eabAPIKey = @"apiKey";
 NSString *const eabOptions = @"options";
 NSString *const hostConfigKey = @"host";
-NSString *const originalHost = @"dev.appboy.com";
 
 __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = nil;
 
@@ -192,9 +191,15 @@ __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelega
 
 #pragma mark ABKAppboyEndpointDelegate
 - (NSString *)getApiEndpoint:(NSString *)appboyApiEndpoint {
-    NSString *host = self.host;
-    NSString *endpoint = [appboyApiEndpoint stringByReplacingOccurrencesOfString:originalHost withString:host];
-    return endpoint;
+    NSMutableString *modifiedEndpoint = [appboyApiEndpoint mutableCopy];
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:
+                                  @"https.*\\.com" options:0 error:nil];
+    
+    if (self.host && modifiedEndpoint) {
+        [regex replaceMatchesInString:modifiedEndpoint options:0 range:NSMakeRange(0, [modifiedEndpoint length]) withTemplate:self.host];
+    }
+    
+    return [modifiedEndpoint copy];
 }
 
 #pragma mark MPKitInstanceProtocol methods
