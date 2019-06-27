@@ -197,6 +197,9 @@ __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelega
     
     if (self.host && modifiedEndpoint) {
         [regex replaceMatchesInString:modifiedEndpoint options:0 range:NSMakeRange(0, [modifiedEndpoint length]) withTemplate:self.host];
+        if (![modifiedEndpoint containsString:@"https://"] && ![modifiedEndpoint containsString:@"http://"]) {
+            modifiedEndpoint = [NSMutableString stringWithFormat:@"https://%@", modifiedEndpoint];
+        }
     }
     
     return [modifiedEndpoint copy];

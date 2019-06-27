@@ -104,7 +104,7 @@
     
     NSString *testEndpoint;
     XCTAssertNil([appBoy getApiEndpoint:testEndpoint]);
-    XCTAssertEqualObjects(@"moo.far.com", [appBoy getApiEndpoint:@"moo.far.com"]);
+    XCTAssertEqualObjects(@"https://moo.far.com", [appBoy getApiEndpoint:@"moo.far.com"]);
     XCTAssertEqualObjects(@"http://moo.far.com", [appBoy getApiEndpoint:@"http://moo.far.com"]);
 }
 
@@ -130,7 +130,7 @@
     
     NSString *testEndpoint;
     XCTAssertNil([appBoy getApiEndpoint:testEndpoint]);
-    XCTAssertEqualObjects(@"moo.far.com", [appBoy getApiEndpoint:@"moo.far.com"]);
+    XCTAssertEqualObjects(@"https://moo.far.com", [appBoy getApiEndpoint:@"moo.far.com"]);
     XCTAssertEqualObjects(@"http://moo.far.com", [appBoy getApiEndpoint:@"http://moo.far.com"]);
 }
 
@@ -150,14 +150,14 @@
     
     [appBoy didFinishLaunchingWithConfiguration:kitConfiguration];
     
-    XCTAssertEqualObjects(@"foo.bar.com", [appBoy getApiEndpoint:@"https://original.com"]);
-    XCTAssertEqualObjects(@"foo.bar.com/param1", [appBoy getApiEndpoint:@"https://original.com/param1"]);
-    XCTAssertEqualObjects(@"foo.bar.com/param1/param2", [appBoy getApiEndpoint:@"https://original.com/param1/param2"]);
+    XCTAssertEqualObjects(@"https://foo.bar.com", [appBoy getApiEndpoint:@"https://original.com"]);
+    XCTAssertEqualObjects(@"https://foo.bar.com/param1", [appBoy getApiEndpoint:@"https://original.com/param1"]);
+    XCTAssertEqualObjects(@"https://foo.bar.com/param1/param2", [appBoy getApiEndpoint:@"https://original.com/param1/param2"]);
     
     
     NSString *testEndpoint;
     XCTAssertNil([appBoy getApiEndpoint:testEndpoint]);
-    XCTAssertEqualObjects(@"moo.far.com", [appBoy getApiEndpoint:@"moo.far.com"]);
+    XCTAssertEqualObjects(@"https://moo.far.com", [appBoy getApiEndpoint:@"moo.far.com"]);
     XCTAssertEqualObjects(@"http://moo.far.com", [appBoy getApiEndpoint:@"http://moo.far.com"]);
 }
 
@@ -184,7 +184,7 @@
     
     NSString *testEndpoint;
     XCTAssertNil([appBoy getApiEndpoint:testEndpoint]);
-    XCTAssertEqualObjects(@"moo.far.com", [appBoy getApiEndpoint:@"moo.far.com"]);
+    XCTAssertEqualObjects(@"https://moo.far.com", [appBoy getApiEndpoint:@"moo.far.com"]);
     XCTAssertEqualObjects(@"http://moo.far.com", [appBoy getApiEndpoint:@"http://moo.far.com"]);
 }
 
@@ -211,7 +211,7 @@
     
     NSString *testEndpoint;
     XCTAssertNil([appBoy getApiEndpoint:testEndpoint]);
-    XCTAssertEqualObjects(@"moo.far.com", [appBoy getApiEndpoint:@"moo.far.com"]);
+    XCTAssertEqualObjects(@"https://moo.far.com", [appBoy getApiEndpoint:@"moo.far.com"]);
     XCTAssertEqualObjects(@"http://moo.far.com", [appBoy getApiEndpoint:@"http://moo.far.com"]);
 }
 
