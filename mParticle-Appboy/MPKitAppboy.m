@@ -32,7 +32,7 @@ NSString *const hostConfigKey = @"host";
 
 __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = nil;
 
-@interface MPKitAppboy() <ABKAppboyEndpointDelegate> {
+@interface MPKitAppboy() {
     Appboy *appboyInstance;
     BOOL collectIDFA;
     BOOL forwardScreenViews;
@@ -189,22 +189,6 @@ __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelega
     return _advertiserId;
 }
 
-#pragma mark ABKAppboyEndpointDelegate
-- (NSString *)getApiEndpoint:(NSString *)appboyApiEndpoint {
-    NSMutableString *modifiedEndpoint = [appboyApiEndpoint mutableCopy];
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:
-                                  @"https.*\\.com" options:0 error:nil];
-    
-    if (self.host && modifiedEndpoint) {
-        [regex replaceMatchesInString:modifiedEndpoint options:0 range:NSMakeRange(0, [modifiedEndpoint length]) withTemplate:self.host];
-        if (![modifiedEndpoint containsString:@"https://"] && ![modifiedEndpoint containsString:@"http://"]) {
-            modifiedEndpoint = [NSMutableString stringWithFormat:@"https://%@", modifiedEndpoint];
-        }
-    }
-    
-    return [modifiedEndpoint copy];
-}
-
 #pragma mark MPKitInstanceProtocol methods
 - (MPKitExecStatus *)didFinishLaunchingWithConfiguration:(NSDictionary *)configuration {
     MPKitExecStatus *execStatus = nil;
@@ -302,7 +286,7 @@ __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelega
     if (self.host.length) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wincompatible-pointer-types"
-        optionsDictionary[ABKAppboyEndpointDelegateKey] = (id)self;
+        optionsDictionary[ABKEndpointKey] = self.host;
 #pragma clang diagnostic pop
     }
     
