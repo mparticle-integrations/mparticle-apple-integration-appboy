@@ -301,7 +301,18 @@ __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelega
     }
     optionsDictionary[ABKSDKFlavorKey] = @(MPARTICLE);
 #pragma clang diagnostic pop
-    
+
+#if TARGET_OS_IOS == 1
+    optionsDictionary[ABKEnableAutomaticLocationCollectionKey] = @(YES);
+    if (self.configuration[@"ABKDisableAutomaticLocationCollectionKey"]) {
+        if ([self.configuration[@"ABKDisableAutomaticLocationCollectionKey"] caseInsensitiveCompare:@"true"] == NSOrderedSame) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wincompatible-pointer-types"
+            optionsDictionary[ABKEnableAutomaticLocationCollectionKey] = @(NO);
+#pragma clang diagnostic pop
+        }
+    }
+#elif TARGET_OS_TVOS == 1
     optionsDictionary[ABKDisableAutomaticLocationCollectionKey] = @(NO);
     if (self.configuration[@"ABKDisableAutomaticLocationCollectionKey"]) {
         if ([self.configuration[@"ABKDisableAutomaticLocationCollectionKey"] caseInsensitiveCompare:@"true"] == NSOrderedSame) {
@@ -311,6 +322,7 @@ __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelega
 #pragma clang diagnostic pop
         }
     }
+#endif
     
     return optionsDictionary;
 }
