@@ -442,7 +442,7 @@ __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelega
 
 - (MPKitExecStatus *)setDeviceToken:(NSData *)deviceToken {
 #if TARGET_OS_IOS == 1
-    [appboyInstance registerPushToken:[NSString stringWithFormat:@"%@", deviceToken]];
+    [appboyInstance registerDeviceToken:deviceToken];
 #endif
     
     MPKitExecStatus *execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
