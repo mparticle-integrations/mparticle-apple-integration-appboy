@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
 
     s.ios.deployment_target = "9.0"
     s.ios.source_files      = 'mParticle-Appboy/*.{h,m,mm}'
-    s.ios.dependency 'mParticle-Apple-SDK/mParticle', '~> 7.12.1'
+    s.ios.dependency 'mParticle-Apple-SDK/mParticle', '~> 7.12'
     s.ios.frameworks = 'CoreTelephony', 'SystemConfiguration'
     s.libraries = 'z'
     s.ios.dependency 'Appboy-iOS-SDK', '~> 3.20'
