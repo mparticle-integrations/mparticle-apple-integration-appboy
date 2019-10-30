@@ -95,9 +95,9 @@ __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelega
 
 - (MPKitExecStatus *)logAppboyCustomEvent:(MPEvent *)event eventType:(NSUInteger)eventType {
     void (^logCustomEvent)(void) = ^{
-        NSDictionary *transformedEventInfo = [event.info transformValuesToString];
+        NSDictionary *transformedEventInfo = [event.customAttributes transformValuesToString];
         
-        NSMutableDictionary *eventInfo = [[NSMutableDictionary alloc] initWithCapacity:event.info.count];
+        NSMutableDictionary *eventInfo = [[NSMutableDictionary alloc] initWithCapacity:event.customAttributes.count];
         [transformedEventInfo enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, id _Nonnull obj, BOOL * _Nonnull stop) {
             NSString *strippedKey = [self stripCharacter:@"$" fromString:key];
             eventInfo[strippedKey] = obj;
@@ -347,7 +347,17 @@ __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelega
     return execStatus;
 }
 
-- (MPKitExecStatus *)logCommerceEvent:(MPCommerceEvent *)commerceEvent {
+- (nonnull MPKitExecStatus *)logBaseEvent:(nonnull MPBaseEvent *)event {
+    if ([event isKindOfClass:[MPEvent class]]) {
+        return [self routeEvent:(MPEvent *)event];
+    } else if ([event isKindOfClass:[MPCommerceEvent class]]) {
+        return [self routeCommerceEvent:(MPCommerceEvent *)event];
+    } else {
+        return [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeUnavailable];
+    }
+}
+
+- (MPKitExecStatus *)routeCommerceEvent:(MPCommerceEvent *)commerceEvent {
     MPKitExecStatus *execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess forwardCount:0];
     
     if (commerceEvent.action == MPCommerceEventActionPurchase) {
@@ -400,7 +410,7 @@ __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelega
         NSArray *expandedInstructions = [commerceEvent expandedInstructions];
         
         for (MPCommerceEventInstruction *commerceEventInstruction in expandedInstructions) {
-            [self logEvent:commerceEventInstruction.event];
+            [self logBaseEvent:commerceEventInstruction.event];
             [execStatus incrementForwardCount];
         }
     }
@@ -408,7 +418,7 @@ __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelega
     return execStatus;
 }
 
-- (MPKitExecStatus *)logEvent:(MPEvent *)event {
+- (MPKitExecStatus *)routeEvent:(MPEvent *)event {
     return [self logAppboyCustomEvent:event eventType:event.type];
 }
 
