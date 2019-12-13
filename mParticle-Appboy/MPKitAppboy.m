@@ -17,18 +17,29 @@
         #endif
     #endif
 #else
-
-#if TARGET_OS_IOS == 1
-#import <Appboy_iOS_SDK/Appboy-iOS-SDK-umbrella.h>
-#elif TARGET_OS_TV == 1
-#import "AppboyKit.h"
+    #if TARGET_OS_IOS == 1
+        #import <Appboy_iOS_SDK/Appboy-iOS-SDK-umbrella.h>
+    #elif TARGET_OS_TV == 1
+        #import "AppboyKit.h"
+    #endif
 #endif
 
-#endif
+static NSString *const eabAPIKey = @"apiKey";
+static NSString *const eabOptions = @"options";
+static NSString *const hostConfigKey = @"host";
+static NSString *const userIdTypeKey = @"userIdentificationType";
 
-NSString *const eabAPIKey = @"apiKey";
-NSString *const eabOptions = @"options";
-NSString *const hostConfigKey = @"host";
+// The possible values for userIdentificationType
+static NSString *const userIdValueOther = @"Other";
+static NSString *const userIdValueCustomerId = @"CustomerId";
+static NSString *const userIdValueFacebook = @"Facebook";
+static NSString *const userIdValueTwitter = @"Twitter";
+static NSString *const userIdValueGoogle = @"Google";
+static NSString *const userIdValueMicrosoft = @"Microsoft";
+static NSString *const userIdValueYahoo = @"Yahoo";
+static NSString *const userIdValueEmail = @"Email";
+static NSString *const userIdValueAlias = @"Alias";
+static NSString *const userIdValueMPID = @"MPID";
 
 __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = nil;
 
@@ -39,6 +50,7 @@ __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelega
 }
 
 @property (nonatomic) NSString *host;
+@property (nonatomic) MPUserIdentity userIdType;
 
 @end
 
@@ -202,7 +214,9 @@ __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelega
     _started = NO;
     collectIDFA = NO;
     forwardScreenViews = NO;
+    
     _host = configuration[hostConfigKey];
+    _userIdType = [self userIdentityForString:configuration[userIdTypeKey]];
     
     execStatus = [[MPKitExecStatus alloc] initWithSDKCode:[[self class] kitCode] returnCode:MPKitReturnCodeSuccess];
     return execStatus;
@@ -301,7 +315,7 @@ __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelega
     }
     optionsDictionary[ABKSDKFlavorKey] = @(MPARTICLE);
 #pragma clang diagnostic pop
-
+    
 #if TARGET_OS_IOS == 1
     optionsDictionary[ABKEnableAutomaticLocationCollectionKey] = @(YES);
     if (self.configuration[@"ABKDisableAutomaticLocationCollectionKey"]) {
@@ -575,10 +589,70 @@ __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelega
     
     if (request.userIdentities) {
         NSMutableDictionary *userIDsCopy = [request.userIdentities copy];
+        NSString *userId;
         
-        if (userIDsCopy[@(MPUserIdentityCustomerId)]) {
+        switch (_userIdType) {
+            case MPUserIdentityOther:
+                if (userIDsCopy[@(MPUserIdentityOther)]) {
+                    userId = userIDsCopy[@(MPUserIdentityOther)];
+                }
+                break;
+            case MPUserIdentityCustomerId:
+                if (userIDsCopy[@(MPUserIdentityCustomerId)]) {
+                    userId = userIDsCopy[@(MPUserIdentityCustomerId)];
+                }
+                break;
+            case MPUserIdentityFacebook:
+                if (userIDsCopy[@(MPUserIdentityFacebook)]) {
+                    userId = userIDsCopy[@(MPUserIdentityFacebook)];
+                }
+                break;
+            case MPUserIdentityTwitter:
+                if (userIDsCopy[@(MPUserIdentityTwitter)]) {
+                    userId = userIDsCopy[@(MPUserIdentityTwitter)];
+                }
+                break;
+            case MPUserIdentityGoogle:
+                if (userIDsCopy[@(MPUserIdentityGoogle)]) {
+                    userId = userIDsCopy[@(MPUserIdentityGoogle)];
+                }
+                break;
+            case MPUserIdentityMicrosoft:
+                if (userIDsCopy[@(MPUserIdentityMicrosoft)]) {
+                    userId = userIDsCopy[@(MPUserIdentityMicrosoft)];
+                }
+                break;
+            case MPUserIdentityYahoo:
+                if (userIDsCopy[@(MPUserIdentityYahoo)]) {
+                    userId = userIDsCopy[@(MPUserIdentityYahoo)];
+                }
+                break;
+            case MPUserIdentityEmail:
+                if (userIDsCopy[@(MPUserIdentityEmail)]) {
+                    userId = userIDsCopy[@(MPUserIdentityEmail)];
+                }
+                break;
+            case MPUserIdentityAlias:
+                if (userIDsCopy[@(MPUserIdentityAlias)]) {
+                    userId = userIDsCopy[@(MPUserIdentityAlias)];
+                }
+                break;
+            case MPUserIdentityOther4:
+                if (user != nil) {
+                    userId = user.userId.stringValue;
+                }
+                break;
+                
+            default:
+                if (userIDsCopy[@(MPUserIdentityCustomerId)]) {
+                    userId = userIDsCopy[@(MPUserIdentityCustomerId)];
+                }
+                break;
+        }
+        
+        if (userId) {
             void (^changeUser)(void) = ^ {
-                [self->appboyInstance changeUser:userIDsCopy[@(MPUserIdentityCustomerId)]];
+                [self->appboyInstance changeUser:userId];
             };
             
             if ([NSThread isMainThread]) {
@@ -610,5 +684,33 @@ __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelega
     return execStatus;
 }
 #endif
+
+- (MPUserIdentity)userIdentityForString:(nullable NSString *)userIdString {
+    if (userIdString != nil) {
+        if ([userIdString isEqualToString:userIdValueOther]) {
+            return MPUserIdentityOther;
+        } else if ([userIdString isEqualToString:userIdValueCustomerId]) {
+            return MPUserIdentityCustomerId;
+        } else if ([userIdString isEqualToString:userIdValueFacebook]) {
+            return MPUserIdentityFacebook;
+        } else if ([userIdString isEqualToString:userIdValueTwitter]) {
+            return MPUserIdentityTwitter;
+        } else if ([userIdString isEqualToString:userIdValueGoogle]) {
+            return MPUserIdentityGoogle;
+        } else if ([userIdString isEqualToString:userIdValueMicrosoft]) {
+            return MPUserIdentityMicrosoft;
+        } else if ([userIdString isEqualToString:userIdValueYahoo]) {
+            return MPUserIdentityYahoo;
+        } else if ([userIdString isEqualToString:userIdValueEmail]) {
+            return MPUserIdentityEmail;
+        } else if ([userIdString isEqualToString:userIdValueAlias]) {
+            return MPUserIdentityAlias;
+        } else if ([userIdString isEqualToString:userIdValueMPID]) {
+            return MPUserIdentityOther4;
+        }
+    }
+    
+    return MPUserIdentityCustomerId;
+}
 
 @end
