@@ -41,6 +41,9 @@ static NSString *const userIdValueEmail = @"Email";
 static NSString *const userIdValueAlias = @"Alias";
 static NSString *const userIdValueMPID = @"MPID";
 
+// User Attribute key with reserved functionality for Braze kit
+static NSString *const brazeUserAttributeDob = @"dob";
+
 __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = nil;
 
 @interface MPKitAppboy() {
@@ -526,8 +529,52 @@ __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelega
         birthComponents.day = 01;
         
         appboyInstance.user.dateOfBirth = [calendar dateFromComponents:birthComponents];
-    } else if ([key isEqualToString:mParticleUserAttributeCountry]) {
-        appboyInstance.user.country = value;
+    } else if ([key isEqualToString:brazeUserAttributeDob]) {
+        // Expected Date Format @"yyyy'-'MM'-'dd"
+        NSCalendar *calendar = [NSCalendar currentCalendar];
+
+        NSString *yearString = [value substringToIndex:3];
+        NSRange monthRange = NSMakeRange(5, 2);
+        NSString *monthString = [value substringWithRange:monthRange];
+        NSRange dayRange = NSMakeRange(8, 2);
+        NSString *dayString = [value substringWithRange:dayRange];
+
+        NSInteger year = 0;
+        NSInteger month = 0;
+        NSInteger day = 0;
+           
+       @try {
+           year = [yearString integerValue];
+       } @catch (NSException *exception) {
+           NSLog(@"mParticle -> Invalid dob year: %@ \nPlease use this date format @\"yyyy'-'MM'-'dd\"", yearString);
+           execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeFail];
+           return execStatus;
+       }
+        
+        @try {
+            month = [monthString integerValue];
+        } @catch (NSException *exception) {
+            NSLog(@"mParticle -> Invalid dob month: %@ \nPlease use this date format @\"yyyy'-'MM'-'dd\"", monthString);
+            execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeFail];
+            return execStatus;
+        }
+        
+        @try {
+            day = [dayString integerValue];
+        } @catch (NSException *exception) {
+            NSLog(@"mParticle -> Invalid dob day: %@ \nPlease use this date format @\"yyyy'-'MM'-'dd\"", dayString);
+            execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeFail];
+            return execStatus;
+        }
+       
+       NSDateComponents *birthComponents = [[NSDateComponents alloc] init];
+       birthComponents.year = year;
+       birthComponents.month = month;
+       birthComponents.day = day;
+       
+       appboyInstance.user.dateOfBirth = [calendar dateFromComponents:birthComponents];
+   } else if ([key isEqualToString:mParticleUserAttributeCountry]) {
+    appboyInstance.user.country = value;
     } else if ([key isEqualToString:mParticleUserAttributeCity]) {
         appboyInstance.user.homeCity = value;
     } else if ([key isEqualToString:mParticleUserAttributeGender]) {
