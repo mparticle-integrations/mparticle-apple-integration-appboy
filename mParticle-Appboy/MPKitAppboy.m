@@ -533,7 +533,7 @@ __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelega
         // Expected Date Format @"yyyy'-'MM'-'dd"
         NSCalendar *calendar = [NSCalendar currentCalendar];
 
-        NSString *yearString = [value substringToIndex:3];
+        NSString *yearString = [value substringToIndex:4];
         NSRange monthRange = NSMakeRange(5, 2);
         NSString *monthString = [value substringWithRange:monthRange];
         NSRange dayRange = NSMakeRange(8, 2);
