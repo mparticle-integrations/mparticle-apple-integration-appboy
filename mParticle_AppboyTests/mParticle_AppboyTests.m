@@ -1,13 +1,6 @@
-//
-//  mParticle_AppboyTests.m
-//  mParticle_AppboyTests
-//
-//  Created by Brandon Stalnaker on 9/20/18.
-//  Copyright © 2018 mParticle. All rights reserved.
-//
-
 #import <XCTest/XCTest.h>
 #import "MPKitAppboy.h"
+#import <OCMock/OCMock.h>
 #if TARGET_OS_IOS == 1
 #import <Appboy_iOS_SDK/Appboy-iOS-SDK-umbrella.h>
 #elif TARGET_OS_TV == 1
@@ -18,6 +11,8 @@
 
 @property (nonatomic) MPUserIdentity userIdType;
 
+- (Appboy *)appboyInstance;
+- (void)setAppboyInstance:(Appboy *)instance;
 - (NSMutableDictionary<NSString *, NSNumber *> *)optionsDictionary;
 + (id<ABKInAppMessageControllerDelegate>)inAppMessageControllerDelegate;
 
@@ -316,6 +311,46 @@
     [appBoy didFinishLaunchingWithConfiguration:kitConfiguration];
     
     XCTAssertEqual(appBoy.userIdType, MPUserIdentityOther4);
+}
+
+- (void)testlogCommerceEvent {
+    MPKitAppboy *kit = [[MPKitAppboy alloc] init];
+    
+    Appboy *testClient = [[Appboy alloc] init];
+    id mockClient = OCMPartialMock(testClient);
+    [kit setAppboyInstance:mockClient];
+        
+    XCTAssertEqualObjects(mockClient, [kit appboyInstance]);
+    
+    MPProduct *product = [[MPProduct alloc] initWithName:@"product1" sku:@"1131331343" quantity:@1 price:@13];
+    
+    MPCommerceEvent *event = [[MPCommerceEvent alloc] initWithAction:MPCommerceEventActionPurchase product:product];
+    MPTransactionAttributes *attributes = [[MPTransactionAttributes alloc] init];
+    attributes.transactionId = @"foo-transaction-id";
+    attributes.revenue = @13.00;
+    attributes.tax = @3;
+    attributes.shipping = @-3;
+    
+    event.transactionAttributes = attributes;
+    
+    [[mockClient expect] logPurchase:@"1131331343"
+                          inCurrency:@"USD"
+                             atPrice:[[NSDecimalNumber alloc] initWithString:@"13"]
+                        withQuantity:[[NSNumber numberWithInteger:1] longLongValue]
+                       andProperties:@{@"Shipping Amount" : @-3,
+                                       @"Total Amount" : @13.00,
+                                       @"Total Product Amount" : @"13",
+                                       @"Tax Amount" : @3,
+                                       @"Transaction Id" : @"foo-transaction-id"
+                       }];
+    
+    MPKitExecStatus *execStatus = [kit logBaseEvent:event];
+    
+    XCTAssertEqual(execStatus.returnCode, MPKitReturnCodeSuccess);
+    
+    [mockClient verify];
+    
+    [mockClient stopMocking];
 }
 
 @end

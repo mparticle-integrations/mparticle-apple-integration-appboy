@@ -96,6 +96,14 @@ __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelega
     return stringRepresentation;
 }
 
+- (Appboy *)appboyInstance {
+    return self->appboyInstance;
+}
+
+- (void)setAppboyInstance:(Appboy *)instance {
+    self->appboyInstance = instance;
+}
+
 - (NSString *)stripCharacter:(NSString *)character fromString:(NSString *)originalString {
     NSRange range = [originalString rangeOfString:character];
     
@@ -379,7 +387,7 @@ __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelega
     
     if (commerceEvent.action == MPCommerceEventActionPurchase) {
         NSMutableDictionary *baseProductAttributes = [[NSMutableDictionary alloc] init];
-        NSDictionary *transactionAttributes = [commerceEvent.transactionAttributes beautifiedDictionaryRepresentation];
+        NSDictionary *transactionAttributes = [self simplifiedDictionary:[commerceEvent.transactionAttributes beautifiedDictionaryRepresentation]];
         
         if (transactionAttributes) {
             [baseProductAttributes addEntriesFromDictionary:transactionAttributes];
@@ -758,6 +766,60 @@ __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelega
     }
     
     return MPUserIdentityCustomerId;
+}
+
+- (NSMutableDictionary *)simplifiedDictionary:(NSDictionary *)originalDictionary {
+    __block NSMutableDictionary *transformedDictionary = [[NSMutableDictionary alloc] init];
+    
+    [originalDictionary enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL *stop) {
+        if ([value isKindOfClass:[NSString class]]) {
+            NSString *stringValue = (NSString *)value;
+            NSDate *dateValue = [MPDateFormatter dateFromStringRFC3339:stringValue];
+            if (dateValue) {
+                transformedDictionary[key] = dateValue;
+            } else if ([self isInteger:stringValue]) {
+                transformedDictionary[key] = [NSNumber numberWithInteger:[stringValue integerValue]];
+            } else if ([self isFloat:stringValue]) {
+                transformedDictionary[key] = [NSNumber numberWithFloat:[stringValue floatValue]];
+            }
+            else {
+                transformedDictionary[key] = stringValue;
+            }
+        } else if ([value isKindOfClass:[NSNumber class]]) {
+            transformedDictionary[key] = (NSNumber *)value;
+        } else if ([value isKindOfClass:[NSDate class]]) {
+            transformedDictionary[key] = (NSDate *)value;
+        }
+    }];
+    
+    return transformedDictionary;
+}
+
+- (BOOL) isInteger:(NSString *)string {
+    NSCharacterSet* nonNumbers = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+
+    if([string hasPrefix:@"-"]) {
+        NSString *absoluteString = [string stringByReplacingOccurrencesOfString:@"-" withString:@""];
+        NSRange r = [absoluteString rangeOfCharacterFromSet: nonNumbers];
+        
+        return r.location == NSNotFound && absoluteString.length > 0;
+    } else {
+        NSRange r = [string rangeOfCharacterFromSet: nonNumbers];
+        
+        return r.location == NSNotFound && string.length > 0;
+    }
+}
+
+- (BOOL) isFloat:(NSString *)string {
+    NSArray *numList = [string componentsSeparatedByString:@"."];
+    
+    if (numList.count == 2) {
+        if ([self isInteger:numList[0]] && [self isInteger:numList[1]]) {
+            return true;
+        }
+    }
+    
+    return false;
 }
 
 @end
