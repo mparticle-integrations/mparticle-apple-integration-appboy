@@ -222,7 +222,11 @@ __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelega
     }
     
     _configuration = configuration;
-    _started = NO;
+    if ([Appboy sharedInstance] ) {
+        _started = YES;
+    } else {
+        _started = NO;
+    }
     collectIDFA = NO;
     forwardScreenViews = NO;
     
