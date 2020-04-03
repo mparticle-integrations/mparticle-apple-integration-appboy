@@ -222,16 +222,24 @@ __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelega
     }
     
     _configuration = configuration;
-    if ([Appboy sharedInstance] ) {
-        _started = YES;
-    } else {
-        _started = NO;
-    }
+
     collectIDFA = NO;
     forwardScreenViews = NO;
     
     _host = configuration[hostConfigKey];
     _userIdType = [self userIdentityForString:configuration[userIdTypeKey]];
+    
+    //If Braze is already initialize, immediately "start" the kit, this
+    //is here for:
+    // 1. Apps that initialize Braze prior to mParticle, and/or
+    // 2. Apps that initialize mParticle too late, causing the SDK to miss
+    //    the launch notification which would otherwise trigger start().
+    if ([Appboy sharedInstance]) {
+        NSLog(@"mParticle -> Warning: Braze SDK initialized outside of mParticle kit, this will mean Braze settings within the mParticle dashboard such as API key, endpoint URL, flush interval and others will not be respected.");
+        [self start];
+    } else {
+        _started = NO;
+    }
     
     execStatus = [[MPKitExecStatus alloc] initWithSDKCode:[[self class] kitCode] returnCode:MPKitReturnCodeSuccess];
     return execStatus;
