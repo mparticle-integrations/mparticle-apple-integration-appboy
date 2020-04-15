@@ -45,6 +45,7 @@ static NSString *const userIdValueMPID = @"MPID";
 static NSString *const brazeUserAttributeDob = @"dob";
 
 __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = nil;
+__weak static id<ABKURLDelegate> urlDelegate = nil;
 
 @interface MPKitAppboy() {
     Appboy *appboyInstance;
@@ -75,6 +76,14 @@ __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelega
 
 + (id<ABKInAppMessageControllerDelegate>)inAppMessageControllerDelegate {
     return inAppMessageControllerDelegate;
+}
+
++ (void)setURLDelegate:(id)delegate {
+    urlDelegate = (id<ABKURLDelegate>)delegate;
+}
+
++ (id<ABKURLDelegate>)urlDelegate {
+    return urlDelegate;
 }
 
 #pragma mark Private methods
@@ -253,7 +262,7 @@ __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelega
     static dispatch_once_t appboyPredicate;
     
     dispatch_once(&appboyPredicate, ^{
-        NSMutableDictionary<NSString *, NSNumber *> *optionsDict = [self optionsDictionary];
+        NSDictionary *optionsDict = [self optionsDictionary];
         
         [Appboy startWithApiKey:self.configuration[eabAPIKey]
                   inApplication:[UIApplication sharedApplication]
@@ -288,10 +297,10 @@ __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelega
     });
 }
 
-- (NSMutableDictionary<NSString *, NSNumber *> *)optionsDictionary {
+- (NSMutableDictionary<NSString *, NSObject *> *)optionsDictionary {
     NSArray <NSString *> *serverKeys = @[@"ABKRequestProcessingPolicyOptionKey", @"ABKFlushIntervalOptionKey", @"ABKSessionTimeoutKey", @"ABKMinimumTriggerTimeIntervalKey"];
     NSArray <NSString *> *appboyKeys = @[ABKRequestProcessingPolicyOptionKey, ABKFlushIntervalOptionKey, ABKSessionTimeoutKey, ABKMinimumTriggerTimeIntervalKey];
-    NSMutableDictionary<NSString *, NSNumber *> *optionsDictionary = [[NSMutableDictionary alloc] initWithCapacity:serverKeys.count];
+    NSMutableDictionary<NSString *, NSObject *> *optionsDictionary = [[NSMutableDictionary alloc] initWithCapacity:serverKeys.count];
     NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
     numberFormatter.numberStyle = NSNumberFormatterNoStyle;
     
@@ -360,6 +369,10 @@ __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelega
         }
     }
 #endif
+    
+    if ([MPKitAppboy urlDelegate]) {
+        optionsDictionary[ABKURLDelegateKey] = [MPKitAppboy urlDelegate];
+    }
     
     return optionsDictionary;
 }
