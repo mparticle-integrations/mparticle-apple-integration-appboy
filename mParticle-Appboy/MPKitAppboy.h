@@ -12,5 +12,6 @@
 @property (nonatomic, unsafe_unretained, readonly) BOOL started;
 
 + (void)setInAppMessageControllerDelegate:(nonnull id)delegate;
++ (void)setURLDelegate:(nonnull id)delegate;
 
 @end
