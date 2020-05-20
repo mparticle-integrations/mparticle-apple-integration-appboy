@@ -28,6 +28,7 @@ static NSString *const eabAPIKey = @"apiKey";
 static NSString *const eabOptions = @"options";
 static NSString *const hostConfigKey = @"host";
 static NSString *const userIdTypeKey = @"userIdentificationType";
+static NSString *const enableTypeDetectionKey = @"enableTypeDetection";
 
 // The possible values for userIdentificationType
 static NSString *const userIdValueOther = @"Other";
@@ -55,6 +56,7 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
 
 @property (nonatomic) NSString *host;
 @property (nonatomic) MPUserIdentity userIdType;
+@property (nonatomic) BOOL enableTypeDetection;
 
 @end
 
@@ -125,7 +127,7 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
     }
 }
 
-- (MPKitExecStatus *)logAppboyCustomEvent:(MPEvent *)event eventType:(NSUInteger)eventType {
+- (MPKitExecStatus *)logAppboyCustomEvent:(MPEvent *)event eventType:(NSUInteger)eventType isScreenEvent:(BOOL)isScreenEvent{
     void (^logCustomEvent)(void) = ^{
         NSDictionary *transformedEventInfo = [event.customAttributes transformValuesToString];
         
@@ -135,7 +137,12 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
             eventInfo[strippedKey] = obj;
         }];
         
-        [self->appboyInstance logCustomEvent:event.name withProperties:eventInfo];
+        NSDictionary *detectedEventInfo = eventInfo;
+        if (self->_enableTypeDetection && !isScreenEvent) {
+            detectedEventInfo = [self simplifiedDictionary:eventInfo];
+        }
+        
+        [self->appboyInstance logCustomEvent:event.name withProperties:detectedEventInfo];
         
         NSString *eventTypeString = [@(eventType) stringValue];
         
@@ -160,7 +167,7 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
             // Add key/value pair
             forwardUserAttributes = self.configuration[@"eas"];
             if (forwardUserAttributes[hashValue]) {
-                [self->appboyInstance.user setCustomAttributeWithKey:forwardUserAttributes[hashValue] andStringValue:eventInfo[key]];
+                [self setUserAttribute:forwardUserAttributes[hashValue] value:eventInfo[key]];
             }
         }
     };
@@ -237,6 +244,7 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
     
     _host = configuration[hostConfigKey];
     _userIdType = [self userIdentityForString:configuration[userIdTypeKey]];
+    _enableTypeDetection = [configuration[enableTypeDetectionKey] boolValue];
     
     //If Braze is already initialize, immediately "start" the kit, this
     //is here for:
@@ -469,14 +477,14 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
 }
 
 - (MPKitExecStatus *)routeEvent:(MPEvent *)event {
-    return [self logAppboyCustomEvent:event eventType:event.type];
+    return [self logAppboyCustomEvent:event eventType:event.type isScreenEvent:NO];
 }
 
 - (MPKitExecStatus *)logScreen:(MPEvent *)event {
     MPKitExecStatus *execStatus = nil;
     
     if (forwardScreenViews) {
-        execStatus = [self logAppboyCustomEvent:event eventType:0];
+        execStatus = [self logAppboyCustomEvent:event eventType:0 isScreenEvent:YES];
     } else {
         execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeCannotExecute];
     }
@@ -628,7 +636,26 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
     } else {
         key = [self stripCharacter:@"$" fromString:key];
         
-        [appboyInstance.user setCustomAttributeWithKey:key andStringValue:value];
+        if (!_enableTypeDetection) {
+            [appboyInstance.user setCustomAttributeWithKey:key andStringValue:value];
+        } else {
+            NSDictionary *tempConversionDictionary = @{key: value};
+            tempConversionDictionary = [self simplifiedDictionary:tempConversionDictionary];
+            id obj = tempConversionDictionary[key];
+            if ([obj isKindOfClass:[NSString class]]) {
+                [appboyInstance.user setCustomAttributeWithKey:key andStringValue:obj];
+            } else if ([obj isKindOfClass:[NSNumber class]]) {
+                if ([self isBoolNumber:obj]) {
+                    [appboyInstance.user setCustomAttributeWithKey:key andBOOLValue:((NSNumber *)obj).boolValue];
+                } else if ([self isInteger:value]) {
+                    [appboyInstance.user setCustomAttributeWithKey:key andIntegerValue:((NSNumber *)obj).intValue];
+                } else if ([self isFloat:value]) {
+                    [appboyInstance.user setCustomAttributeWithKey:key andDoubleValue:((NSNumber *)obj).doubleValue];
+                }
+            } else if ([obj isKindOfClass:[NSDate class]]) {
+                [appboyInstance.user setCustomAttributeWithKey:key andDateValue:obj];
+            }
+        }
     }
     
     execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
@@ -806,6 +833,10 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
                 transformedDictionary[key] = [NSNumber numberWithInteger:[stringValue integerValue]];
             } else if ([self isFloat:stringValue]) {
                 transformedDictionary[key] = [NSNumber numberWithFloat:[stringValue floatValue]];
+            } else if ([stringValue caseInsensitiveCompare:@"true"] == NSOrderedSame) {
+                transformedDictionary[key] = @YES;
+            } else if ([stringValue caseInsensitiveCompare:@"false"] == NSOrderedSame) {
+                transformedDictionary[key] = @NO;
             }
             else {
                 transformedDictionary[key] = stringValue;
@@ -845,6 +876,16 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
     }
     
     return false;
+}
+
+- (BOOL) isBoolNumber:(NSNumber *)num {
+   CFTypeID boolID = CFBooleanGetTypeID();
+   CFTypeID numID = CFGetTypeID((__bridge CFTypeRef)(num));
+   return numID == boolID;
+}
+
+- (void)setEnableTypeDetection:(BOOL)enableTypeDetection {
+    _enableTypeDetection = enableTypeDetection;
 }
 
 @end
