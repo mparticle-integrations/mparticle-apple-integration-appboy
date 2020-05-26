@@ -15,6 +15,7 @@
 - (void)setAppboyInstance:(Appboy *)instance;
 - (NSMutableDictionary<NSString *, NSNumber *> *)optionsDictionary;
 + (id<ABKInAppMessageControllerDelegate>)inAppMessageControllerDelegate;
+- (void)setEnableTypeDetection:(BOOL)enableTypeDetection;
 
 @end
 
@@ -343,6 +344,57 @@
                                        @"Tax Amount" : @3,
                                        @"Transaction Id" : @"foo-transaction-id"
                        }];
+    
+    MPKitExecStatus *execStatus = [kit logBaseEvent:event];
+    
+    XCTAssertEqual(execStatus.returnCode, MPKitReturnCodeSuccess);
+    
+    [mockClient verify];
+    
+    [mockClient stopMocking];
+}
+
+- (void)testTypeDetection {
+    MPKitAppboy *kit = [[MPKitAppboy alloc] init];
+    
+    Appboy *testClient = [[Appboy alloc] init];
+    id mockClient = OCMPartialMock(testClient);
+    [kit setAppboyInstance:mockClient];
+        
+    XCTAssertEqualObjects(mockClient, [kit appboyInstance]);
+    
+    
+    MPEvent *event = [[MPEvent alloc] initWithName:@"test event" type:MPEventTypeNavigation];
+    event.customAttributes = @{@"foo":@"5.0", @"bar": @"true", @"baz": @"abc", @"qux": @"-3", @"quux": @"1970-01-01T00:00:00Z"};
+    
+    [kit setEnableTypeDetection:YES];
+    [[mockClient expect] logCustomEvent:event.name withProperties:@{@"foo":@5.0, @"bar": @YES, @"baz":@"abc", @"qux": @-3, @"quux": [NSDate dateWithTimeIntervalSince1970:0]}];
+    
+    MPKitExecStatus *execStatus = [kit logBaseEvent:event];
+    
+    XCTAssertEqual(execStatus.returnCode, MPKitReturnCodeSuccess);
+    
+    [mockClient verify];
+    
+    [mockClient stopMocking];
+}
+
+
+- (void)testTypeDetectionDisable {
+    MPKitAppboy *kit = [[MPKitAppboy alloc] init];
+    
+    Appboy *testClient = [[Appboy alloc] init];
+    id mockClient = OCMPartialMock(testClient);
+    [kit setAppboyInstance:mockClient];
+        
+    XCTAssertEqualObjects(mockClient, [kit appboyInstance]);
+    
+    
+    MPEvent *event = [[MPEvent alloc] initWithName:@"test event" type:MPEventTypeNavigation];
+    event.customAttributes = @{@"foo":@"5.0", @"bar": @"true", @"baz": @"abc", @"quz": @"-3", @"qux": @"1970-01-01T00:00:00Z"};
+    
+    [kit setEnableTypeDetection:NO];
+    [[mockClient expect] logCustomEvent:event.name withProperties:event.customAttributes];
     
     MPKitExecStatus *execStatus = [kit logBaseEvent:event];
     
