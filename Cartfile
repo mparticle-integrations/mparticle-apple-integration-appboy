@@ -1,2 +1,2 @@
-github "Appboy/appboy-ios-sdk" ~> 3.27.0-beta1
+github "Appboy/appboy-ios-sdk" ~> 3.27.0-beta
 github "mparticle/mparticle-apple-sdk" ~> 7.0
