@@ -64,3 +64,4 @@ fastlane/test_output
 
 **/Podfile.lock
 **/*.xcworkspace
+ **/.DS_Store
