@@ -1,6 +1,0 @@
-osx_image: xcode11
-language: objective-c
-script:
-- sudo gem install cocoapods -v 1.8.4
-- carthage update
-- pod lib lint --use-libraries --allow-warnings || pod lib lint --allow-warnings
