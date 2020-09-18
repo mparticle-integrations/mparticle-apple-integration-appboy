@@ -13,6 +13,9 @@ Pod::Spec.new do |s|
     s.source           = { :git => "https://github.com/mparticle-integrations/mparticle-apple-integration-appboy.git", :tag => s.version.to_s }
     s.social_media_url = "https://twitter.com/mparticle"
 
+    s.pod_target_xcconfig = {  'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
+    s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
+
     s.ios.deployment_target = "9.0"
     s.ios.source_files      = 'mParticle-Appboy/*.{h,m,mm}'
     s.ios.dependency 'mParticle-Apple-SDK/mParticle', '~> 8.0'
