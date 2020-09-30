@@ -609,6 +609,8 @@
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Build/tvOS/mParticle_Apple_SDK.framework";
+				VALID_ARCHS = arm64;
+				"VALID_ARCHS[sdk=appletvsimulator*]" = x86_64;
 			};
 			name = Debug;
 		};
@@ -663,6 +665,8 @@
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Build/tvOS/mParticle_Apple_SDK.framework";
+				VALID_ARCHS = arm64;
+				"VALID_ARCHS[sdk=appletvsimulator*]" = x86_64;
 			};
 			name = Release;
 		};
