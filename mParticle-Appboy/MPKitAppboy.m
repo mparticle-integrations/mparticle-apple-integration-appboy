@@ -28,10 +28,20 @@ static NSString *const eabAPIKey = @"apiKey";
 static NSString *const eabOptions = @"options";
 static NSString *const hostConfigKey = @"host";
 static NSString *const userIdTypeKey = @"userIdentificationType";
+static NSString *const emailIdTypeKey = @"emailIdentificationType";
 static NSString *const enableTypeDetectionKey = @"enableTypeDetection";
 
 // The possible values for userIdentificationType
 static NSString *const userIdValueOther = @"Other";
+static NSString *const userIdValueOther2 = @"Other2";
+static NSString *const userIdValueOther3 = @"Other3";
+static NSString *const userIdValueOther4 = @"Other4";
+static NSString *const userIdValueOther5 = @"Other5";
+static NSString *const userIdValueOther6 = @"Other6";
+static NSString *const userIdValueOther7 = @"Other7";
+static NSString *const userIdValueOther8 = @"Other8";
+static NSString *const userIdValueOther9 = @"Other9";
+static NSString *const userIdValueOther10 = @"Other10";
 static NSString *const userIdValueCustomerId = @"CustomerId";
 static NSString *const userIdValueFacebook = @"Facebook";
 static NSString *const userIdValueTwitter = @"Twitter";
@@ -56,6 +66,7 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
 
 @property (nonatomic) NSString *host;
 @property (nonatomic) MPUserIdentity userIdType;
+@property (nonatomic) MPUserIdentity emailIdType;
 @property (nonatomic) BOOL enableTypeDetection;
 
 @end
@@ -244,6 +255,7 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
     
     _host = configuration[hostConfigKey];
     _userIdType = [self userIdentityForString:configuration[userIdTypeKey]];
+    _emailIdType = [self userIdentityForString:configuration[emailIdTypeKey]];
     _enableTypeDetection = [configuration[enableTypeDetectionKey] boolValue];
     
     //If Braze is already initialize, immediately "start" the kit, this
@@ -709,6 +721,51 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
                     userId = userIDsCopy[@(MPUserIdentityOther)];
                 }
                 break;
+            case MPUserIdentityOther2:
+                if (userIDsCopy[@(MPUserIdentityOther2)]) {
+                    userId = userIDsCopy[@(MPUserIdentityOther2)];
+                }
+                break;
+            case MPUserIdentityOther3:
+                if (userIDsCopy[@(MPUserIdentityOther3)]) {
+                    userId = userIDsCopy[@(MPUserIdentityOther3)];
+                }
+                break;
+            case MPUserIdentityOther4:
+                if (userIDsCopy[@(MPUserIdentityOther4)]) {
+                    userId = userIDsCopy[@(MPUserIdentityOther4)];
+                }
+                break;
+            case MPUserIdentityOther5:
+                if (userIDsCopy[@(MPUserIdentityOther5)]) {
+                    userId = userIDsCopy[@(MPUserIdentityOther5)];
+                }
+                break;
+            case MPUserIdentityOther6:
+                if (userIDsCopy[@(MPUserIdentityOther6)]) {
+                    userId = userIDsCopy[@(MPUserIdentityOther6)];
+                }
+                break;
+            case MPUserIdentityOther7:
+                if (userIDsCopy[@(MPUserIdentityOther7)]) {
+                    userId = userIDsCopy[@(MPUserIdentityOther7)];
+                }
+                break;
+            case MPUserIdentityOther8:
+                if (userIDsCopy[@(MPUserIdentityOther8)]) {
+                    userId = userIDsCopy[@(MPUserIdentityOther8)];
+                }
+                break;
+            case MPUserIdentityOther9:
+                if (userIDsCopy[@(MPUserIdentityOther9)]) {
+                    userId = userIDsCopy[@(MPUserIdentityOther9)];
+                }
+                break;
+            case MPUserIdentityOther10:
+                if (userIDsCopy[@(MPUserIdentityOther10)]) {
+                    userId = userIDsCopy[@(MPUserIdentityOther10)];
+                }
+                break;
             case MPUserIdentityCustomerId:
                 if (userIDsCopy[@(MPUserIdentityCustomerId)]) {
                     userId = userIDsCopy[@(MPUserIdentityCustomerId)];
@@ -749,7 +806,7 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
                     userId = userIDsCopy[@(MPUserIdentityAlias)];
                 }
                 break;
-            case MPUserIdentityOther4:
+            case MPUserIdentityPhoneNumber2: //Used to represent MPID in this case
                 if (user != nil) {
                     userId = user.userId.stringValue;
                 }
@@ -775,8 +832,73 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
             execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
         }
         
-        if (userIDsCopy[@(MPUserIdentityEmail)]) {
-            appboyInstance.user.email = userIDsCopy[@(MPUserIdentityEmail)];
+        NSString *userEmail;
+        
+        switch (_emailIdType) {
+            case MPUserIdentityOther:
+                if (userIDsCopy[@(MPUserIdentityOther)]) {
+                    userEmail = userIDsCopy[@(MPUserIdentityOther)];
+                }
+                break;
+            case MPUserIdentityOther2:
+                if (userIDsCopy[@(MPUserIdentityOther2)]) {
+                    userEmail = userIDsCopy[@(MPUserIdentityOther2)];
+                }
+                break;
+            case MPUserIdentityOther3:
+                if (userIDsCopy[@(MPUserIdentityOther3)]) {
+                    userEmail = userIDsCopy[@(MPUserIdentityOther3)];
+                }
+                break;
+            case MPUserIdentityOther4:
+                if (userIDsCopy[@(MPUserIdentityOther4)]) {
+                    userEmail = userIDsCopy[@(MPUserIdentityOther4)];
+                }
+                break;
+            case MPUserIdentityOther5:
+                if (userIDsCopy[@(MPUserIdentityOther5)]) {
+                    userEmail = userIDsCopy[@(MPUserIdentityOther5)];
+                }
+                break;
+            case MPUserIdentityOther6:
+                if (userIDsCopy[@(MPUserIdentityOther6)]) {
+                    userEmail = userIDsCopy[@(MPUserIdentityOther6)];
+                }
+                break;
+            case MPUserIdentityOther7:
+                if (userIDsCopy[@(MPUserIdentityOther7)]) {
+                    userEmail = userIDsCopy[@(MPUserIdentityOther7)];
+                }
+                break;
+            case MPUserIdentityOther8:
+                if (userIDsCopy[@(MPUserIdentityOther8)]) {
+                    userEmail = userIDsCopy[@(MPUserIdentityOther8)];
+                }
+                break;
+            case MPUserIdentityOther9:
+                if (userIDsCopy[@(MPUserIdentityOther9)]) {
+                    userEmail = userIDsCopy[@(MPUserIdentityOther9)];
+                }
+                break;
+            case MPUserIdentityOther10:
+                if (userIDsCopy[@(MPUserIdentityOther10)]) {
+                    userEmail = userIDsCopy[@(MPUserIdentityOther10)];
+                }
+                break;
+            case MPUserIdentityEmail:
+                if (userIDsCopy[@(MPUserIdentityEmail)]) {
+                    userEmail = userIDsCopy[@(MPUserIdentityEmail)];
+                }
+                break;
+            default:
+                if (userIDsCopy[@(MPUserIdentityEmail)]) {
+                    userEmail = userIDsCopy[@(MPUserIdentityEmail)];
+                }
+                break;
+        }
+        
+        if (userEmail) {
+            appboyInstance.user.email = userEmail;
             execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
         }
     }
@@ -801,6 +923,24 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
     if (userIdString != nil) {
         if ([userIdString isEqualToString:userIdValueOther]) {
             return MPUserIdentityOther;
+        } else if ([userIdString isEqualToString:userIdValueOther2]) {
+            return MPUserIdentityOther2;
+        } else if ([userIdString isEqualToString:userIdValueOther3]) {
+            return MPUserIdentityOther3;
+        } else if ([userIdString isEqualToString:userIdValueOther4]) {
+            return MPUserIdentityOther4;
+        } else if ([userIdString isEqualToString:userIdValueOther5]) {
+            return MPUserIdentityOther5;
+        } else if ([userIdString isEqualToString:userIdValueOther6]) {
+            return MPUserIdentityOther6;
+        } else if ([userIdString isEqualToString:userIdValueOther7]) {
+            return MPUserIdentityOther7;
+        } else if ([userIdString isEqualToString:userIdValueOther8]) {
+            return MPUserIdentityOther8;
+        } else if ([userIdString isEqualToString:userIdValueOther9]) {
+            return MPUserIdentityOther9;
+        } else if ([userIdString isEqualToString:userIdValueOther10]) {
+            return MPUserIdentityOther10;
         } else if ([userIdString isEqualToString:userIdValueCustomerId]) {
             return MPUserIdentityCustomerId;
         } else if ([userIdString isEqualToString:userIdValueFacebook]) {
@@ -818,7 +958,7 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
         } else if ([userIdString isEqualToString:userIdValueAlias]) {
             return MPUserIdentityAlias;
         } else if ([userIdString isEqualToString:userIdValueMPID]) {
-            return MPUserIdentityOther4;
+            return MPUserIdentityPhoneNumber2;
         }
     }
     
