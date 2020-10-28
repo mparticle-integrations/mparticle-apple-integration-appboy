@@ -379,7 +379,7 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
 #endif
     
     if ([MPKitAppboy urlDelegate]) {
-        optionsDictionary[ABKURLDelegateKey] = [MPKitAppboy urlDelegate];
+        optionsDictionary[ABKURLDelegateKey] = (NSObject *)[MPKitAppboy urlDelegate];
     }
     
     return optionsDictionary;
