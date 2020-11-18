@@ -22,8 +22,26 @@ Pod::Spec.new do |s|
     s.ios.frameworks = 'CoreTelephony', 'SystemConfiguration'
     s.libraries = 'z'
     s.ios.dependency 'Appboy-iOS-SDK', '~> 3.27'
+
+    s.ios.pod_target_xcconfig = {
+        'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64'
+    }
+    s.ios.user_target_xcconfig = {
+        'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64'
+    }
+
+    s.tvos.deployment_target = "9.0"    
+    s.tvos.source_files      = 'mParticle-Appboy/*.{h,m,mm}'    
+    s.tvos.dependency 'mParticle-Apple-SDK/mParticle', '~> 8.0.0'  
+    s.tvos.frameworks = 'SystemConfiguration'   
+    s.tvos.dependency 'Appboy-tvOS-SDK', '~> 3.27'
     
     s.tvos.pod_target_xcconfig = {
-        'LIBRARY_SEARCH_PATHS' => '$(inherited) $(PODS_ROOT)/Appboy-tvOS-SDK/**'
+        'EXCLUDED_ARCHS[sdk=appletvsimulator*]' => 'arm64'
     }
+    s.tvos.user_target_xcconfig = {
+        'EXCLUDED_ARCHS[sdk=appletvsimulator*]' => 'arm64'
+    }
+
+
 end
