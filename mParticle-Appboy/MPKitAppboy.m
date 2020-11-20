@@ -65,8 +65,6 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
 }
 
 @property (nonatomic) NSString *host;
-@property (nonatomic) MPUserIdentity userIdType;
-@property (nonatomic) MPUserIdentity emailIdType;
 @property (nonatomic) BOOL enableTypeDetection;
 
 @end
@@ -254,8 +252,6 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
     forwardScreenViews = NO;
     
     _host = configuration[hostConfigKey];
-    _userIdType = [self userIdentityForString:configuration[userIdTypeKey]];
-    _emailIdType = [self userIdentityForString:configuration[emailIdTypeKey]];
     _enableTypeDetection = [configuration[enableTypeDetectionKey] boolValue];
     
     //If Braze is already initialize, immediately "start" the kit, this
@@ -715,108 +711,89 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
         NSMutableDictionary *userIDsCopy = [request.userIdentities copy];
         NSString *userId;
         
-        switch (_userIdType) {
-            case MPUserIdentityOther:
+        if (_configuration[userIdTypeKey]) {
+            NSString *userIdKey = _configuration[userIdTypeKey];
+            if ([userIdKey isEqualToString:userIdValueOther]) {
                 if (userIDsCopy[@(MPUserIdentityOther)]) {
                     userId = userIDsCopy[@(MPUserIdentityOther)];
                 }
-                break;
-            case MPUserIdentityOther2:
-                if (userIDsCopy[@(MPUserIdentityOther2)]) {
-                    userId = userIDsCopy[@(MPUserIdentityOther2)];
-                }
-                break;
-            case MPUserIdentityOther3:
-                if (userIDsCopy[@(MPUserIdentityOther3)]) {
-                    userId = userIDsCopy[@(MPUserIdentityOther3)];
-                }
-                break;
-            case MPUserIdentityOther4:
-                if (userIDsCopy[@(MPUserIdentityOther4)]) {
-                    userId = userIDsCopy[@(MPUserIdentityOther4)];
-                }
-                break;
-            case MPUserIdentityOther5:
-                if (userIDsCopy[@(MPUserIdentityOther5)]) {
-                    userId = userIDsCopy[@(MPUserIdentityOther5)];
-                }
-                break;
-            case MPUserIdentityOther6:
-                if (userIDsCopy[@(MPUserIdentityOther6)]) {
-                    userId = userIDsCopy[@(MPUserIdentityOther6)];
-                }
-                break;
-            case MPUserIdentityOther7:
-                if (userIDsCopy[@(MPUserIdentityOther7)]) {
-                    userId = userIDsCopy[@(MPUserIdentityOther7)];
-                }
-                break;
-            case MPUserIdentityOther8:
-                if (userIDsCopy[@(MPUserIdentityOther8)]) {
-                    userId = userIDsCopy[@(MPUserIdentityOther8)];
-                }
-                break;
-            case MPUserIdentityOther9:
-                if (userIDsCopy[@(MPUserIdentityOther9)]) {
-                    userId = userIDsCopy[@(MPUserIdentityOther9)];
-                }
-                break;
-            case MPUserIdentityOther10:
-                if (userIDsCopy[@(MPUserIdentityOther10)]) {
-                    userId = userIDsCopy[@(MPUserIdentityOther10)];
-                }
-                break;
-            case MPUserIdentityCustomerId:
-                if (userIDsCopy[@(MPUserIdentityCustomerId)]) {
-                    userId = userIDsCopy[@(MPUserIdentityCustomerId)];
-                }
-                break;
-            case MPUserIdentityFacebook:
-                if (userIDsCopy[@(MPUserIdentityFacebook)]) {
-                    userId = userIDsCopy[@(MPUserIdentityFacebook)];
-                }
-                break;
-            case MPUserIdentityTwitter:
-                if (userIDsCopy[@(MPUserIdentityTwitter)]) {
-                    userId = userIDsCopy[@(MPUserIdentityTwitter)];
-                }
-                break;
-            case MPUserIdentityGoogle:
-                if (userIDsCopy[@(MPUserIdentityGoogle)]) {
-                    userId = userIDsCopy[@(MPUserIdentityGoogle)];
-                }
-                break;
-            case MPUserIdentityMicrosoft:
-                if (userIDsCopy[@(MPUserIdentityMicrosoft)]) {
-                    userId = userIDsCopy[@(MPUserIdentityMicrosoft)];
-                }
-                break;
-            case MPUserIdentityYahoo:
-                if (userIDsCopy[@(MPUserIdentityYahoo)]) {
-                    userId = userIDsCopy[@(MPUserIdentityYahoo)];
-                }
-                break;
-            case MPUserIdentityEmail:
-                if (userIDsCopy[@(MPUserIdentityEmail)]) {
-                    userId = userIDsCopy[@(MPUserIdentityEmail)];
-                }
-                break;
-            case MPUserIdentityAlias:
-                if (userIDsCopy[@(MPUserIdentityAlias)]) {
-                    userId = userIDsCopy[@(MPUserIdentityAlias)];
-                }
-                break;
-            case MPUserIdentityPhoneNumber2: //Used to represent MPID in this case
-                if (user != nil) {
-                    userId = user.userId.stringValue;
-                }
-                break;
-                
-            default:
-                if (userIDsCopy[@(MPUserIdentityCustomerId)]) {
-                    userId = userIDsCopy[@(MPUserIdentityCustomerId)];
-                }
-                break;
+            } else if ([userIdKey isEqualToString:userIdValueOther2]) {
+                    if (userIDsCopy[@(MPUserIdentityOther2)]) {
+                        userId = userIDsCopy[@(MPUserIdentityOther2)];
+                    }
+            } else if ([userIdKey isEqualToString:userIdValueOther3]) {
+                    if (userIDsCopy[@(MPUserIdentityOther3)]) {
+                        userId = userIDsCopy[@(MPUserIdentityOther3)];
+                    }
+            } else if ([userIdKey isEqualToString:userIdValueOther4]) {
+                    if (userIDsCopy[@(MPUserIdentityOther4)]) {
+                        userId = userIDsCopy[@(MPUserIdentityOther4)];
+                    }
+            } else if ([userIdKey isEqualToString:userIdValueOther5]) {
+                    if (userIDsCopy[@(MPUserIdentityOther5)]) {
+                        userId = userIDsCopy[@(MPUserIdentityOther5)];
+                    }
+            } else if ([userIdKey isEqualToString:userIdValueOther6]) {
+                    if (userIDsCopy[@(MPUserIdentityOther6)]) {
+                        userId = userIDsCopy[@(MPUserIdentityOther6)];
+                    }
+            } else if ([userIdKey isEqualToString:userIdValueOther7]) {
+                    if (userIDsCopy[@(MPUserIdentityOther7)]) {
+                        userId = userIDsCopy[@(MPUserIdentityOther7)];
+                    }
+            } else if ([userIdKey isEqualToString:userIdValueOther8]) {
+                    if (userIDsCopy[@(MPUserIdentityOther8)]) {
+                        userId = userIDsCopy[@(MPUserIdentityOther8)];
+                    }
+            } else if ([userIdKey isEqualToString:userIdValueOther9]) {
+                    if (userIDsCopy[@(MPUserIdentityOther9)]) {
+                        userId = userIDsCopy[@(MPUserIdentityOther9)];
+                    }
+            } else if ([userIdKey isEqualToString:userIdValueOther10]) {
+                    if (userIDsCopy[@(MPUserIdentityOther10)]) {
+                        userId = userIDsCopy[@(MPUserIdentityOther10)];
+                    }
+            } else if ([userIdKey isEqualToString:userIdValueCustomerId]) {
+                    if (userIDsCopy[@(MPUserIdentityCustomerId)]) {
+                        userId = userIDsCopy[@(MPUserIdentityCustomerId)];
+                    }
+            } else if ([userIdKey isEqualToString:userIdValueFacebook]) {
+                    if (userIDsCopy[@(MPUserIdentityFacebook)]) {
+                        userId = userIDsCopy[@(MPUserIdentityFacebook)];
+                    }
+            } else if ([userIdKey isEqualToString:userIdValueTwitter]) {
+                    if (userIDsCopy[@(MPUserIdentityTwitter)]) {
+                        userId = userIDsCopy[@(MPUserIdentityTwitter)];
+                    }
+            } else if ([userIdKey isEqualToString:userIdValueGoogle]) {
+                    if (userIDsCopy[@(MPUserIdentityGoogle)]) {
+                        userId = userIDsCopy[@(MPUserIdentityGoogle)];
+                    }
+            } else if ([userIdKey isEqualToString:userIdValueMicrosoft]) {
+                    if (userIDsCopy[@(MPUserIdentityMicrosoft)]) {
+                        userId = userIDsCopy[@(MPUserIdentityMicrosoft)];
+                    }
+            } else if ([userIdKey isEqualToString:userIdValueYahoo]) {
+                    if (userIDsCopy[@(MPUserIdentityYahoo)]) {
+                        userId = userIDsCopy[@(MPUserIdentityYahoo)];
+                    }
+            } else if ([userIdKey isEqualToString:userIdValueEmail]) {
+                    if (userIDsCopy[@(MPUserIdentityEmail)]) {
+                        userId = userIDsCopy[@(MPUserIdentityEmail)];
+                    }
+            } else if ([userIdKey isEqualToString:userIdValueAlias]) {
+                    if (userIDsCopy[@(MPUserIdentityAlias)]) {
+                        userId = userIDsCopy[@(MPUserIdentityAlias)];
+                    }
+            } else if ([userIdKey isEqualToString:userIdValueMPID]) {
+                    if (user != nil) {
+                        userId = user.userId.stringValue;
+                    }
+            } else {
+                    if (userIDsCopy[@(MPUserIdentityCustomerId)]) {
+                        userId = userIDsCopy[@(MPUserIdentityCustomerId)];
+                    }
+            }
         }
         
         if (userId) {
@@ -834,67 +811,57 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
         
         NSString *userEmail;
         
-        switch (_emailIdType) {
-            case MPUserIdentityOther:
+        if (_configuration[emailIdTypeKey]) {
+            NSString *emailIdKey = _configuration[emailIdTypeKey];
+            if ([emailIdKey isEqualToString:userIdValueOther]) {
                 if (userIDsCopy[@(MPUserIdentityOther)]) {
                     userEmail = userIDsCopy[@(MPUserIdentityOther)];
                 }
-                break;
-            case MPUserIdentityOther2:
+            } else if ([emailIdKey isEqualToString:userIdValueOther2]) {
                 if (userIDsCopy[@(MPUserIdentityOther2)]) {
                     userEmail = userIDsCopy[@(MPUserIdentityOther2)];
                 }
-                break;
-            case MPUserIdentityOther3:
+            } else if ([emailIdKey isEqualToString:userIdValueOther3]) {
                 if (userIDsCopy[@(MPUserIdentityOther3)]) {
                     userEmail = userIDsCopy[@(MPUserIdentityOther3)];
                 }
-                break;
-            case MPUserIdentityOther4:
+            } else if ([emailIdKey isEqualToString:userIdValueOther4]) {
                 if (userIDsCopy[@(MPUserIdentityOther4)]) {
                     userEmail = userIDsCopy[@(MPUserIdentityOther4)];
                 }
-                break;
-            case MPUserIdentityOther5:
+            } else if ([emailIdKey isEqualToString:userIdValueOther5]) {
                 if (userIDsCopy[@(MPUserIdentityOther5)]) {
                     userEmail = userIDsCopy[@(MPUserIdentityOther5)];
                 }
-                break;
-            case MPUserIdentityOther6:
+            } else if ([emailIdKey isEqualToString:userIdValueOther6]) {
                 if (userIDsCopy[@(MPUserIdentityOther6)]) {
                     userEmail = userIDsCopy[@(MPUserIdentityOther6)];
                 }
-                break;
-            case MPUserIdentityOther7:
+            } else if ([emailIdKey isEqualToString:userIdValueOther7]) {
                 if (userIDsCopy[@(MPUserIdentityOther7)]) {
                     userEmail = userIDsCopy[@(MPUserIdentityOther7)];
                 }
-                break;
-            case MPUserIdentityOther8:
+            } else if ([emailIdKey isEqualToString:userIdValueOther8]) {
                 if (userIDsCopy[@(MPUserIdentityOther8)]) {
                     userEmail = userIDsCopy[@(MPUserIdentityOther8)];
                 }
-                break;
-            case MPUserIdentityOther9:
+            } else if ([emailIdKey isEqualToString:userIdValueOther9]) {
                 if (userIDsCopy[@(MPUserIdentityOther9)]) {
                     userEmail = userIDsCopy[@(MPUserIdentityOther9)];
                 }
-                break;
-            case MPUserIdentityOther10:
+            } else if ([emailIdKey isEqualToString:userIdValueOther10]) {
                 if (userIDsCopy[@(MPUserIdentityOther10)]) {
                     userEmail = userIDsCopy[@(MPUserIdentityOther10)];
                 }
-                break;
-            case MPUserIdentityEmail:
+            } else if ([emailIdKey isEqualToString:userIdValueEmail]) {
                 if (userIDsCopy[@(MPUserIdentityEmail)]) {
                     userEmail = userIDsCopy[@(MPUserIdentityEmail)];
                 }
-                break;
-            default:
+            } else {
                 if (userIDsCopy[@(MPUserIdentityEmail)]) {
                     userEmail = userIDsCopy[@(MPUserIdentityEmail)];
                 }
-                break;
+            }
         }
         
         if (userEmail) {
@@ -918,52 +885,6 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
     return execStatus;
 }
 #endif
-
-- (MPUserIdentity)userIdentityForString:(nullable NSString *)userIdString {
-    if (userIdString != nil) {
-        if ([userIdString isEqualToString:userIdValueOther]) {
-            return MPUserIdentityOther;
-        } else if ([userIdString isEqualToString:userIdValueOther2]) {
-            return MPUserIdentityOther2;
-        } else if ([userIdString isEqualToString:userIdValueOther3]) {
-            return MPUserIdentityOther3;
-        } else if ([userIdString isEqualToString:userIdValueOther4]) {
-            return MPUserIdentityOther4;
-        } else if ([userIdString isEqualToString:userIdValueOther5]) {
-            return MPUserIdentityOther5;
-        } else if ([userIdString isEqualToString:userIdValueOther6]) {
-            return MPUserIdentityOther6;
-        } else if ([userIdString isEqualToString:userIdValueOther7]) {
-            return MPUserIdentityOther7;
-        } else if ([userIdString isEqualToString:userIdValueOther8]) {
-            return MPUserIdentityOther8;
-        } else if ([userIdString isEqualToString:userIdValueOther9]) {
-            return MPUserIdentityOther9;
-        } else if ([userIdString isEqualToString:userIdValueOther10]) {
-            return MPUserIdentityOther10;
-        } else if ([userIdString isEqualToString:userIdValueCustomerId]) {
-            return MPUserIdentityCustomerId;
-        } else if ([userIdString isEqualToString:userIdValueFacebook]) {
-            return MPUserIdentityFacebook;
-        } else if ([userIdString isEqualToString:userIdValueTwitter]) {
-            return MPUserIdentityTwitter;
-        } else if ([userIdString isEqualToString:userIdValueGoogle]) {
-            return MPUserIdentityGoogle;
-        } else if ([userIdString isEqualToString:userIdValueMicrosoft]) {
-            return MPUserIdentityMicrosoft;
-        } else if ([userIdString isEqualToString:userIdValueYahoo]) {
-            return MPUserIdentityYahoo;
-        } else if ([userIdString isEqualToString:userIdValueEmail]) {
-            return MPUserIdentityEmail;
-        } else if ([userIdString isEqualToString:userIdValueAlias]) {
-            return MPUserIdentityAlias;
-        } else if ([userIdString isEqualToString:userIdValueMPID]) {
-            return MPUserIdentityPhoneNumber2;
-        }
-    }
-    
-    return MPUserIdentityCustomerId;
-}
 
 - (NSMutableDictionary *)simplifiedDictionary:(NSDictionary *)originalDictionary {
     __block NSMutableDictionary *transformedDictionary = [[NSMutableDictionary alloc] init];
