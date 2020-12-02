@@ -18,10 +18,6 @@ jobs:
     name: Test
     # This job runs on macOS
     runs-on: macOS-latest
-    strategy:
-      matrix:
-        destination: ['platform=iOS Simulator,OS=14.0,name=iPhone 8']
-        xcode: ['/Applications/Xcode_12_beta.app/Contents/Developer']
     steps:
       - name: Checkout
         uses: actions/checkout@v1
@@ -29,7 +25,5 @@ jobs:
         run: |
           sudo gem install cocoapods
           pod repo update
-        env:
-          DEVELOPER_DIR: ${{ matrix.xcode }}
       - name: Build
         run: pod lib lint --use-libraries --allow-warnings || pod lib lint --allow-warnings
