@@ -300,16 +300,16 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
             self->appboyInstance.inAppMessageController.delegate = [MPKitAppboy inAppMessageControllerDelegate];
         }
 #endif
+    });
+    
+    self->_started = YES;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSDictionary *userInfo = @{mParticleKitInstanceKey:[[self class] kitCode]};
         
-        self->_started = YES;
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSDictionary *userInfo = @{mParticleKitInstanceKey:[[self class] kitCode]};
-            
-            [[NSNotificationCenter defaultCenter] postNotificationName:mParticleKitDidBecomeActiveNotification
-                                                                object:nil
-                                                              userInfo:userInfo];
-        });
+        [[NSNotificationCenter defaultCenter] postNotificationName:mParticleKitDidBecomeActiveNotification
+                                                            object:nil
+                                                          userInfo:userInfo];
     });
 }
 
