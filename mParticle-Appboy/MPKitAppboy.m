@@ -284,23 +284,23 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
                   inApplication:[UIApplication sharedApplication]
               withLaunchOptions:self.launchOptions
               withAppboyOptions:optionsDict];
-        
-        if (![Appboy sharedInstance] ) {
-            return;
-        }
-        CFTypeRef appboyRef = CFRetain((__bridge CFTypeRef)[Appboy sharedInstance]);
-        self->appboyInstance = (__bridge Appboy *)appboyRef;
-        
-        if (self->collectIDFA) {
-            self->appboyInstance.idfaDelegate = (id)self;
-        }
-        
-#if TARGET_OS_IOS == 1
-        if ([MPKitAppboy inAppMessageControllerDelegate]) {
-            self->appboyInstance.inAppMessageController.delegate = [MPKitAppboy inAppMessageControllerDelegate];
-        }
-#endif
     });
+    
+    if (![Appboy sharedInstance] ) {
+        return;
+    }
+    CFTypeRef appboyRef = CFRetain((__bridge CFTypeRef)[Appboy sharedInstance]);
+    self->appboyInstance = (__bridge Appboy *)appboyRef;
+    
+    if (self->collectIDFA) {
+        self->appboyInstance.idfaDelegate = (id)self;
+    }
+    
+#if TARGET_OS_IOS == 1
+    if ([MPKitAppboy inAppMessageControllerDelegate]) {
+        self->appboyInstance.inAppMessageController.delegate = [MPKitAppboy inAppMessageControllerDelegate];
+    }
+#endif
     
     self->_started = YES;
     
