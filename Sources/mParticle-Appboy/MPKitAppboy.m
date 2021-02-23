@@ -1,26 +1,30 @@
 #import "MPKitAppboy.h"
 
-#ifdef COCOAPODS
-    #if TARGET_OS_IOS == 1
-        #if defined(__has_include) && __has_include(<Appboy-iOS-SDK/AppboyKit.h>)
-            #import <Appboy-iOS-SDK/AppboyKit.h>
-        #elif defined(__has_include) && __has_include(<Appboy_iOS_SDK/AppboyKit.h>)
-            #import <Appboy_iOS_SDK/AppboyKit.h>
-        #else
-            #import "AppboyKit.h"
-        #endif
-    #elif TARGET_OS_TV == 1
-        #if defined(__has_include) && __has_include(<AppboyTVOSKit/AppboyKit.h>)
-            #import <AppboyTVOSKit/AppboyKit.h>
-        #else
-            #import "AppboyKit.h"
-        #endif
-    #endif
+#if SWIFT_PACKAGE
+    #import "AppboyKit.h"
 #else
-    #if TARGET_OS_IOS == 1
-        #import <Appboy_iOS_SDK/Appboy-iOS-SDK-umbrella.h>
-    #elif TARGET_OS_TV == 1
-        #import "AppboyKit.h"
+    #ifdef COCOAPODS
+        #if TARGET_OS_IOS == 1
+            #if defined(__has_include) && __has_include(<Appboy-iOS-SDK/AppboyKit.h>)
+                #import <Appboy-iOS-SDK/AppboyKit.h>
+            #elif defined(__has_include) && __has_include(<Appboy_iOS_SDK/AppboyKit.h>)
+                #import <Appboy_iOS_SDK/AppboyKit.h>
+            #else
+                #import "AppboyKit.h"
+            #endif
+        #elif TARGET_OS_TV == 1
+            #if defined(__has_include) && __has_include(<AppboyTVOSKit/AppboyKit.h>)
+                #import <AppboyTVOSKit/AppboyKit.h>
+            #else
+                #import "AppboyKit.h"
+            #endif
+        #endif
+    #else
+        #if TARGET_OS_IOS == 1
+            #import <Appboy_iOS_SDK/Appboy-iOS-SDK-umbrella.h>
+        #elif TARGET_OS_TV == 1
+            #import "AppboyKit.h"
+        #endif
     #endif
 #endif
 

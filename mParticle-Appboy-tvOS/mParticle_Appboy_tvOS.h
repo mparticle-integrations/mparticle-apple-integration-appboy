@@ -1,11 +1,3 @@
-//
-//  mParticle_Appboy_tvOS.h
-//  mParticle-Appboy-tvOS
-//
-//  Created by Peter Jenkins on 5/3/18.
-//  Copyright © 2018 mParticle. All rights reserved.
-//
-
 #import <UIKit/UIKit.h>
 
 //! Project version number for mParticle_Appboy_tvOS.
