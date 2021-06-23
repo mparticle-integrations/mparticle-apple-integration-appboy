@@ -9,8 +9,6 @@
 
 @interface MPKitAppboy ()
 
-@property (nonatomic) MPUserIdentity userIdType;
-
 - (Appboy *)appboyInstance;
 - (void)setAppboyInstance:(Appboy *)instance;
 - (NSMutableDictionary<NSString *, NSNumber *> *)optionsDictionary;
@@ -62,7 +60,6 @@
                                        @"ABKFlushIntervalOptionKey":@"2",
                                        @"ABKSessionTimeoutKey":@"3",
                                        @"ABKMinimumTriggerTimeIntervalKey":@"4",
-                                       @"ABKCollectIDFA":@"true",
                                        @"userIdentificationType":@"CustomerId"
                                        };
     
@@ -286,13 +283,12 @@
                                        @"ABKFlushIntervalOptionKey":@"2",
                                        @"ABKSessionTimeoutKey":@"3",
                                        @"ABKMinimumTriggerTimeIntervalKey":@"4",
-                                       @"ABKCollectIDFA":@"true",
                                        @"userIdentificationType":@"CustomerId"
                                        };
 
     [appBoy didFinishLaunchingWithConfiguration:kitConfiguration];
     
-    XCTAssertEqual(appBoy.userIdType, MPUserIdentityCustomerId);
+    XCTAssertEqual(appBoy.configuration[@"userIdentificationType"], @"CustomerId");
 }
 
 - (void)testUserIdMPID {
@@ -305,13 +301,12 @@
                                        @"ABKFlushIntervalOptionKey":@"2",
                                        @"ABKSessionTimeoutKey":@"3",
                                        @"ABKMinimumTriggerTimeIntervalKey":@"4",
-                                       @"ABKCollectIDFA":@"true",
                                        @"userIdentificationType":@"MPID"
                                        };
 
     [appBoy didFinishLaunchingWithConfiguration:kitConfiguration];
     
-    XCTAssertEqual(appBoy.userIdType, MPUserIdentityOther4);
+    XCTAssertEqual(appBoy.configuration[@"userIdentificationType"], @"MPID");
 }
 
 - (void)testlogCommerceEvent {
