@@ -7,13 +7,13 @@ This repository contains the [Braze](https://www.braze.com) integration for the 
 1. Add the kit dependency to your app's Podfile or Cartfile:
 
     ```
-    pod 'mParticle-Appboy', '~> 7.0'
+    pod 'mParticle-Appboy', '~> 8.0'
     ```
 
     OR
 
     ```
-    github "mparticle-integrations/mparticle-apple-integration-appboy" ~> 7.0
+    github "mparticle-integrations/mparticle-apple-integration-appboy" ~> 8.0
     ```
 
 2. Follow the mParticle iOS SDK [quick-start](https://github.com/mParticle/mparticle-apple-sdk), then rebuild and launch your app, and verify that you see `"Included kits: { Appboy }"` in your Xcode console 
