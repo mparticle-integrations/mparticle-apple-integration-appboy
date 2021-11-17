@@ -18,13 +18,13 @@ Pod::Spec.new do |s|
     s.ios.dependency 'mParticle-Apple-SDK/mParticle', '~> 8.0'
     s.ios.frameworks = 'CoreTelephony', 'SystemConfiguration'
     s.libraries = 'z'
-    s.ios.dependency 'Appboy-iOS-SDK', '~> 4.3'
+    s.ios.dependency 'Appboy-iOS-SDK', '~> 4.4'
 
     s.tvos.deployment_target = "9.0"    
     s.ios.source_files      = 'Sources/**/*.{h,m,mm}'
     s.tvos.dependency 'mParticle-Apple-SDK/mParticle', '~> 8.0'  
     s.tvos.frameworks = 'SystemConfiguration'   
-    s.tvos.dependency 'Appboy-tvOS-SDK', '~> 3.27'
+    s.tvos.dependency 'Appboy-tvOS-SDK', '~> 4.3'
     
     s.tvos.pod_target_xcconfig = {
         'EXCLUDED_ARCHS[sdk=appletvsimulator*]' => 'arm64'
