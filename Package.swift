@@ -16,7 +16,7 @@ let package = Package(
                url: "https://github.com/mParticle/mparticle-apple-sdk",
                .upToNextMajor(from: "8.0.0")),
       .package(name: "Appboy_iOS_SDK",
-               url: "https://github.com/Appboy/appboy-ios-sdk",
+               url: "https://github.com/braze-inc/braze-ios-sdk",
                .upToNextMajor(from: "4.0.0")),
     ],
     targets: [
