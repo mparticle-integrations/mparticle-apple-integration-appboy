@@ -650,6 +650,8 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
 #endif
     } else if ([key isEqualToString:mParticleUserAttributeMobileNumber] || [key isEqualToString:@"$MPUserMobile"]) {
         appboyInstance.user.phone = value;
+    } else if ([key isEqualToString:mParticleUserAttributeZip]){
+        [appboyInstance.user setCustomAttributeWithKey:@"Zip" andStringValue:value];
     } else {
         key = [self stripCharacter:@"$" fromString:key];
         
