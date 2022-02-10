@@ -295,6 +295,8 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
     }
     CFTypeRef appboyRef = CFRetain((__bridge CFTypeRef)[Appboy sharedInstance]);
     self->appboyInstance = (__bridge Appboy *)appboyRef;
+
+    [self->appboyInstance addSdkMetadata:@[ABKSdkMetadataMParticle]];
     
     if (self->collectIDFA) {
         self->appboyInstance.idfaDelegate = (id)self;
