@@ -154,8 +154,13 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
         if (self->_enableTypeDetection) {
             detectedEventInfo = [self simplifiedDictionary:eventInfo];
         }
-        
-        [self->appboyInstance logCustomEvent:event.name withProperties:detectedEventInfo];
+
+        // Appboy expects that the properties are non empty when present.
+        if (detectedEventInfo && detectedEventInfo.count > 0) {
+            [self->appboyInstance logCustomEvent:event.name withProperties:detectedEventInfo];
+        } else {
+            [self->appboyInstance logCustomEvent:event.name];
+        }
         
         NSString *eventTypeString = [@(eventType) stringValue];
         
