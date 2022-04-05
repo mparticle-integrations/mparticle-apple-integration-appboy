@@ -400,4 +400,29 @@
     [mockClient stopMocking];
 }
 
+- (void)testEventWithEmptyProperties {
+    MPKitAppboy *kit = [[MPKitAppboy alloc] init];
+
+    Appboy *testClient = [[Appboy alloc] init];
+    id mockClient = OCMPartialMock(testClient);
+    [kit setAppboyInstance:mockClient];
+
+    XCTAssertEqualObjects(mockClient, [kit appboyInstance]);
+
+
+    MPEvent *event = [[MPEvent alloc] initWithName:@"test event" type:MPEventTypeNavigation];
+    event.customAttributes = @{};
+
+    [kit setEnableTypeDetection:NO];
+    [[mockClient expect] logCustomEvent:event.name];
+
+    MPKitExecStatus *execStatus = [kit logBaseEvent:event];
+
+    XCTAssertEqual(execStatus.returnCode, MPKitReturnCodeSuccess);
+
+    [mockClient verify];
+
+    [mockClient stopMocking];
+}
+
 @end
