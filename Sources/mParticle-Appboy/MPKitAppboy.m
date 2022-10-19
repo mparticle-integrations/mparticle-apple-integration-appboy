@@ -59,6 +59,8 @@ static NSString *const userIdValueMPID = @"MPID";
 // User Attribute key with reserved functionality for Braze kit
 static NSString *const brazeUserAttributeDob = @"dob";
 
+static NSDictionary *_brazeOptions = nil;
+static BrazeConfigurationBlock brazeConfigurationBlock = nil;
 __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = nil;
 __weak static id<ABKURLDelegate> urlDelegate = nil;
 
@@ -83,6 +85,18 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
 + (void)load {
     MPKitRegister *kitRegister = [[MPKitRegister alloc] initWithName:@"Appboy" className:@"MPKitAppboy"];
     [MParticle registerExtension:kitRegister];
+}
+
++ (NSDictionary *)brazeOptions {
+    return _brazeOptions;
+}
+
++ (void)setBrazeOptions:(NSDictionary *)brazeOptions {
+    _brazeOptions = brazeOptions;
+}
+
++ (void)configureBrazeInstanceWithBlock:(BrazeConfigurationBlock)configurationBlock {
+    brazeConfigurationBlock = configurationBlock;
 }
 
 + (void)setInAppMessageControllerDelegate:(id)delegate {
@@ -313,6 +327,11 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
     }
 #endif
     
+    if (brazeConfigurationBlock) {
+        brazeConfigurationBlock([self appboyInstance]);
+        brazeConfigurationBlock = nil;
+    }
+    
     self->_started = YES;
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -399,6 +418,11 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
     
     if ([MPKitAppboy urlDelegate]) {
         optionsDictionary[ABKURLDelegateKey] = (NSObject *)[MPKitAppboy urlDelegate];
+    }
+    
+    NSDictionary *brazeOptions = [[self class] brazeOptions];
+    if (brazeOptions) {
+        [optionsDictionary addEntriesFromDictionary:brazeOptions];
     }
     
     return optionsDictionary;
