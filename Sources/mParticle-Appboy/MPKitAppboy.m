@@ -58,6 +58,8 @@ static NSString *const userIdValueMPID = @"MPID";
 
 // User Attribute key with reserved functionality for Braze kit
 static NSString *const brazeUserAttributeDob = @"dob";
+static NSString *const brazeUserAttributeEmailSubscribe = @"email_subscribe";
+static NSString *const brazeUserAttributePushSubscribe = @"push_subscribe";
 
 __weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = nil;
 __weak static id<ABKURLDelegate> urlDelegate = nil;
@@ -659,6 +661,26 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
         appboyInstance.user.phone = value;
     } else if ([key isEqualToString:mParticleUserAttributeZip]){
         [appboyInstance.user setCustomAttributeWithKey:@"Zip" andStringValue:value];
+    } else if ([key isEqualToString:brazeUserAttributeEmailSubscribe]) {
+        if([value isEqualToString:@"opted_in"]) {
+            [appboyInstance.user setEmailNotificationSubscriptionType:ABKOptedIn];
+        } else if ([value isEqualToString:@"unsubscribed"]) {
+            [appboyInstance.user setEmailNotificationSubscriptionType:ABKUnsubscribed];
+        } else if ([value isEqualToString:@"subscribed"]) {
+            [appboyInstance.user setEmailNotificationSubscriptionType:ABKSubscribed];
+        } else {
+            NSLog(@"mParticle -> Invalid email_subscribe value: %@", value);
+        }
+    } else if ([key isEqualToString:brazeUserAttributePushSubscribe]) {
+        if([value isEqualToString:@"opted_in"]) {
+            [appboyInstance.user setPushNotificationSubscriptionType:ABKOptedIn];
+        } else if ([value isEqualToString:@"unsubscribed"]) {
+            [appboyInstance.user setPushNotificationSubscriptionType:ABKUnsubscribed];
+        } else if ([value isEqualToString:@"subscribed"]) {
+            [appboyInstance.user setPushNotificationSubscriptionType:ABKSubscribed];
+        } else {
+            NSLog(@"mParticle -> Invalid push_subscribe value: %@", value);
+        }
     } else {
         key = [self stripCharacter:@"$" fromString:key];
         
