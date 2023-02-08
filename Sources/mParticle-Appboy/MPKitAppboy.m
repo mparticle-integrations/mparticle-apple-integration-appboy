@@ -1,30 +1,22 @@
 #import "MPKitAppboy.h"
 
 #if SWIFT_PACKAGE
-    #import "AppboyKit.h"
+    #if TARGET_OS_IOS == 1
+        import BrazeKit
+        import BrazeKitCompat
+        import BrazeUI
+    #elif TARGET_OS_TV == 1
+        import BrazeKit
+        import BrazeKitCompat
+    #endif
 #else
-    #ifdef COCOAPODS
-        #if TARGET_OS_IOS == 1
-            #if defined(__has_include) && __has_include(<Appboy-iOS-SDK/AppboyKit.h>)
-                #import <Appboy-iOS-SDK/AppboyKit.h>
-            #elif defined(__has_include) && __has_include(<Appboy_iOS_SDK/AppboyKit.h>)
-                #import <Appboy_iOS_SDK/AppboyKit.h>
-            #else
-                #import "AppboyKit.h"
-            #endif
-        #elif TARGET_OS_TV == 1
-            #if defined(__has_include) && __has_include(<AppboyTVOSKit/AppboyKit.h>)
-                #import <AppboyTVOSKit/AppboyKit.h>
-            #else
-                #import "AppboyKit.h"
-            #endif
-        #endif
-    #else
-        #if TARGET_OS_IOS == 1
-            #import <Appboy_iOS_SDK/Appboy-iOS-SDK-umbrella.h>
-        #elif TARGET_OS_TV == 1
-            #import "AppboyKit.h"
-        #endif
+    #if TARGET_OS_IOS == 1
+        @import BrazeKit;
+        @import BrazeKitCompat;
+        @import BrazeUI;
+    #elif TARGET_OS_TV == 1
+        @import BrazeKit;
+        @import BrazeKitCompat;
     #endif
 #endif
 
@@ -59,11 +51,11 @@ static NSString *const userIdValueMPID = @"MPID";
 // User Attribute key with reserved functionality for Braze kit
 static NSString *const brazeUserAttributeDob = @"dob";
 
-__weak static id<ABKInAppMessageControllerDelegate> inAppMessageControllerDelegate = nil;
-__weak static id<ABKURLDelegate> urlDelegate = nil;
+__weak static id<BrazeInAppMessageUIDelegate> inAppMessageControllerDelegate = nil;
+__weak static id<BrazeDelegate> urlDelegate = nil;
 
 @interface MPKitAppboy() {
-    Appboy *appboyInstance;
+    Braze *appboyInstance;
     BOOL collectIDFA;
     BOOL forwardScreenViews;
 }
@@ -86,18 +78,18 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
 }
 
 + (void)setInAppMessageControllerDelegate:(id)delegate {
-    inAppMessageControllerDelegate = (id<ABKInAppMessageControllerDelegate>)delegate;
+    inAppMessageControllerDelegate = (id<BrazeInAppMessageUIDelegate>)delegate;
 }
 
-+ (id<ABKInAppMessageControllerDelegate>)inAppMessageControllerDelegate {
++ (id<BrazeInAppMessageUIDelegate>)inAppMessageControllerDelegate {
     return inAppMessageControllerDelegate;
 }
 
 + (void)setURLDelegate:(id)delegate {
-    urlDelegate = (id<ABKURLDelegate>)delegate;
+    urlDelegate = (id<BrazeDelegate>)delegate;
 }
 
-+ (id<ABKURLDelegate>)urlDelegate {
++ (id<BrazeDelegate>)urlDelegate {
     return urlDelegate;
 }
 
@@ -120,11 +112,11 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
     return stringRepresentation;
 }
 
-- (Appboy *)appboyInstance {
+- (Braze *)appboyInstance {
     return self->appboyInstance;
 }
 
-- (void)setAppboyInstance:(Appboy *)instance {
+- (void)setAppboyInstance:(Braze *)instance {
     self->appboyInstance = instance;
 }
 
@@ -157,7 +149,7 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
 
         // Appboy expects that the properties are non empty when present.
         if (detectedEventInfo && detectedEventInfo.count > 0) {
-            [self->appboyInstance logCustomEvent:event.name withProperties:detectedEventInfo];
+            [self->appboyInstance logCustomEvent:event.name properties:detectedEventInfo];
         } else {
             [self->appboyInstance logCustomEvent:event.name];
         }
@@ -200,7 +192,6 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
     return execStatus;
 }
 
-#pragma mark ABKIDFADelegate
 - (BOOL)isAdvertisingTrackingEnabled {
     BOOL advertisingTrackingEnabled = NO;
     Class MPIdentifierManager = NSClassFromString(@"ASIdentifierManager");
@@ -268,7 +259,7 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
     // 1. Apps that initialize Braze prior to mParticle, and/or
     // 2. Apps that initialize mParticle too late, causing the SDK to miss
     //    the launch notification which would otherwise trigger start().
-    if ([Appboy sharedInstance]) {
+    if (self->appboyInstance) {
         NSLog(@"mParticle -> Warning: Braze SDK initialized outside of mParticle kit, this will mean Braze settings within the mParticle dashboard such as API key, endpoint URL, flush interval and others will not be respected.");
         [self start];
     } else {
@@ -284,32 +275,33 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
 }
 
 - (void)start {
-    static dispatch_once_t appboyPredicate;
-    
-    dispatch_once(&appboyPredicate, ^{
+    if (!self->appboyInstance) {
         NSDictionary *optionsDict = [self optionsDictionary];
+        BRZConfiguration *configuration = [[BRZConfiguration alloc] initWithApiKey:self.configuration[eabAPIKey] endpoint:optionsDict[ABKEndpointKey]];
+        configuration.api.requestPolicy = ((NSNumber *)optionsDict[ABKRequestProcessingPolicyOptionKey]).intValue;
+        configuration.api.flushInterval = ((NSNumber *)optionsDict[ABKFlushIntervalOptionKey]).doubleValue;
+        configuration.sessionTimeout = ((NSNumber *)optionsDict[ABKSessionTimeoutKey]).doubleValue;
+        configuration.triggerMinimumTimeInterval = ((NSNumber *)optionsDict[ABKMinimumTriggerTimeIntervalKey]).doubleValue;
+        configuration.location.automaticLocationCollection = optionsDict[ABKEnableAutomaticLocationCollectionKey];
+        [configuration.api addSDKMetadata:@[BRZSDKMetadata.mparticle]];
+        configuration.api.sdkFlavor = ((NSNumber *)optionsDict[ABKSDKFlavorKey]).intValue;
         
-        [Appboy startWithApiKey:self.configuration[eabAPIKey]
-                  inApplication:[UIApplication sharedApplication]
-              withLaunchOptions:self.launchOptions
-              withAppboyOptions:optionsDict];
-    });
+        self->appboyInstance = [[Braze alloc] initWithConfiguration:configuration];
+    }
     
-    if (![Appboy sharedInstance] ) {
+    if (!self->appboyInstance) {
         return;
     }
-    CFTypeRef appboyRef = CFRetain((__bridge CFTypeRef)[Appboy sharedInstance]);
-    self->appboyInstance = (__bridge Appboy *)appboyRef;
-
-    [self->appboyInstance addSdkMetadata:@[ABKSdkMetadataMParticle]];
     
     if (self->collectIDFA) {
-        self->appboyInstance.idfaDelegate = (id)self;
+        [self->appboyInstance setIdentifierForAdvertiser:[self advertisingIdentifierString]];
+        [self->appboyInstance setAdTrackingEnabled:[self isAdvertisingTrackingEnabled]];
     }
     
 #if TARGET_OS_IOS == 1
     if ([MPKitAppboy inAppMessageControllerDelegate]) {
-        self->appboyInstance.inAppMessageController.delegate = [MPKitAppboy inAppMessageControllerDelegate];
+        BrazeInAppMessageUI *inAppMessageUI = [[BrazeInAppMessageUI alloc] init];
+        inAppMessageUI.delegate = [MPKitAppboy inAppMessageControllerDelegate];
     }
 #endif
     
@@ -404,19 +396,6 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
     return optionsDictionary;
 }
 
-- (MPKitExecStatus *)handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo {
-#if TARGET_OS_IOS == 1
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    [appboyInstance getActionWithIdentifier:identifier forRemoteNotification:userInfo completionHandler:^{}];
-#pragma clang diagnostic pop
-    
-#endif
-    
-    MPKitExecStatus *execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
-    return execStatus;
-}
-
 - (MPKitExecStatus *)incrementUserAttribute:(NSString *)key byValue:(NSNumber *)value {
     [appboyInstance.user incrementCustomUserAttribute:key by:[value integerValue]];
     
@@ -481,10 +460,10 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
             [properties removeObjectsForKeys:keys];
             
             [appboyInstance logPurchase:product.sku
-                             inCurrency:currency
-                                atPrice:[NSDecimalNumber decimalNumberWithDecimal:[product.price decimalValue]]
-                           withQuantity:[product.quantity integerValue]
-                          andProperties:properties];
+                               currency:currency
+                                  price:[product.price doubleValue]
+                               quantity:[product.quantity integerValue]
+                             properties:properties];
             
             [execStatus incrementForwardCount];
         }
@@ -517,11 +496,14 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
 }
 
 - (MPKitExecStatus *)receivedUserNotification:(NSDictionary *)userInfo {
+    MPKitExecStatus *execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
+
 #if TARGET_OS_IOS == 1
-    [appboyInstance registerApplication:[UIApplication sharedApplication] didReceiveRemoteNotification:userInfo fetchCompletionHandler:^(UIBackgroundFetchResult fetchResult) {}];
+    if (![appboyInstance.notifications handleBackgroundNotificationWithUserInfo:userInfo fetchCompletionHandler:^(UIBackgroundFetchResult fetchResult) {}]) {
+        execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeFail];
+    }
 #endif
     
-    MPKitExecStatus *execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
     return execStatus;
 }
 
@@ -534,7 +516,7 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
 
 - (MPKitExecStatus *)setDeviceToken:(NSData *)deviceToken {
 #if TARGET_OS_IOS == 1
-    [appboyInstance registerDeviceToken:deviceToken];
+    [appboyInstance.notifications registerDeviceToken:deviceToken];
 #endif
     
     MPKitExecStatus *execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
@@ -545,7 +527,7 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
     MPKitReturnCode returnCode;
     
     if (optOut) {
-        [appboyInstance.user setEmailNotificationSubscriptionType:ABKUnsubscribed];
+        [appboyInstance.user setEmailSubscriptionState:BRZUserSubscriptionStateSubscribed];
         returnCode = MPKitReturnCodeSuccess;
     } else {
         returnCode = MPKitReturnCodeCannotExecute;
@@ -571,9 +553,9 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
     }
     
     if ([key isEqualToString:mParticleUserAttributeFirstName]) {
-        appboyInstance.user.firstName = value;
+        [appboyInstance.user setFirstName:value];
     } else if ([key isEqualToString:mParticleUserAttributeLastName]) {
-        appboyInstance.user.lastName = value;
+        [appboyInstance.user setLastName:value];
     } else if ([key isEqualToString:mParticleUserAttributeAge]) {
         NSDate *now = [NSDate date];
         NSCalendar *calendar = [NSCalendar currentCalendar];
@@ -593,7 +575,7 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
         birthComponents.month = 01;
         birthComponents.day = 01;
         
-        appboyInstance.user.dateOfBirth = [calendar dateFromComponents:birthComponents];
+        [appboyInstance.user setDateOfBirth:[calendar dateFromComponents:birthComponents]];
     } else if ([key isEqualToString:brazeUserAttributeDob]) {
         // Expected Date Format @"yyyy'-'MM'-'dd"
         NSCalendar *calendar = [NSCalendar currentCalendar];
@@ -637,49 +619,45 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
        birthComponents.month = month;
        birthComponents.day = day;
        
-       appboyInstance.user.dateOfBirth = [calendar dateFromComponents:birthComponents];
+       [appboyInstance.user setDateOfBirth:[calendar dateFromComponents:birthComponents]];
    } else if ([key isEqualToString:mParticleUserAttributeCountry]) {
-    appboyInstance.user.country = value;
+    [appboyInstance.user setCountry:value];
     } else if ([key isEqualToString:mParticleUserAttributeCity]) {
-        appboyInstance.user.homeCity = value;
+        [appboyInstance.user setHomeCity:value];
     } else if ([key isEqualToString:mParticleUserAttributeGender]) {
-#if TARGET_OS_IOS == 1
-        appboyInstance.user.gender = ABKUserGenderOther;
+        [appboyInstance.user setGender:BRZUserGender.other];
         if ([value isEqualToString:mParticleGenderMale]) {
-            appboyInstance.user.gender = ABKUserGenderMale;
+            [appboyInstance.user setGender:BRZUserGender.male];
         } else if ([value isEqualToString:mParticleGenderFemale]) {
-            appboyInstance.user.gender = ABKUserGenderFemale;
+            [appboyInstance.user setGender:BRZUserGender.female];
         } else if ([value isEqualToString:mParticleGenderNotAvailable]) {
-            appboyInstance.user.gender = ABKUserGenderNotApplicable;
+            [appboyInstance.user setGender:BRZUserGender.notApplicable];
         }
-#elif TARGET_OS_TV == 1
-        appboyInstance.user.gender = [value isEqualToString:mParticleGenderMale] ? ABKUserGenderMale : ABKUserGenderFemale;
-#endif
     } else if ([key isEqualToString:mParticleUserAttributeMobileNumber] || [key isEqualToString:@"$MPUserMobile"]) {
-        appboyInstance.user.phone = value;
+        [appboyInstance.user setPhoneNumber:value];
     } else if ([key isEqualToString:mParticleUserAttributeZip]){
-        [appboyInstance.user setCustomAttributeWithKey:@"Zip" andStringValue:value];
+        [appboyInstance.user setCustomAttributeWithKey:@"Zip" stringValue:value];
     } else {
         key = [self stripCharacter:@"$" fromString:key];
         
         if (!_enableTypeDetection) {
-            [appboyInstance.user setCustomAttributeWithKey:key andStringValue:value];
+            [appboyInstance.user setCustomAttributeWithKey:key stringValue:value];
         } else {
             NSDictionary *tempConversionDictionary = @{key: value};
             tempConversionDictionary = [self simplifiedDictionary:tempConversionDictionary];
             id obj = tempConversionDictionary[key];
             if ([obj isKindOfClass:[NSString class]]) {
-                [appboyInstance.user setCustomAttributeWithKey:key andStringValue:obj];
+                [appboyInstance.user setCustomAttributeWithKey:key stringValue:obj];
             } else if ([obj isKindOfClass:[NSNumber class]]) {
                 if ([self isBoolNumber:obj]) {
-                    [appboyInstance.user setCustomAttributeWithKey:key andBOOLValue:((NSNumber *)obj).boolValue];
+                    [appboyInstance.user setCustomAttributeWithKey:key boolValue:((NSNumber *)obj).boolValue];
                 } else if ([self isInteger:value]) {
-                    [appboyInstance.user setCustomAttributeWithKey:key andIntegerValue:((NSNumber *)obj).intValue];
+                    [appboyInstance.user setCustomAttributeWithKey:key intValue:((NSNumber *)obj).intValue];
                 } else if ([self isFloat:value]) {
-                    [appboyInstance.user setCustomAttributeWithKey:key andDoubleValue:((NSNumber *)obj).doubleValue];
+                    [appboyInstance.user setCustomAttributeWithKey:key doubleValue:((NSNumber *)obj).doubleValue];
                 }
             } else if ([obj isKindOfClass:[NSDate class]]) {
-                [appboyInstance.user setCustomAttributeWithKey:key andDateValue:obj];
+                [appboyInstance.user setCustomAttributeWithKey:key dateValue:obj];
             }
         }
     }
@@ -878,7 +856,7 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
         }
         
         if (userEmail) {
-            appboyInstance.user.email = userEmail;
+            [appboyInstance.user setEmail:userEmail];
             execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
         }
     }
@@ -892,9 +870,12 @@ __weak static id<ABKURLDelegate> urlDelegate = nil;
 
 #if TARGET_OS_IOS == 1 && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
 - (nonnull MPKitExecStatus *)userNotificationCenter:(nonnull UNUserNotificationCenter *)center didReceiveNotificationResponse:(nonnull UNNotificationResponse *)response API_AVAILABLE(ios(10.0)) {
-    [appboyInstance userNotificationCenter:center didReceiveNotificationResponse:response withCompletionHandler:^{}];
-    
     MPKitExecStatus *execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
+
+    if (![appboyInstance.notifications handleUserNotificationWithResponse:response withCompletionHandler:^{}]) {
+        execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeFail];
+    }
+    
     return execStatus;
 }
 #endif

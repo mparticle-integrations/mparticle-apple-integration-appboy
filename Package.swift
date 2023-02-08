@@ -15,9 +15,9 @@ let package = Package(
       .package(name: "mParticle-Apple-SDK",
                url: "https://github.com/mParticle/mparticle-apple-sdk",
                .upToNextMajor(from: "8.0.0")),
-      .package(name: "Appboy_iOS_SDK",
-               url: "https://github.com/braze-inc/braze-ios-sdk",
-               .upToNextMajor(from: "4.4.0")),
+      .package(name: "braze-swift-sdk",
+               url: "https://github.com/braze-inc/braze-swift-sdk",
+               .upToNextMajor(from: "5.9.0")),
     ],
     targets: [
         .target(
