@@ -1,20 +1,20 @@
 #import "MPKitAppboy.h"
 
 #if SWIFT_PACKAGE
-    #if TARGET_OS_IOS == 1
+    #ifdef TARGET_OS_IOS
         import BrazeKit
         import BrazeKitCompat
         import BrazeUI
-    #elif TARGET_OS_TV == 1
+    #else
         import BrazeKit
         import BrazeKitCompat
     #endif
 #else
-    #if TARGET_OS_IOS == 1
+    #ifdef TARGET_OS_IOS
         @import BrazeKit;
         @import BrazeKitCompat;
         @import BrazeUI;
-    #elif TARGET_OS_TV == 1
+    #else
         @import BrazeKit;
         @import BrazeKitCompat;
     #endif
@@ -51,7 +51,9 @@ static NSString *const userIdValueMPID = @"MPID";
 // User Attribute key with reserved functionality for Braze kit
 static NSString *const brazeUserAttributeDob = @"dob";
 
+#ifdef TARGET_OS_IOS
 __weak static id<BrazeInAppMessageUIDelegate> inAppMessageControllerDelegate = nil;
+#endif
 __weak static id<BrazeDelegate> urlDelegate = nil;
 
 @interface MPKitAppboy() {
@@ -77,6 +79,7 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
     [MParticle registerExtension:kitRegister];
 }
 
+#ifdef TARGET_OS_IOS
 + (void)setInAppMessageControllerDelegate:(id)delegate {
     inAppMessageControllerDelegate = (id<BrazeInAppMessageUIDelegate>)delegate;
 }
@@ -84,6 +87,7 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
 + (id<BrazeInAppMessageUIDelegate>)inAppMessageControllerDelegate {
     return inAppMessageControllerDelegate;
 }
+#endif
 
 + (void)setURLDelegate:(id)delegate {
     urlDelegate = (id<BrazeDelegate>)delegate;
@@ -254,7 +258,7 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
     _host = configuration[hostConfigKey];
     _enableTypeDetection = [configuration[enableTypeDetectionKey] boolValue];
     
-    //If Braze is already initialize, immediately "start" the kit, this
+    //If Braze is already initialized, immediately "start" the kit, this
     //is here for:
     // 1. Apps that initialize Braze prior to mParticle, and/or
     // 2. Apps that initialize mParticle too late, causing the SDK to miss
@@ -298,7 +302,7 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
         [self->appboyInstance setAdTrackingEnabled:[self isAdvertisingTrackingEnabled]];
     }
     
-#if TARGET_OS_IOS == 1
+#ifdef TARGET_OS_IOS
     if ([MPKitAppboy inAppMessageControllerDelegate]) {
         BrazeInAppMessageUI *inAppMessageUI = [[BrazeInAppMessageUI alloc] init];
         inAppMessageUI.delegate = [MPKitAppboy inAppMessageControllerDelegate];
@@ -367,23 +371,13 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
     optionsDictionary[ABKSDKFlavorKey] = @(MPARTICLE);
 #pragma clang diagnostic pop
     
-#if TARGET_OS_IOS == 1
+#ifdef TARGET_OS_IOS
     optionsDictionary[ABKEnableAutomaticLocationCollectionKey] = @(YES);
     if (self.configuration[@"ABKDisableAutomaticLocationCollectionKey"]) {
         if ([self.configuration[@"ABKDisableAutomaticLocationCollectionKey"] caseInsensitiveCompare:@"true"] == NSOrderedSame) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wincompatible-pointer-types"
             optionsDictionary[ABKEnableAutomaticLocationCollectionKey] = @(NO);
-#pragma clang diagnostic pop
-        }
-    }
-#elif TARGET_OS_TVOS == 1
-    optionsDictionary[ABKDisableAutomaticLocationCollectionKey] = @(NO);
-    if (self.configuration[@"ABKDisableAutomaticLocationCollectionKey"]) {
-        if ([self.configuration[@"ABKDisableAutomaticLocationCollectionKey"] caseInsensitiveCompare:@"true"] == NSOrderedSame) {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wincompatible-pointer-types"
-            optionsDictionary[ABKDisableAutomaticLocationCollectionKey] = @(YES);
 #pragma clang diagnostic pop
         }
     }
@@ -498,7 +492,7 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
 - (MPKitExecStatus *)receivedUserNotification:(NSDictionary *)userInfo {
     MPKitExecStatus *execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
 
-#if TARGET_OS_IOS == 1
+#ifdef TARGET_OS_IOS
     if (![appboyInstance.notifications handleBackgroundNotificationWithUserInfo:userInfo fetchCompletionHandler:^(UIBackgroundFetchResult fetchResult) {}]) {
         execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeFail];
     }
@@ -515,7 +509,7 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
 }
 
 - (MPKitExecStatus *)setDeviceToken:(NSData *)deviceToken {
-#if TARGET_OS_IOS == 1
+#ifdef TARGET_OS_IOS
     [appboyInstance.notifications registerDeviceToken:deviceToken];
 #endif
     
@@ -868,7 +862,7 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
     return [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
 }
 
-#if TARGET_OS_IOS == 1 && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
+#ifdef TARGET_OS_IOS
 - (nonnull MPKitExecStatus *)userNotificationCenter:(nonnull UNUserNotificationCenter *)center didReceiveNotificationResponse:(nonnull UNNotificationResponse *)response API_AVAILABLE(ios(10.0)) {
     MPKitExecStatus *execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
 
