@@ -75,14 +75,19 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
 }
 
 + (void)load {
+    // support default in-app message ui by default
+    inAppMessagePresenter = (id<BrazeInAppMessagePresenter>)[BrazeInAppMessageUI new];
+
     MPKitRegister *kitRegister = [[MPKitRegister alloc] initWithName:@"Appboy" className:@"MPKitAppboy"];
     [MParticle registerExtension:kitRegister];
 }
 
 #ifdef TARGET_OS_IOS
-+ (void)setInAppMessagePresenter:(nonnull id)presenter {
++ (void)setInAppMessagePresenter:(nullable id)presenter {
     if ([presenter conformsToProtocol:@protocol(BrazeInAppMessagePresenter)]) {
         inAppMessagePresenter = presenter;
+    } else {
+        inAppMessagePresenter = nil;
     }
 }
 #endif

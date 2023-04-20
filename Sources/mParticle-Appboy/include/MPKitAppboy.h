@@ -11,7 +11,7 @@
 @property (nonatomic, strong, nullable) NSDictionary *launchOptions;
 @property (nonatomic, unsafe_unretained, readonly) BOOL started;
 
-+ (void)setInAppMessagePresenter:(nonnull id)presenter;
++ (void)setInAppMessagePresenter:(nullable id)presenter;
 + (void)setURLDelegate:(nonnull id)delegate;
 
 @end
