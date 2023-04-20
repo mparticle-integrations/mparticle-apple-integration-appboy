@@ -52,7 +52,7 @@ static NSString *const userIdValueMPID = @"MPID";
 static NSString *const brazeUserAttributeDob = @"dob";
 
 #ifdef TARGET_OS_IOS
-__weak static id<BrazeInAppMessageUIDelegate> inAppMessageControllerDelegate = nil;
+static id<BrazeInAppMessagePresenter> inAppMessagePresenter = nil;
 #endif
 __weak static id<BrazeDelegate> urlDelegate = nil;
 
@@ -80,12 +80,10 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
 }
 
 #ifdef TARGET_OS_IOS
-+ (void)setInAppMessageControllerDelegate:(id)delegate {
-    inAppMessageControllerDelegate = (id<BrazeInAppMessageUIDelegate>)delegate;
-}
-
-+ (id<BrazeInAppMessageUIDelegate>)inAppMessageControllerDelegate {
-    return inAppMessageControllerDelegate;
++ (void)setInAppMessagePresenter:(nonnull id)presenter {
+    if ([presenter conformsToProtocol:@protocol(BrazeInAppMessagePresenter)]) {
+        inAppMessagePresenter = presenter;
+    }
 }
 #endif
 
@@ -303,11 +301,7 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
     }
     
 #ifdef TARGET_OS_IOS
-    if ([MPKitAppboy inAppMessageControllerDelegate]) {
-        BrazeInAppMessageUI *inAppMessageUI = [[BrazeInAppMessageUI alloc] init];
-        inAppMessageUI.delegate = [MPKitAppboy inAppMessageControllerDelegate];
-        self->appboyInstance.inAppMessagePresenter = inAppMessageUI;
-    }
+    self->appboyInstance.inAppMessagePresenter = inAppMessagePresenter;
 #endif
     
     self->_started = YES;
