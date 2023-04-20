@@ -306,6 +306,7 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
     if ([MPKitAppboy inAppMessageControllerDelegate]) {
         BrazeInAppMessageUI *inAppMessageUI = [[BrazeInAppMessageUI alloc] init];
         inAppMessageUI.delegate = [MPKitAppboy inAppMessageControllerDelegate];
+        self->appboyInstance.inAppMessagePresenter = inAppMessageUI;
     }
 #endif
     
