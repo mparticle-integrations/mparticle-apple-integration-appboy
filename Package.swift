@@ -26,7 +26,6 @@ let package = Package(
               .byName(name: "mParticle-Apple-SDK"),
               .product(name: "BrazeUI", package: "braze-swift-sdk"),
               .product(name: "BrazeKit", package: "braze-swift-sdk"),
-              .product(name: "BrazeKitCompat", package: "braze-swift-sdk"),
             ]
         )
     ]
