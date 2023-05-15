@@ -24,8 +24,8 @@ let package = Package(
             name: "mParticle-Appboy",
             dependencies: [
               .byName(name: "mParticle-Apple-SDK"),
-              .product(name: "BrazeUI", package: "braze-swift-sdk"),
-              .product(name: "BrazeKit", package: "braze-swift-sdk"),
+              .product(name: "BrazeUICompat", package: "braze-swift-sdk"),
+              .product(name: "BrazeKitCompat", package: "braze-swift-sdk"),
             ]
         )
     ]
