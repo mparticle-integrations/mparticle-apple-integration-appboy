@@ -2,17 +2,17 @@
 
 #if SWIFT_PACKAGE
     #ifdef TARGET_OS_IOS
-        @import BrazeKit;
-        @import BrazeUI;
+        @import BrazeKitCompat;
+        @import BrazeUICompat;
     #else
-        @import BrazeKit;
+        @import BrazeKitCompat;
     #endif
 #else
     #ifdef TARGET_OS_IOS
-        @import BrazeKit;
-        @import BrazeUI;
+        @import BrazeKitCompat;
+        @import BrazeUICompat;
     #else
-        @import BrazeKit;
+        @import BrazeKitCompat;
     #endif
 #endif
 
