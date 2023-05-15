@@ -781,7 +781,7 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
             }
         }
         
-        if (userId) {
+        if (userId && ![userId isKindOfClass: [NSNull class]]) {
             void (^changeUser)(void) = ^ {
                 [self->appboyInstance changeUser:userId];
             };
@@ -849,7 +849,7 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
             }
         }
         
-        if (userEmail) {
+        if (userEmail && ![userEmail isKindOfClass: [NSNull class]]) {
             [appboyInstance.user setEmail:userEmail];
             execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
         }
