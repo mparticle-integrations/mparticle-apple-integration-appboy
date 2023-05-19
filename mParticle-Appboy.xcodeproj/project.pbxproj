@@ -3,32 +3,42 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		531861FF2A13E147006FFE90 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531861FE2A13E147006FFE90 /* AppDelegate.swift */; };
+		531862032A13E147006FFE90 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531862022A13E147006FFE90 /* ViewController.swift */; };
+		531862062A13E147006FFE90 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 531862042A13E147006FFE90 /* Main.storyboard */; };
+		531862082A13E14A006FFE90 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 531862072A13E14A006FFE90 /* Assets.xcassets */; };
+		5318620B2A13E14A006FFE90 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 531862092A13E14A006FFE90 /* LaunchScreen.storyboard */; };
+		5387EC002A18050500219E89 /* BrazeKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5387EBFF2A18050500219E89 /* BrazeKit */; };
+		5387EC022A18051200219E89 /* BrazeKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5387EC012A18051200219E89 /* BrazeKit */; };
+		539B2E952A13D62200C8339D /* OCMock in Frameworks */ = {isa = PBXBuildFile; productRef = 539B2E942A13D62200C8339D /* OCMock */; };
+		539B2E982A13D66300C8339D /* mParticle-Apple-SDK in Frameworks */ = {isa = PBXBuildFile; productRef = 539B2E972A13D66300C8339D /* mParticle-Apple-SDK */; };
+		539B2E9A2A13D66A00C8339D /* mParticle-Apple-SDK in Frameworks */ = {isa = PBXBuildFile; productRef = 539B2E992A13D66A00C8339D /* mParticle-Apple-SDK */; };
+		539B2E9D2A13D69F00C8339D /* BrazeKitCompat in Frameworks */ = {isa = PBXBuildFile; productRef = 539B2E9C2A13D69F00C8339D /* BrazeKitCompat */; };
+		539B2E9F2A13D69F00C8339D /* BrazeUI in Frameworks */ = {isa = PBXBuildFile; productRef = 539B2E9E2A13D69F00C8339D /* BrazeUI */; };
+		539B2EA12A13D6AB00C8339D /* BrazeKitCompat in Frameworks */ = {isa = PBXBuildFile; productRef = 539B2EA02A13D6AB00C8339D /* BrazeKitCompat */; };
 		D31A98A92153F73400358293 /* mParticle_AppboyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D31A98A82153F73400358293 /* mParticle_AppboyTests.m */; };
 		D31A98AB2153F73400358293 /* mParticle_Appboy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB94016C1CB703F2007ABB18 /* mParticle_Appboy.framework */; };
-		D34D5D8C21541BB1009518C6 /* mParticle_Apple_SDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB9401781CB70C58007ABB18 /* mParticle_Apple_SDK.framework */; };
-		D34D5D8D21541BC4009518C6 /* Appboy_iOS_SDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4603411CDCD749006E590D /* Appboy_iOS_SDK.framework */; };
-		D34D5D8E21541BC6009518C6 /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4603431CDCD75A006E590D /* SDWebImage.framework */; };
-		D34D5D8F21541BCA009518C6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4603451CDCDD2B006E590D /* UIKit.framework */; };
-		DB4603421CDCD749006E590D /* Appboy_iOS_SDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4603411CDCD749006E590D /* Appboy_iOS_SDK.framework */; };
-		DB4603441CDCD75A006E590D /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4603431CDCD75A006E590D /* SDWebImage.framework */; };
-		DB4603461CDCDD2B006E590D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4603451CDCDD2B006E590D /* UIKit.framework */; };
 		DB76F1CF25D2E71D00CAB3EB /* MPKitAppboy.h in Headers */ = {isa = PBXBuildFile; fileRef = DB76F1CB25D2E71D00CAB3EB /* MPKitAppboy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DB76F1D025D2E71D00CAB3EB /* mParticle_Appboy.h in Headers */ = {isa = PBXBuildFile; fileRef = DB76F1CC25D2E71D00CAB3EB /* mParticle_Appboy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DB76F1D125D2E71D00CAB3EB /* MPKitAppboy.m in Sources */ = {isa = PBXBuildFile; fileRef = DB76F1CD25D2E71D00CAB3EB /* MPKitAppboy.m */; };
 		DB76F1D225D2E71D00CAB3EB /* MPKitAppboy.m in Sources */ = {isa = PBXBuildFile; fileRef = DB76F1CD25D2E71D00CAB3EB /* MPKitAppboy.m */; };
 		DB76F1DB25D2E73700CAB3EB /* MPKitAppboy.m in Sources */ = {isa = PBXBuildFile; fileRef = DB76F1CD25D2E71D00CAB3EB /* MPKitAppboy.m */; };
 		DB76F1DF25D2E74900CAB3EB /* MPKitAppboy.h in Headers */ = {isa = PBXBuildFile; fileRef = DB76F1CB25D2E71D00CAB3EB /* MPKitAppboy.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		DB94017A1CB70C58007ABB18 /* mParticle_Apple_SDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB9401781CB70C58007ABB18 /* mParticle_Apple_SDK.framework */; };
 		DBDEDD9C209B8FD600DD3B9B /* mParticle_Appboy_tvOS.h in Headers */ = {isa = PBXBuildFile; fileRef = DBDEDD9A209B8FD600DD3B9B /* mParticle_Appboy_tvOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		DBDEDDA4209BA34E00DD3B9B /* AppboyTVOSKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBDEDDA0209B916500DD3B9B /* AppboyTVOSKit.framework */; };
-		DBDEDDA6209BA36900DD3B9B /* mParticle_Apple_SDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBDEDDA5209BA36900DD3B9B /* mParticle_Apple_SDK.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		531862102A13E17D006FFE90 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DB9401631CB703F2007ABB18 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 531861FB2A13E147006FFE90;
+			remoteInfo = AppboyTestHost;
+		};
 		D31A98AC2153F73400358293 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DB9401631CB703F2007ABB18 /* Project object */;
@@ -39,35 +49,41 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		531861FC2A13E147006FFE90 /* AppboyTestHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppboyTestHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		531861FE2A13E147006FFE90 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		531862022A13E147006FFE90 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		531862052A13E147006FFE90 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		531862072A13E14A006FFE90 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		5318620A2A13E14A006FFE90 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		5318620C2A13E14A006FFE90 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D31A98A62153F73400358293 /* mParticle_AppboyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = mParticle_AppboyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D31A98A82153F73400358293 /* mParticle_AppboyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = mParticle_AppboyTests.m; sourceTree = "<group>"; };
 		D31A98AA2153F73400358293 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DB4603411CDCD749006E590D /* Appboy_iOS_SDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Appboy_iOS_SDK.framework; path = Carthage/Build/iOS/Appboy_iOS_SDK.framework; sourceTree = "<group>"; };
-		DB4603431CDCD75A006E590D /* SDWebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDWebImage.framework; path = Carthage/Build/iOS/SDWebImage.framework; sourceTree = "<group>"; };
-		DB4603451CDCDD2B006E590D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		DB76F1CB25D2E71D00CAB3EB /* MPKitAppboy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPKitAppboy.h; sourceTree = "<group>"; };
 		DB76F1CC25D2E71D00CAB3EB /* mParticle_Appboy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mParticle_Appboy.h; sourceTree = "<group>"; };
 		DB76F1CD25D2E71D00CAB3EB /* MPKitAppboy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPKitAppboy.m; sourceTree = "<group>"; };
 		DB76F1CE25D2E71D00CAB3EB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DB94016C1CB703F2007ABB18 /* mParticle_Appboy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = mParticle_Appboy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		DB9401781CB70C58007ABB18 /* mParticle_Apple_SDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = mParticle_Apple_SDK.framework; path = Carthage/Build/iOS/mParticle_Apple_SDK.framework; sourceTree = "<group>"; };
 		DBDEDD98209B8FD600DD3B9B /* mParticle_Appboy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = mParticle_Appboy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBDEDD9A209B8FD600DD3B9B /* mParticle_Appboy_tvOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mParticle_Appboy_tvOS.h; sourceTree = "<group>"; };
 		DBDEDD9B209B8FD600DD3B9B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DBDEDDA0209B916500DD3B9B /* AppboyTVOSKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppboyTVOSKit.framework; path = "Carthage/Checkouts/appboy-ios-sdk/Appboy-tvOS-SDK/AppboyTVOSKit.framework"; sourceTree = "<group>"; };
 		DBDEDDA5209BA36900DD3B9B /* mParticle_Apple_SDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = mParticle_Apple_SDK.framework; path = Carthage/Build/tvOS/mParticle_Apple_SDK.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		531861F92A13E147006FFE90 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D31A98A32153F73400358293 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D34D5D8E21541BC6009518C6 /* SDWebImage.framework in Frameworks */,
-				D34D5D8C21541BB1009518C6 /* mParticle_Apple_SDK.framework in Frameworks */,
-				D34D5D8D21541BC4009518C6 /* Appboy_iOS_SDK.framework in Frameworks */,
+				539B2E952A13D62200C8339D /* OCMock in Frameworks */,
 				D31A98AB2153F73400358293 /* mParticle_Appboy.framework in Frameworks */,
-				D34D5D8F21541BCA009518C6 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,10 +91,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DB4603461CDCDD2B006E590D /* UIKit.framework in Frameworks */,
-				DB4603421CDCD749006E590D /* Appboy_iOS_SDK.framework in Frameworks */,
-				DB4603441CDCD75A006E590D /* SDWebImage.framework in Frameworks */,
-				DB94017A1CB70C58007ABB18 /* mParticle_Apple_SDK.framework in Frameworks */,
+				5387EC022A18051200219E89 /* BrazeKit in Frameworks */,
+				539B2E9F2A13D69F00C8339D /* BrazeUI in Frameworks */,
+				539B2E9D2A13D69F00C8339D /* BrazeKitCompat in Frameworks */,
+				539B2E982A13D66300C8339D /* mParticle-Apple-SDK in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,14 +102,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DBDEDDA6209BA36900DD3B9B /* mParticle_Apple_SDK.framework in Frameworks */,
-				DBDEDDA4209BA34E00DD3B9B /* AppboyTVOSKit.framework in Frameworks */,
+				539B2EA12A13D6AB00C8339D /* BrazeKitCompat in Frameworks */,
+				539B2E9A2A13D66A00C8339D /* mParticle-Apple-SDK in Frameworks */,
+				5387EC002A18050500219E89 /* BrazeKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		531861FD2A13E147006FFE90 /* AppboyTestHost */ = {
+			isa = PBXGroup;
+			children = (
+				531861FE2A13E147006FFE90 /* AppDelegate.swift */,
+				531862022A13E147006FFE90 /* ViewController.swift */,
+				531862042A13E147006FFE90 /* Main.storyboard */,
+				531862072A13E14A006FFE90 /* Assets.xcassets */,
+				531862092A13E14A006FFE90 /* LaunchScreen.storyboard */,
+				5318620C2A13E14A006FFE90 /* Info.plist */,
+			);
+			path = AppboyTestHost;
+			sourceTree = "<group>";
+		};
 		D31A98A72153F73400358293 /* mParticle_AppboyTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -134,13 +164,9 @@
 			isa = PBXGroup;
 			children = (
 				DB76F1C825D2E71D00CAB3EB /* Sources */,
-				DBDEDDA0209B916500DD3B9B /* AppboyTVOSKit.framework */,
-				DB4603451CDCDD2B006E590D /* UIKit.framework */,
-				DB4603431CDCD75A006E590D /* SDWebImage.framework */,
-				DB4603411CDCD749006E590D /* Appboy_iOS_SDK.framework */,
-				DB9401781CB70C58007ABB18 /* mParticle_Apple_SDK.framework */,
 				DBDEDD99209B8FD600DD3B9B /* mParticle-Appboy-tvOS */,
 				D31A98A72153F73400358293 /* mParticle_AppboyTests */,
+				531861FD2A13E147006FFE90 /* AppboyTestHost */,
 				DB94016D1CB703F2007ABB18 /* Products */,
 				DBDEDDA3209BA34E00DD3B9B /* Frameworks */,
 			);
@@ -152,6 +178,7 @@
 				DB94016C1CB703F2007ABB18 /* mParticle_Appboy.framework */,
 				DBDEDD98209B8FD600DD3B9B /* mParticle_Appboy.framework */,
 				D31A98A62153F73400358293 /* mParticle_AppboyTests.xctest */,
+				531861FC2A13E147006FFE90 /* AppboyTestHost.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -197,6 +224,23 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		531861FB2A13E147006FFE90 /* AppboyTestHost */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5318620D2A13E14A006FFE90 /* Build configuration list for PBXNativeTarget "AppboyTestHost" */;
+			buildPhases = (
+				531861F82A13E147006FFE90 /* Sources */,
+				531861F92A13E147006FFE90 /* Frameworks */,
+				531861FA2A13E147006FFE90 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AppboyTestHost;
+			productName = AppboyTestHost;
+			productReference = 531861FC2A13E147006FFE90 /* AppboyTestHost.app */;
+			productType = "com.apple.product-type.application";
+		};
 		D31A98A52153F73400358293 /* mParticle_AppboyTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D31A98B02153F73400358293 /* Build configuration list for PBXNativeTarget "mParticle_AppboyTests" */;
@@ -208,9 +252,15 @@
 			buildRules = (
 			);
 			dependencies = (
+				539B2EA52A13D95200C8339D /* PBXTargetDependency */,
+				539B2EA32A13D94E00C8339D /* PBXTargetDependency */,
 				D31A98AD2153F73400358293 /* PBXTargetDependency */,
+				531862112A13E17D006FFE90 /* PBXTargetDependency */,
 			);
 			name = mParticle_AppboyTests;
+			packageProductDependencies = (
+				539B2E942A13D62200C8339D /* OCMock */,
+			);
 			productName = mParticle_AppboyTests;
 			productReference = D31A98A62153F73400358293 /* mParticle_AppboyTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -229,6 +279,12 @@
 			dependencies = (
 			);
 			name = "mParticle-Appboy";
+			packageProductDependencies = (
+				539B2E972A13D66300C8339D /* mParticle-Apple-SDK */,
+				539B2E9C2A13D69F00C8339D /* BrazeKitCompat */,
+				539B2E9E2A13D69F00C8339D /* BrazeUI */,
+				5387EC012A18051200219E89 /* BrazeKit */,
+			);
 			productName = "mParticle-Appboy";
 			productReference = DB94016C1CB703F2007ABB18 /* mParticle_Appboy.framework */;
 			productType = "com.apple.product-type.framework";
@@ -247,6 +303,11 @@
 			dependencies = (
 			);
 			name = "mParticle-Appboy-tvOS";
+			packageProductDependencies = (
+				539B2E992A13D66A00C8339D /* mParticle-Apple-SDK */,
+				539B2EA02A13D6AB00C8339D /* BrazeKitCompat */,
+				5387EBFF2A18050500219E89 /* BrazeKit */,
+			);
 			productName = "mParticle-Appboy-tvOS";
 			productReference = DBDEDD98209B8FD600DD3B9B /* mParticle_Appboy.framework */;
 			productType = "com.apple.product-type.framework";
@@ -257,12 +318,17 @@
 		DB9401631CB703F2007ABB18 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 1430;
 				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = mParticle;
 				TargetAttributes = {
+					531861FB2A13E147006FFE90 = {
+						CreatedOnToolsVersion = 14.3;
+					};
 					D31A98A52153F73400358293 = {
 						CreatedOnToolsVersion = 10.0;
 						ProvisioningStyle = Automatic;
+						TestTargetID = 531861FB2A13E147006FFE90;
 					};
 					DB94016B1CB703F2007ABB18 = {
 						CreatedOnToolsVersion = 7.3;
@@ -284,6 +350,11 @@
 				Base,
 			);
 			mainGroup = DB9401621CB703F2007ABB18;
+			packageReferences = (
+				539B2E932A13D62200C8339D /* XCRemoteSwiftPackageReference "ocmock" */,
+				539B2E962A13D66300C8339D /* XCRemoteSwiftPackageReference "mparticle-apple-sdk" */,
+				539B2E9B2A13D69F00C8339D /* XCRemoteSwiftPackageReference "braze-swift-sdk" */,
+			);
 			productRefGroup = DB94016D1CB703F2007ABB18 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -291,11 +362,22 @@
 				DB94016B1CB703F2007ABB18 /* mParticle-Appboy */,
 				DBDEDD97209B8FD600DD3B9B /* mParticle-Appboy-tvOS */,
 				D31A98A52153F73400358293 /* mParticle_AppboyTests */,
+				531861FB2A13E147006FFE90 /* AppboyTestHost */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		531861FA2A13E147006FFE90 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5318620B2A13E14A006FFE90 /* LaunchScreen.storyboard in Resources */,
+				531862082A13E14A006FFE90 /* Assets.xcassets in Resources */,
+				531862062A13E147006FFE90 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D31A98A42153F73400358293 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -320,6 +402,15 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		531861F82A13E147006FFE90 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				531862032A13E147006FFE90 /* ViewController.swift in Sources */,
+				531861FF2A13E147006FFE90 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D31A98A22153F73400358293 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -348,6 +439,19 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		531862112A13E17D006FFE90 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 531861FB2A13E147006FFE90 /* AppboyTestHost */;
+			targetProxy = 531862102A13E17D006FFE90 /* PBXContainerItemProxy */;
+		};
+		539B2EA32A13D94E00C8339D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 539B2EA22A13D94E00C8339D /* BrazeKitCompat */;
+		};
+		539B2EA52A13D95200C8339D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 539B2EA42A13D95200C8339D /* BrazeUI */;
+		};
 		D31A98AD2153F73400358293 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = DB94016B1CB703F2007ABB18 /* mParticle-Appboy */;
@@ -355,10 +459,96 @@
 		};
 /* End PBXTargetDependency section */
 
+/* Begin PBXVariantGroup section */
+		531862042A13E147006FFE90 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				531862052A13E147006FFE90 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		531862092A13E14A006FFE90 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5318620A2A13E14A006FFE90 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
+		5318620E2A13E14A006FFE90 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AppboyTestHost/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mparticle.AppboyTestHost;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5318620F2A13E14A006FFE90 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AppboyTestHost/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mparticle.AppboyTestHost;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		D31A98AE2153F73400358293 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -366,27 +556,25 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/Carthage/Checkouts/appboy-ios-sdk/Appboy-tvOS-SDK",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = mParticle_AppboyTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/Carthage/Build/iOS";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mparticle.mParticle-AppboyTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TVOS_DEPLOYMENT_TARGET = 9.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AppboyTestHost.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AppboyTestHost";
 			};
 			name = Debug;
 		};
 		D31A98AF2153F73400358293 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -394,20 +582,17 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/Carthage/Checkouts/appboy-ios-sdk/Appboy-tvOS-SDK",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = mParticle_AppboyTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/Carthage/Build/iOS";
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mparticle.mParticle-AppboyTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TVOS_DEPLOYMENT_TARGET = 9.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AppboyTestHost.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AppboyTestHost";
 			};
 			name = Release;
 		};
@@ -461,13 +646,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TVOS_DEPLOYMENT_TARGET = 9.0;
+				TVOS_DEPLOYMENT_TARGET = 11.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -517,11 +702,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TVOS_DEPLOYMENT_TARGET = 9.0;
+				TVOS_DEPLOYMENT_TARGET = 11.0;
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -536,18 +721,12 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
 				INFOPLIST_FILE = Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mparticle.mParticle-Appboy";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				TVOS_DEPLOYMENT_TARGET = 9.0;
 				"VALID_ARCHS[sdk=iphonesimulator*]" = x86_64;
 			};
 			name = Debug;
@@ -560,18 +739,12 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
 				INFOPLIST_FILE = Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mparticle.mParticle-Appboy";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				TVOS_DEPLOYMENT_TARGET = 9.0;
 				"VALID_ARCHS[sdk=iphonesimulator*]" = x86_64;
 			};
 			name = Release;
@@ -601,21 +774,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Checkouts/appboy-ios-sdk/Appboy-tvOS-SDK/AppboyTVOSKit.framework",
-					"$(PROJECT_DIR)/Carthage/Build/tvOS/mParticle_Apple_SDK.framework",
-					"$(PROJECT_DIR)/Carthage/Checkouts/appboy-ios-sdk/Appboy-tvOS-SDK",
-					"$(PROJECT_DIR)/Carthage/Build/tvOS",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
-				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/Carthage/Build/tvOS/mParticle_Apple_SDK.framework/Headers",
-					"$(PROJECT_DIR)/Carthage/Checkouts/appboy-ios-sdk/Appboy-tvOS-SDK/AppboyTVOSKit.framework/Headers",
-				);
 				INFOPLIST_FILE = "mParticle-Appboy-tvOS/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-all_load",
@@ -625,8 +787,6 @@
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 9.0;
-				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Build/tvOS/mParticle_Apple_SDK.framework";
 				VALID_ARCHS = arm64;
 				"VALID_ARCHS[sdk=appletvsimulator*]" = x86_64;
 			};
@@ -657,21 +817,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Checkouts/appboy-ios-sdk/Appboy-tvOS-SDK/AppboyTVOSKit.framework",
-					"$(PROJECT_DIR)/Carthage/Build/tvOS/mParticle_Apple_SDK.framework",
-					"$(PROJECT_DIR)/Carthage/Checkouts/appboy-ios-sdk/Appboy-tvOS-SDK",
-					"$(PROJECT_DIR)/Carthage/Build/tvOS",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
-				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/Carthage/Build/tvOS/mParticle_Apple_SDK.framework/Headers",
-					"$(PROJECT_DIR)/Carthage/Checkouts/appboy-ios-sdk/Appboy-tvOS-SDK/AppboyTVOSKit.framework/Headers",
-				);
 				INFOPLIST_FILE = "mParticle-Appboy-tvOS/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-all_load",
@@ -681,8 +830,6 @@
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 9.0;
-				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Build/tvOS/mParticle_Apple_SDK.framework";
 				VALID_ARCHS = arm64;
 				"VALID_ARCHS[sdk=appletvsimulator*]" = x86_64;
 			};
@@ -691,6 +838,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		5318620D2A13E14A006FFE90 /* Build configuration list for PBXNativeTarget "AppboyTestHost" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5318620E2A13E14A006FFE90 /* Debug */,
+				5318620F2A13E14A006FFE90 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		D31A98B02153F73400358293 /* Build configuration list for PBXNativeTarget "mParticle_AppboyTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -728,6 +884,86 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		539B2E932A13D62200C8339D /* XCRemoteSwiftPackageReference "ocmock" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/erikdoe/ocmock";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		539B2E962A13D66300C8339D /* XCRemoteSwiftPackageReference "mparticle-apple-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mParticle/mparticle-apple-sdk/";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
+		539B2E9B2A13D69F00C8339D /* XCRemoteSwiftPackageReference "braze-swift-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/braze-inc/braze-swift-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5387EBFF2A18050500219E89 /* BrazeKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 539B2E9B2A13D69F00C8339D /* XCRemoteSwiftPackageReference "braze-swift-sdk" */;
+			productName = BrazeKit;
+		};
+		5387EC012A18051200219E89 /* BrazeKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 539B2E9B2A13D69F00C8339D /* XCRemoteSwiftPackageReference "braze-swift-sdk" */;
+			productName = BrazeKit;
+		};
+		539B2E942A13D62200C8339D /* OCMock */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 539B2E932A13D62200C8339D /* XCRemoteSwiftPackageReference "ocmock" */;
+			productName = OCMock;
+		};
+		539B2E972A13D66300C8339D /* mParticle-Apple-SDK */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 539B2E962A13D66300C8339D /* XCRemoteSwiftPackageReference "mparticle-apple-sdk" */;
+			productName = "mParticle-Apple-SDK";
+		};
+		539B2E992A13D66A00C8339D /* mParticle-Apple-SDK */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 539B2E962A13D66300C8339D /* XCRemoteSwiftPackageReference "mparticle-apple-sdk" */;
+			productName = "mParticle-Apple-SDK";
+		};
+		539B2E9C2A13D69F00C8339D /* BrazeKitCompat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 539B2E9B2A13D69F00C8339D /* XCRemoteSwiftPackageReference "braze-swift-sdk" */;
+			productName = BrazeKitCompat;
+		};
+		539B2E9E2A13D69F00C8339D /* BrazeUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 539B2E9B2A13D69F00C8339D /* XCRemoteSwiftPackageReference "braze-swift-sdk" */;
+			productName = BrazeUI;
+		};
+		539B2EA02A13D6AB00C8339D /* BrazeKitCompat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 539B2E9B2A13D69F00C8339D /* XCRemoteSwiftPackageReference "braze-swift-sdk" */;
+			productName = BrazeKitCompat;
+		};
+		539B2EA22A13D94E00C8339D /* BrazeKitCompat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 539B2E9B2A13D69F00C8339D /* XCRemoteSwiftPackageReference "braze-swift-sdk" */;
+			productName = BrazeKitCompat;
+		};
+		539B2EA42A13D95200C8339D /* BrazeUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 539B2E9B2A13D69F00C8339D /* XCRemoteSwiftPackageReference "braze-swift-sdk" */;
+			productName = BrazeUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = DB9401631CB703F2007ABB18 /* Project object */;
 }

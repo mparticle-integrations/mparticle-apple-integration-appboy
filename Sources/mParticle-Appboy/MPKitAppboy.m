@@ -1,23 +1,12 @@
 #import "MPKitAppboy.h"
 
-#if SWIFT_PACKAGE
-    #ifdef TARGET_OS_IOS
-        @import BrazeKit;
-        @import BrazeKitCompat;
-        @import BrazeUI;
-    #else
-        @import BrazeKit;
-        @import BrazeKitCompat;
-    #endif
+#if TARGET_OS_IOS
+    @import BrazeKit;
+    @import BrazeKitCompat;
+    @import BrazeUI;
 #else
-    #ifdef TARGET_OS_IOS
-        @import BrazeKit;
-        @import BrazeKitCompat;
-        @import BrazeUI;
-    #else
-        @import BrazeKit;
-        @import BrazeKitCompat;
-    #endif
+    @import BrazeKit;
+    @import BrazeKitCompat;
 #endif
 
 static NSString *const eabAPIKey = @"apiKey";
@@ -51,7 +40,7 @@ static NSString *const userIdValueMPID = @"MPID";
 // User Attribute key with reserved functionality for Braze kit
 static NSString *const brazeUserAttributeDob = @"dob";
 
-#ifdef TARGET_OS_IOS
+#if TARGET_OS_IOS
 __weak static id<BrazeInAppMessageUIDelegate> inAppMessageControllerDelegate = nil;
 #endif
 __weak static id<BrazeDelegate> urlDelegate = nil;
@@ -79,7 +68,7 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
     [MParticle registerExtension:kitRegister];
 }
 
-#ifdef TARGET_OS_IOS
+#if TARGET_OS_IOS
 + (void)setInAppMessageControllerDelegate:(id)delegate {
     inAppMessageControllerDelegate = (id<BrazeInAppMessageUIDelegate>)delegate;
 }
@@ -169,13 +158,13 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
             // Delete from array
             forwardUserAttributes = self.configuration[@"ear"];
             if (forwardUserAttributes[hashValue]) {
-                [self->appboyInstance.user removeFromCustomAttributeArrayWithKey:forwardUserAttributes[hashValue] value:eventInfo[key]];
+                [self->appboyInstance.user removeFromCustomAttributeStringArrayWithKey:forwardUserAttributes[hashValue] value:eventInfo[key]];
             }
             
             // Add to array
             forwardUserAttributes = self.configuration[@"eaa"];
             if (forwardUserAttributes[hashValue]) {
-                [self->appboyInstance.user addToCustomAttributeArrayWithKey:forwardUserAttributes[hashValue] value:eventInfo[key]];
+                [self->appboyInstance.user addToCustomAttributeStringArrayWithKey:forwardUserAttributes[hashValue] value:eventInfo[key]];
             }
             
             // Add key/value pair
@@ -302,7 +291,7 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
         [self->appboyInstance setAdTrackingEnabled:[self isAdvertisingTrackingEnabled]];
     }
     
-#ifdef TARGET_OS_IOS
+#if TARGET_OS_IOS
     if ([MPKitAppboy inAppMessageControllerDelegate]) {
         BrazeInAppMessageUI *inAppMessageUI = [[BrazeInAppMessageUI alloc] init];
         inAppMessageUI.delegate = [MPKitAppboy inAppMessageControllerDelegate];
@@ -371,7 +360,7 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
     optionsDictionary[ABKSDKFlavorKey] = @(MPARTICLE);
 #pragma clang diagnostic pop
     
-#ifdef TARGET_OS_IOS
+#if TARGET_OS_IOS
     optionsDictionary[ABKEnableAutomaticLocationCollectionKey] = @(YES);
     if (self.configuration[@"ABKDisableAutomaticLocationCollectionKey"]) {
         if ([self.configuration[@"ABKDisableAutomaticLocationCollectionKey"] caseInsensitiveCompare:@"true"] == NSOrderedSame) {
@@ -492,7 +481,7 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
 - (MPKitExecStatus *)receivedUserNotification:(NSDictionary *)userInfo {
     MPKitExecStatus *execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
 
-#ifdef TARGET_OS_IOS
+#if TARGET_OS_IOS
     if (![appboyInstance.notifications handleBackgroundNotificationWithUserInfo:userInfo fetchCompletionHandler:^(UIBackgroundFetchResult fetchResult) {}]) {
         execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeFail];
     }
@@ -509,7 +498,7 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
 }
 
 - (MPKitExecStatus *)setDeviceToken:(NSData *)deviceToken {
-#ifdef TARGET_OS_IOS
+#if TARGET_OS_IOS
     [appboyInstance.notifications registerDeviceToken:deviceToken];
 #endif
     
@@ -862,7 +851,7 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
     return [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
 }
 
-#ifdef TARGET_OS_IOS
+#if TARGET_OS_IOS
 - (nonnull MPKitExecStatus *)userNotificationCenter:(nonnull UNUserNotificationCenter *)center didReceiveNotificationResponse:(nonnull UNNotificationResponse *)response API_AVAILABLE(ios(10.0)) {
     MPKitExecStatus *execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
 

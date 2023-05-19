@@ -16,19 +16,16 @@ Pod::Spec.new do |s|
 
     s.ios.deployment_target = "11.0"
     s.ios.source_files      = 'Sources/**/*.{h,m,mm}'
-    s.ios.dependency 'mParticle-Apple-SDK/mParticle', '~> 8.0'
-    s.ios.frameworks = 'CoreTelephony', 'SystemConfiguration'
-    s.libraries = 'z'
-    s.ios.dependency 'BrazeKit', '~> 5.9'
-    s.ios.dependency 'BrazeKitCompat', '~> 5.9'
-    s.ios.dependency 'BrazeUI', '~> 5.9'
+    s.ios.dependency 'mParticle-Apple-SDK', '~> 8.0'
+    s.ios.dependency 'BrazeKit', '~> 6.1'
+    s.ios.dependency 'BrazeKitCompat', '~> 6.1'
+    s.ios.dependency 'BrazeUI', '~> 6.1'
     
-#    s.tvos.deployment_target = "11.0"
-#    s.tvos.source_files      = 'Sources/**/*.{h,m,mm}'
-#    s.tvos.dependency 'mParticle-Apple-SDK/mParticle', '~> 8.0'
-#    s.tvos.frameworks = 'SystemConfiguration'
-#    s.tvos.dependency 'BrazeKit', '~> 5.9'
-#    s.tvos.dependency 'BrazeKitCompat', '~> 5.9'
+    s.tvos.deployment_target = "11.0"
+    s.tvos.source_files      = 'Sources/**/*.{h,m,mm}'
+    s.tvos.dependency 'mParticle-Apple-SDK', '~> 8.0'
+    s.tvos.dependency 'BrazeKit', '~> 6.1'
+    s.tvos.dependency 'BrazeKitCompat', '~> 6.1'
 
 
 end
