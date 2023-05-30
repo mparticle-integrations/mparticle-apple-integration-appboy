@@ -15,6 +15,7 @@ static NSString *const hostConfigKey = @"host";
 static NSString *const userIdTypeKey = @"userIdentificationType";
 static NSString *const emailIdTypeKey = @"emailIdentificationType";
 static NSString *const enableTypeDetectionKey = @"enableTypeDetection";
+static NSString *const forwardEnhancedCommerceDataKey = @"forwardEnhancedECommerceData";
 
 // The possible values for userIdentificationType
 static NSString *const userIdValueOther = @"Other";
@@ -39,6 +40,11 @@ static NSString *const userIdValueMPID = @"MPID";
 
 // User Attribute key with reserved functionality for Braze kit
 static NSString *const brazeUserAttributeDob = @"dob";
+
+// Strings used when sending enhanced commerce events
+static NSString *const enhancedCommerceProductId = @"Completed Order";
+static NSString *const productKey = @"products";
+
 
 #if TARGET_OS_IOS
 __weak static id<BrazeInAppMessageUIDelegate> inAppMessageControllerDelegate = nil;
@@ -399,11 +405,6 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
 - (MPKitExecStatus *)routeCommerceEvent:(MPCommerceEvent *)commerceEvent {
     MPKitExecStatus *execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess forwardCount:0];
     
-    NSDictionary *detectedEventInfo = commerceEvent.customAttributes;
-    if (self->_enableTypeDetection) {
-        detectedEventInfo = [self simplifiedDictionary:commerceEvent.customAttributes];
-    }
-    
     if (commerceEvent.action == MPCommerceEventActionPurchase) {
         NSMutableDictionary *baseProductAttributes = [[NSMutableDictionary alloc] init];
         NSDictionary *transactionAttributes = [self simplifiedDictionary:[commerceEvent.transactionAttributes beautifiedDictionaryRepresentation]];
@@ -425,37 +426,100 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
         NSString *currency = commerceEvent.currency ? : @"USD";
         NSMutableDictionary *properties;
         
-        for (MPProduct *product in products) {
-            // Add relevant attributes from the commerce event
-            properties = [[NSMutableDictionary alloc] init];
-            if (baseProductAttributes.count > 0) {
-                [properties addEntriesFromDictionary:baseProductAttributes];
+        // Add relevant attributes from the commerce event
+        properties = [[NSMutableDictionary alloc] init];
+        if (baseProductAttributes.count > 0) {
+            [properties addEntriesFromDictionary:baseProductAttributes];
+        }
+        
+        if (_configuration[forwardEnhancedCommerceDataKey]) {
+            NSMutableArray *productArray;
+            for (MPProduct *product in products) {
+                // Add attributes from the products themselves
+                NSMutableDictionary *productDictionary = [[product beautifiedDictionaryRepresentation] mutableCopy];
+                                
+                // Adds the product dictionary to the product array being supplied to Braze
+                if (productDictionary) {
+                    [productArray addObject:productDictionary];
+                }
+            }
+            if (productArray.count > 0) {
+                properties[productKey] = productArray;
             }
             
-            // Add attributes from the product itself
-            NSDictionary *productDictionary = [product beautifiedDictionaryRepresentation];
-            if (productDictionary) {
-                [properties addEntriesFromDictionary:productDictionary];
-            }
-            
-            // Strips key/values already being passed to Appboy, plus key/values initialized to default values
-            keys = @[kMPExpProductSKU, kMPProductCurrency, kMPExpProductUnitPrice, kMPExpProductQuantity, kMPProductAffiliation, kMPExpProductCategory, kMPExpProductName];
-            [properties removeObjectsForKeys:keys];
-            
-            [appboyInstance logPurchase:product.sku
+            [appboyInstance logPurchase:enhancedCommerceProductId
                                currency:currency
-                                  price:[product.price doubleValue]
-                               quantity:[product.quantity integerValue]
+                                  price:[commerceEvent.transactionAttributes.revenue doubleValue]
                              properties:properties];
             
             [execStatus incrementForwardCount];
+        } else {
+            for (MPProduct *product in products) {
+                // Add attributes from the product itself
+                NSDictionary *productDictionary = [product beautifiedDictionaryRepresentation];
+                if (productDictionary) {
+                    [properties addEntriesFromDictionary:productDictionary];
+                }
+                
+                // Strips key/values already being passed to Appboy, plus key/values initialized to default values
+                keys = @[kMPExpProductSKU, kMPProductCurrency, kMPExpProductUnitPrice, kMPExpProductQuantity, kMPProductAffiliation, kMPExpProductCategory, kMPExpProductName];
+                [properties removeObjectsForKeys:keys];
+                
+                [appboyInstance logPurchase:product.sku
+                                   currency:currency
+                                      price:[product.price doubleValue]
+                                   quantity:[product.quantity integerValue]
+                                 properties:properties];
+                
+                [execStatus incrementForwardCount];
+            }
         }
     } else {
-        NSArray *expandedInstructions = [commerceEvent expandedInstructions];
-        
-        for (MPCommerceEventInstruction *commerceEventInstruction in expandedInstructions) {
-            [self logBaseEvent:commerceEventInstruction.event];
+        if (_configuration[forwardEnhancedCommerceDataKey]) {
+            NSDictionary *transformedEventInfo = [commerceEvent.customAttributes transformValuesToString];
+            
+            NSMutableDictionary *eventInfo = [[NSMutableDictionary alloc] initWithCapacity:commerceEvent.customAttributes.count];
+            [transformedEventInfo enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, id _Nonnull obj, BOOL * _Nonnull stop) {
+                NSString *strippedKey = [self stripCharacter:@"$" fromString:key];
+                eventInfo[strippedKey] = obj;
+            }];
+            
+            if (self->_enableTypeDetection) {
+                eventInfo = [[self simplifiedDictionary:eventInfo] mutableCopy];
+            }
+            
+            if (commerceEvent.products) {
+                NSMutableArray *productArray;
+                for (MPProduct *product in commerceEvent.products) {
+                    // Add attributes from the products themselves
+                    NSMutableDictionary *productDictionary = [[product beautifiedDictionaryRepresentation] mutableCopy];
+                                    
+                    // Adds the product dictionary to the product array being supplied to Braze
+                    if (productDictionary) {
+                        [productArray addObject:productDictionary];
+                    }
+                }
+                if (productArray.count > 0) {
+                    eventInfo[productKey] = productArray;
+                }
+            }
+            
+            NSString *eventName = [[NSMutableString alloc] initWithFormat:@"eCommerce - %@", commerceEvent.typeName];
+            
+            // Appboy expects that the properties are non empty when present.
+            if (eventInfo && eventInfo.count > 0) {
+                [self->appboyInstance logCustomEvent:eventName properties:eventInfo];
+            } else {
+                [self->appboyInstance logCustomEvent:eventName];
+            }
             [execStatus incrementForwardCount];
+        } else {
+            NSArray *expandedInstructions = [commerceEvent expandedInstructions];
+            
+            for (MPCommerceEventInstruction *commerceEventInstruction in expandedInstructions) {
+                [self logBaseEvent:commerceEventInstruction.event];
+                [execStatus incrementForwardCount];
+            }
         }
     }
     
