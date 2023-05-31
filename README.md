@@ -1,6 +1,6 @@
 ## Braze (formerly Appboy) Kit Integration
 
-This repository contains the [Braze](https://www.braze.com) integration by refrencing the [mParticle Apple SDK](https://github.com/mParticle/mparticle-apple-sdk) and the [Braze Swift SDK](https://github.com/braze-inc/braze-swift-sdk/).
+This repository contains the [Braze](https://www.braze.com) integration for the [mParticle Apple SDK](https://github.com/mParticle/mparticle-apple-sdk) using the latest [Braze Swift SDK](https://github.com/braze-inc/braze-swift-sdk/).
 
 ### Adding the integration
 
