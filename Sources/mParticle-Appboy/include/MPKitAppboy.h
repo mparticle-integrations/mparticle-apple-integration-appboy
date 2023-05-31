@@ -11,7 +11,9 @@
 @property (nonatomic, strong, nullable) NSDictionary *launchOptions;
 @property (nonatomic, unsafe_unretained, readonly) BOOL started;
 
+#if TARGET_OS_IOS
 + (void)setInAppMessageControllerDelegate:(nonnull id)delegate;
+#endif
 + (void)setURLDelegate:(nonnull id)delegate;
 
 @end
