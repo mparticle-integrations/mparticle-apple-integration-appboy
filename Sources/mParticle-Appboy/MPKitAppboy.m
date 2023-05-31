@@ -432,7 +432,7 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
             [properties addEntriesFromDictionary:baseProductAttributes];
         }
         
-        if (_configuration[forwardEnhancedCommerceDataKey]) {
+        if (_configuration[forwardEnhancedCommerceDataKey] && [_configuration[forwardEnhancedCommerceDataKey] boolValue]) {
             NSMutableArray *productArray;
             for (MPProduct *product in products) {
                 // Add attributes from the products themselves
@@ -475,7 +475,7 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
             }
         }
     } else {
-        if (_configuration[forwardEnhancedCommerceDataKey]) {
+        if (_configuration[forwardEnhancedCommerceDataKey] && [_configuration[forwardEnhancedCommerceDataKey] boolValue]) {
             NSDictionary *transformedEventInfo = [commerceEvent.customAttributes transformValuesToString];
             
             NSMutableDictionary *eventInfo = [[NSMutableDictionary alloc] initWithCapacity:commerceEvent.customAttributes.count];
