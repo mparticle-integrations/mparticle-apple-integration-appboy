@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name             = "mParticle-Appboy"
-    s.version          = "8.1.1"
+    s.version          = "8.2.0"
     s.summary          = "Appboy integration for mParticle"
 
     s.description      = <<-DESC
@@ -13,6 +13,7 @@ Pod::Spec.new do |s|
     s.source           = { :git => "https://github.com/mparticle-integrations/mparticle-apple-integration-appboy.git", :tag => s.version.to_s }
     s.social_media_url = "https://twitter.com/mparticle"
     s.static_framework = true
+    s.swift_version = '5.3'
 
     s.ios.deployment_target = "11.0"
     s.ios.source_files      = 'Sources/**/*.{h,m,mm}'
