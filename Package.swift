@@ -12,7 +12,7 @@ let package = Package(
             targets: ["mParticle-Appboy"]),
     ],
     dependencies: [
-      .package(name: "mParticle-Apple-SDK",
+      .package(name: "mParticle-Apple-SDK-NoLocation",
                url: "https://github.com/mParticle/mparticle-apple-sdk",
                .upToNextMajor(from: "8.0.0")),
       .package(name: "braze-swift-sdk",
