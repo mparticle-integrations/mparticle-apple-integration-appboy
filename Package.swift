@@ -10,6 +10,10 @@ let package = Package(
         .library(
             name: "mParticle-Appboy",
             targets: ["mParticle-Appboy"]),
+        .library(
+            name: "mParticle-Appboy-NoLocation",
+            targets: ["mParticle-Appboy-NoLocation"]
+        )
     ],
     dependencies: [
       .package(name: "mParticle-Apple-SDK",
@@ -23,11 +27,21 @@ let package = Package(
         .target(
             name: "mParticle-Appboy",
             dependencies: [
-              .byName(name: "mParticle-Apple-SDK"),
+              .product(name: "mParticle-Apple-SDK", package: "mParticle-Apple-SDK"),
               .product(name: "BrazeUI", package: "braze-swift-sdk", condition: .when(platforms: [.iOS])),
               .product(name: "BrazeKit", package: "braze-swift-sdk"),
               .product(name: "BrazeKitCompat", package: "braze-swift-sdk"),
             ]
+        ),
+        .target(
+            name: "mParticle-Appboy-NoLocation",
+            dependencies: [
+              .product(name: "mParticle-Apple-SDK-NoLocation", package: "mParticle-Apple-SDK"),
+              .product(name: "BrazeUI", package: "braze-swift-sdk", condition: .when(platforms: [.iOS])),
+              .product(name: "BrazeKit", package: "braze-swift-sdk"),
+              .product(name: "BrazeKitCompat", package: "braze-swift-sdk"),
+            ],
+            path: "SPM/mParticle-Appboy-NoLocation"
         )
     ]
 )
