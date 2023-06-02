@@ -15,7 +15,7 @@ static NSString *const hostConfigKey = @"host";
 static NSString *const userIdTypeKey = @"userIdentificationType";
 static NSString *const emailIdTypeKey = @"emailIdentificationType";
 static NSString *const enableTypeDetectionKey = @"enableTypeDetection";
-static NSString *const forwardEnhancedCommerceDataKey = @"forwardEnhancedECommerceData";
+static NSString *const bundleProductsWithCommerceEvents = @"bundleProductsWithCommerceEvents";
 
 // The possible values for userIdentificationType
 static NSString *const userIdValueOther = @"Other";
@@ -42,7 +42,6 @@ static NSString *const userIdValueMPID = @"MPID";
 static NSString *const brazeUserAttributeDob = @"dob";
 
 // Strings used when sending enhanced commerce events
-static NSString *const enhancedCommerceProductId = @"Completed Order";
 static NSString *const productKey = @"products";
 
 
@@ -432,8 +431,8 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
             [properties addEntriesFromDictionary:baseProductAttributes];
         }
         
-        if (_configuration[forwardEnhancedCommerceDataKey] && [_configuration[forwardEnhancedCommerceDataKey] boolValue]) {
-            NSMutableArray *productArray;
+        if (_configuration[bundleProductsWithCommerceEvents] && [_configuration[bundleProductsWithCommerceEvents] boolValue]) {
+            NSMutableArray *productArray = [[NSMutableArray alloc] init];
             for (MPProduct *product in products) {
                 // Add attributes from the products themselves
                 NSMutableDictionary *productDictionary = [[product beautifiedDictionaryRepresentation] mutableCopy];
@@ -444,10 +443,12 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
                 }
             }
             if (productArray.count > 0) {
-                properties[productKey] = productArray;
+                [properties setValue:productArray forKey:productKey];
             }
             
-            [appboyInstance logPurchase:enhancedCommerceProductId
+            NSString *eventName = [NSString stringWithFormat:@"eCommerce - %@", [self eventNameForAction:commerceEvent.action]];
+            
+            [appboyInstance logPurchase:eventName
                                currency:currency
                                   price:[commerceEvent.transactionAttributes.revenue doubleValue]
                              properties:properties];
@@ -475,7 +476,7 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
             }
         }
     } else {
-        if (_configuration[forwardEnhancedCommerceDataKey] && [_configuration[forwardEnhancedCommerceDataKey] boolValue]) {
+        if (_configuration[bundleProductsWithCommerceEvents] && [_configuration[bundleProductsWithCommerceEvents] boolValue]) {
             NSDictionary *transformedEventInfo = [commerceEvent.customAttributes transformValuesToString];
             
             NSMutableDictionary *eventInfo = [[NSMutableDictionary alloc] initWithCapacity:commerceEvent.customAttributes.count];
@@ -489,7 +490,7 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
             }
             
             if (commerceEvent.products) {
-                NSMutableArray *productArray;
+                NSMutableArray *productArray = [[NSMutableArray alloc] init];
                 for (MPProduct *product in commerceEvent.products) {
                     // Add attributes from the products themselves
                     NSMutableDictionary *productDictionary = [[product beautifiedDictionaryRepresentation] mutableCopy];
@@ -504,7 +505,7 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
                 }
             }
             
-            NSString *eventName = [[NSMutableString alloc] initWithFormat:@"eCommerce - %@", commerceEvent.typeName];
+            NSString *eventName = [NSString stringWithFormat:@"eCommerce - %@", [self eventNameForAction:commerceEvent.action]];
             
             // Appboy expects that the properties are non empty when present.
             if (eventInfo && eventInfo.count > 0) {
@@ -993,6 +994,16 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
 
 - (void)setEnableTypeDetection:(BOOL)enableTypeDetection {
     _enableTypeDetection = enableTypeDetection;
+}
+
+- (NSString *)eventNameForAction:(MPCommerceEventAction)action {
+    NSArray *actionNames = @[@"add_to_cart", @"remove_from_cart", @"add_to_wishlist", @"remove_from_wishlist", @"checkout", @"checkout_option", @"click", @"view_detail", @"purchase", @"refund"];
+    
+    if (action >= actionNames.count) {
+        return @"unknown";
+    }
+    
+    return actionNames[(NSUInteger)action];
 }
 
 @end
