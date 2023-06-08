@@ -43,7 +43,8 @@ static NSString *const brazeUserAttributeDob = @"dob";
 
 // Strings used when sending enhanced commerce events
 static NSString *const productKey = @"products";
-
+static NSString *const promotionKey = @"promotions";
+static NSString *const impressionKey = @"impressions";
 
 #if TARGET_OS_IOS
 __weak static id<BrazeInAppMessageUIDelegate> inAppMessageControllerDelegate = nil;
@@ -432,18 +433,17 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
         }
         
         if (_configuration[bundleProductsWithCommerceEvents] && [_configuration[bundleProductsWithCommerceEvents] boolValue]) {
-            NSMutableArray *productArray = [[NSMutableArray alloc] init];
-            for (MPProduct *product in products) {
-                // Add attributes from the products themselves
-                NSMutableDictionary *productDictionary = [[product beautifiedDictionaryRepresentation] mutableCopy];
-                                
-                // Adds the product dictionary to the product array being supplied to Braze
-                if (productDictionary) {
-                    [productArray addObject:productDictionary];
-                }
-            }
+            NSArray *productArray = [self getProductListParameters:products];
             if (productArray.count > 0) {
                 [properties setValue:productArray forKey:productKey];
+            }
+            NSArray *promotionArray = [self getPromotionListParameters:commerceEvent.promotionContainer.promotions];
+            if (promotionArray.count > 0) {
+                [properties setValue:promotionArray forKey:promotionKey];
+            }
+            NSArray *impressionArray = [self getImpressionListParameters:commerceEvent.impressions];
+            if (impressionArray.count > 0) {
+                [properties setValue:impressionArray forKey:impressionKey];
             }
             
             NSString *eventName = [NSString stringWithFormat:@"eCommerce - %@", [self eventNameForAction:commerceEvent.action]];
@@ -489,23 +489,27 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
                 eventInfo = [[self simplifiedDictionary:eventInfo] mutableCopy];
             }
             
-            if (commerceEvent.products) {
-                NSMutableArray *productArray = [[NSMutableArray alloc] init];
-                for (MPProduct *product in commerceEvent.products) {
-                    // Add attributes from the products themselves
-                    NSMutableDictionary *productDictionary = [[product beautifiedDictionaryRepresentation] mutableCopy];
-                                    
-                    // Adds the product dictionary to the product array being supplied to Braze
-                    if (productDictionary) {
-                        [productArray addObject:productDictionary];
-                    }
-                }
-                if (productArray.count > 0) {
-                    eventInfo[productKey] = productArray;
-                }
+            NSArray *productArray = [self getProductListParameters:commerceEvent.products];
+            if (productArray.count > 0) {
+                [eventInfo setValue:productArray forKey:productKey];
+            }
+            NSArray *promotionArray = [self getPromotionListParameters:commerceEvent.promotionContainer.promotions];
+            if (promotionArray.count > 0) {
+                [eventInfo setValue:promotionArray forKey:promotionKey];
+            }
+            NSArray *impressionArray = [self getImpressionListParameters:commerceEvent.impressions];
+            if (impressionArray.count > 0) {
+                [eventInfo setValue:impressionArray forKey:impressionKey];
             }
             
             NSString *eventName = [NSString stringWithFormat:@"eCommerce - %@", [self eventNameForAction:commerceEvent.action]];
+            if ([eventName isEqualToString:@"eCommerce - unknown"]) {
+                if (commerceEvent.impressions != nil) {
+                    eventName = @"eCommerce - impression";
+                } else if (commerceEvent.promotionContainer.action) {
+                    eventName = [NSString stringWithFormat:@"eCommerce - %@", [self eventNameForPromotionAction:commerceEvent.promotionContainer.action]];
+                }
+            }
             
             // Appboy expects that the properties are non empty when present.
             if (eventInfo && eventInfo.count > 0) {
@@ -996,8 +1000,63 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
     _enableTypeDetection = enableTypeDetection;
 }
 
+- (NSArray *)getProductListParameters:(NSArray<MPProduct *> *)products {
+    NSMutableArray *productArray = [[NSMutableArray alloc] init];
+    for (MPProduct *product in products) {
+        // Add attributes from the products themselves
+        NSMutableDictionary *productDictionary = [[product beautifiedDictionaryRepresentation] mutableCopy];
+                        
+        // Adds the product dictionary to the product array being supplied to Braze
+        if (productDictionary) {
+            [productArray addObject:productDictionary];
+        }
+    }
+    return productArray;
+}
+
+- (NSArray *)getPromotionListParameters:(NSArray<MPPromotion *> *)promotions {
+    NSMutableArray *promotionArray = [[NSMutableArray alloc] init];
+    for (MPPromotion *promotion in promotions) {
+        // Add attributes from the products themselves
+        NSMutableDictionary *promotionDictionary = [[NSMutableDictionary alloc] init];
+        promotionDictionary[@"Creative"] = promotion.creative;
+        promotionDictionary[@"Name"] = promotion.name;
+        promotionDictionary[@"Position"] = promotion.position;
+        promotionDictionary[@"Id"] = promotion.promotionId;
+                        
+        // Adds the product dictionary to the product array being supplied to Braze
+        [promotionArray addObject:promotionDictionary];
+    }
+    return promotionArray;
+}
+
+- (NSArray *)getImpressionListParameters:(NSDictionary<NSString *, __kindof NSSet<MPProduct *> *> *)impressions {
+    NSMutableArray *impressionArray = [[NSMutableArray alloc] init];
+    for (NSString *impressionName in impressions.allKeys) {
+        // Add attributes from the products themselves
+        NSMutableDictionary *impressionDictionary = [[NSMutableDictionary alloc] init];
+        impressionDictionary[@"Product Impression List"] = impressionName;
+        NSArray<MPProduct *> *impressionProducts = [[impressions[impressionName] allObjects] copy];
+        impressionDictionary[productKey] = [self getProductListParameters:impressionProducts];
+
+        // Adds the product dictionary to the product array being supplied to Braze
+        [impressionArray addObject:impressionDictionary];
+    }
+    return impressionArray;
+}
+
 - (NSString *)eventNameForAction:(MPCommerceEventAction)action {
     NSArray *actionNames = @[@"add_to_cart", @"remove_from_cart", @"add_to_wishlist", @"remove_from_wishlist", @"checkout", @"checkout_option", @"click", @"view_detail", @"purchase", @"refund"];
+    
+    if (action >= actionNames.count) {
+        return @"unknown";
+    }
+    
+    return actionNames[(NSUInteger)action];
+}
+
+- (NSString *)eventNameForPromotionAction:(MPPromotionAction)action {
+    NSArray *actionNames = @[@"click", @"view"];
     
     if (action >= actionNames.count) {
         return @"unknown";
