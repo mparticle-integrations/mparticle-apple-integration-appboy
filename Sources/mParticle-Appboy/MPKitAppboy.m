@@ -1017,14 +1017,14 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
 - (NSArray *)getPromotionListParameters:(NSArray<MPPromotion *> *)promotions {
     NSMutableArray *promotionArray = [[NSMutableArray alloc] init];
     for (MPPromotion *promotion in promotions) {
-        // Add attributes from the products themselves
+        // Add attributes from the promotions themselves
         NSMutableDictionary *promotionDictionary = [[NSMutableDictionary alloc] init];
         promotionDictionary[@"Creative"] = promotion.creative;
         promotionDictionary[@"Name"] = promotion.name;
         promotionDictionary[@"Position"] = promotion.position;
         promotionDictionary[@"Id"] = promotion.promotionId;
                         
-        // Adds the product dictionary to the product array being supplied to Braze
+        // Adds the promotion dictionary to the promotion array being supplied to Braze
         [promotionArray addObject:promotionDictionary];
     }
     return promotionArray;
@@ -1039,7 +1039,7 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
         NSArray<MPProduct *> *impressionProducts = [[impressions[impressionName] allObjects] copy];
         impressionDictionary[productKey] = [self getProductListParameters:impressionProducts];
 
-        // Adds the product dictionary to the product array being supplied to Braze
+        // Adds the impression dictionary to the impression array being supplied to Braze
         [impressionArray addObject:impressionDictionary];
     }
     return impressionArray;
