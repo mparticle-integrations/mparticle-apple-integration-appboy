@@ -377,7 +377,7 @@
     event.transactionAttributes = attributes;
 
     [[mockClient expect] logCustomEvent:@"eCommerce - click"
-                          properties:@{@"testKey" : @"testCustomAttValue",
+                          properties:@{@"Attributes" : @{@"testKey" : @"testCustomAttValue"},
                                        @"products" : @[@{
                                            @"Id" : @"1131331343",
                                            @"Item Price" : @"13",
@@ -410,6 +410,8 @@
     MPProduct *product = [[MPProduct alloc] initWithName:@"product1" sku:@"1131331343" quantity:@1 price:@13];
 
     MPCommerceEvent *event = [[MPCommerceEvent alloc] initWithAction:MPCommerceEventActionPurchase product:product];
+    event.customAttributes = @{@"testKey" : @"testCustomAttValue"};
+
     MPTransactionAttributes *attributes = [[MPTransactionAttributes alloc] init];
     attributes.transactionId = @"foo-transaction-id";
     attributes.revenue = @13.00;
@@ -452,6 +454,8 @@
     MPProduct *product = [[MPProduct alloc] initWithName:@"product1" sku:@"1131331343" quantity:@1 price:@13];
 
     MPCommerceEvent *event = [[MPCommerceEvent alloc] initWithAction:MPCommerceEventActionPurchase product:product];
+    event.customAttributes = @{@"testKey" : @"testCustomAttValue"};
+
     MPTransactionAttributes *attributes = [[MPTransactionAttributes alloc] init];
     attributes.transactionId = @"foo-transaction-id";
     attributes.revenue = @13.00;
@@ -460,7 +464,8 @@
 
     event.transactionAttributes = attributes;
 
-    NSDictionary *testResultDict = @{@"Shipping Amount" : @3,
+    NSDictionary *testResultDict = @{@"Attributes" : @{@"testKey" : @"testCustomAttValue"},
+                                     @"Shipping Amount" : @3,
                                      @"Total Amount" : @13.00,
                                      @"Tax Amount" : @3,
                                      @"Transaction Id" : @"foo-transaction-id",
@@ -530,6 +535,8 @@
 
     MPCommerceEvent *event = [[MPCommerceEvent alloc] initWithAction:MPCommerceEventActionPurchase];
     [event addProducts:@[product1, product2]];
+    event.customAttributes = @{@"testKey" : @"testCustomAttValue"};
+
     MPTransactionAttributes *attributes = [[MPTransactionAttributes alloc] init];
     attributes.transactionId = @"foo-transaction-id";
     attributes.revenue = @26.00;
@@ -538,7 +545,8 @@
 
     event.transactionAttributes = attributes;
 
-    NSDictionary *testResultDict = @{@"Shipping Amount" : @3,
+    NSDictionary *testResultDict = @{@"Attributes" : @{@"testKey" : @"testCustomAttValue"},
+                                     @"Shipping Amount" : @3,
                                      @"Total Amount" : @26.00,
                                      @"Tax Amount" : @3,
                                      @"Transaction Id" : @"foo-transaction-id",
@@ -555,7 +563,7 @@
                                                          @"Name" : @"product2",
                                                          @"Quantity" : @"1",
                                                          @"Total Product Amount" : @"13",
-                                                         @"testKey" : @"testCustomAttValue"
+                                                         @"Attributes" : @{@"testKey" : @"testCustomAttValue"}
                                                      }
                                      ]
     };
@@ -624,7 +632,7 @@
     event.customAttributes = @{@"testKey" : @"testCustomAttValue"};
 
     [[mockClient expect] logCustomEvent:@"eCommerce - view"
-                          properties:@{@"testKey" : @"testCustomAttValue",
+                          properties:@{@"Attributes" : @{@"testKey" : @"testCustomAttValue"},
                                        @"promotions" : @[@{
                                            @"Creative" : @"sale_banner_1",
                                            @"Name" : @"App-wide 50% off sale",
@@ -655,12 +663,13 @@
     XCTAssertEqualObjects(mockClient, [kit appboyInstance]);
 
     MPProduct *product = [[MPProduct alloc] initWithName:@"product1" sku:@"1131331343" quantity:@1 price:@13];
+    product.userDefinedAttributes = [@{@"productTestKey" : @"productTestCustomAttValue"} mutableCopy];
 
     MPCommerceEvent *event = [[MPCommerceEvent alloc] initWithImpressionName:@"Suggested Products List" product:product];
     event.customAttributes = @{@"testKey" : @"testCustomAttValue"};
 
     [[mockClient expect] logCustomEvent:@"eCommerce - impression"
-                          properties:@{@"testKey" : @"testCustomAttValue",
+                          properties:@{@"Attributes" : @{@"testKey" : @"testCustomAttValue"},
                                        @"impressions" : @[@{
                                            @"Product Impression List" : @"Suggested Products List",
                                            @"products" : @[@{
@@ -668,7 +677,8 @@
                                                @"Item Price" : @"13",
                                                @"Name" : @"product1",
                                                @"Quantity" : @"1",
-                                               @"Total Product Amount" : @"13"
+                                               @"Total Product Amount" : @"13",
+                                               @"Attributes" : @{@"productTestKey" : @"productTestCustomAttValue"}
                                               }
                                            ]
                                           }

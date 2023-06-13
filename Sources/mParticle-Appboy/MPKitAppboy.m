@@ -42,6 +42,7 @@ static NSString *const userIdValueMPID = @"MPID";
 static NSString *const brazeUserAttributeDob = @"dob";
 
 // Strings used when sending enhanced commerce events
+static NSString *const attributesKey = @"Attributes";
 static NSString *const productKey = @"products";
 static NSString *const promotionKey = @"promotions";
 static NSString *const impressionKey = @"impressions";
@@ -405,6 +406,10 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
 - (MPKitExecStatus *)routeCommerceEvent:(MPCommerceEvent *)commerceEvent {
     MPKitExecStatus *execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess forwardCount:0];
     
+    NSMutableDictionary *mutDict = [_configuration mutableCopy];
+    mutDict[bundleProductsWithCommerceEvents] = @true;
+    _configuration = mutDict;
+    
     if (commerceEvent.action == MPCommerceEventActionPurchase) {
         NSMutableDictionary *baseProductAttributes = [[NSMutableDictionary alloc] init];
         NSDictionary *transactionAttributes = [self simplifiedDictionary:[commerceEvent.transactionAttributes beautifiedDictionaryRepresentation]];
@@ -433,6 +438,10 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
         }
         
         if ([_configuration[bundleProductsWithCommerceEvents] boolValue]) {
+            if (commerceEvent.customAttributes.count > 0) {
+                [properties removeObjectsForKeys:[commerceEvent.customAttributes allKeys]];
+                [properties setValue:commerceEvent.customAttributes forKey:attributesKey];
+            }
             NSArray *productArray = [self getProductListParameters:products];
             if (productArray.count > 0) {
                 [properties setValue:productArray forKey:productKey];
@@ -489,6 +498,10 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
                 eventInfo = [[self simplifiedDictionary:eventInfo] mutableCopy];
             }
             
+            if (commerceEvent.customAttributes.count > 0) {
+                [eventInfo removeObjectsForKeys:[commerceEvent.customAttributes allKeys]];
+                [eventInfo setValue:commerceEvent.customAttributes forKey:attributesKey];
+            }
             NSArray *productArray = [self getProductListParameters:commerceEvent.products];
             if (productArray.count > 0) {
                 [eventInfo setValue:productArray forKey:productKey];
@@ -1005,6 +1018,11 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
     for (MPProduct *product in products) {
         // Add attributes from the products themselves
         NSMutableDictionary *productDictionary = [[product beautifiedDictionaryRepresentation] mutableCopy];
+        
+        if (product.userDefinedAttributes.count > 0) {
+            [productDictionary removeObjectsForKeys:[product.userDefinedAttributes allKeys]];
+            [productDictionary setValue:product.userDefinedAttributes forKey:attributesKey];
+        }
                         
         // Adds the product dictionary to the product array being supplied to Braze
         if (productDictionary) {
