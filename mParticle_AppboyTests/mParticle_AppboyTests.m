@@ -311,47 +311,389 @@
     XCTAssertEqual(appBoy.configuration[@"userIdentificationType"], @"MPID");
 }
 
-//- (void)testlogCommerceEvent {
-//    MPKitAppboy *kit = [[MPKitAppboy alloc] init];
-//
-//    BRZConfiguration *configuration = [[BRZConfiguration alloc] init];
-//    Braze *testClient = [[Braze alloc] initWithConfiguration:configuration];
-//    id mockClient = OCMPartialMock(testClient);
-//    [kit setAppboyInstance:mockClient];
-//
-//    XCTAssertEqualObjects(mockClient, [kit appboyInstance]);
-//
-//    MPProduct *product = [[MPProduct alloc] initWithName:@"product1" sku:@"1131331343" quantity:@1 price:@13];
-//
-//    MPCommerceEvent *event = [[MPCommerceEvent alloc] initWithAction:MPCommerceEventActionPurchase product:product];
-//    MPTransactionAttributes *attributes = [[MPTransactionAttributes alloc] init];
-//    attributes.transactionId = @"foo-transaction-id";
-//    attributes.revenue = @13.00;
-//    attributes.tax = @3;
-//    attributes.shipping = @-3;
-//
-//    event.transactionAttributes = attributes;
-//
-//    [[mockClient expect] logPurchase:@"1131331343"
-//                          inCurrency:@"USD"
-//                             atPrice:[[NSDecimalNumber alloc] initWithString:@"13"]
-//                        withQuantity:[[NSNumber numberWithInteger:1] longLongValue]
-//                       andProperties:@{@"Shipping Amount" : @-3,
-//                                       @"Total Amount" : @13.00,
-//                                       @"Total Product Amount" : @"13",
-//                                       @"Tax Amount" : @3,
-//                                       @"Transaction Id" : @"foo-transaction-id"
-//                       }];
-//
-//    MPKitExecStatus *execStatus = [kit logBaseEvent:event];
-//
-//    XCTAssertEqual(execStatus.returnCode, MPKitReturnCodeSuccess);
-//
-//    [mockClient verify];
-//
-//    [mockClient stopMocking];
-//}
-//
+- (void)testlogCommerceEvent {
+    MPKitAppboy *kit = [[MPKitAppboy alloc] init];
+
+    BRZConfiguration *configuration = [[BRZConfiguration alloc] init];
+    Braze *testClient = [[Braze alloc] initWithConfiguration:configuration];
+    id mockClient = OCMPartialMock(testClient);
+    [kit setAppboyInstance:mockClient];
+
+    XCTAssertEqualObjects(mockClient, [kit appboyInstance]);
+
+    MPProduct *product = [[MPProduct alloc] initWithName:@"product1" sku:@"1131331343" quantity:@1 price:@13];
+
+    MPCommerceEvent *event = [[MPCommerceEvent alloc] initWithAction:MPCommerceEventActionClick product:product];
+    event.customAttributes = @{@"testKey" : @"testCustomAttValue"};
+    
+    MPTransactionAttributes *attributes = [[MPTransactionAttributes alloc] init];
+    attributes.transactionId = @"foo-transaction-id";
+    attributes.revenue = @13.00;
+    attributes.tax = @3;
+    attributes.shipping = @3;
+
+    event.transactionAttributes = attributes;
+
+    [[mockClient expect] logCustomEvent:@"eCommerce - click - Item"
+                          properties:@{@"Id" : @"1131331343",
+                                       @"Item Price" : @"13",
+                                       @"Name" : @"product1",
+                                       @"Quantity" : @"1",
+                                       @"Total Product Amount" : @"13",
+                                       @"testKey" : @"testCustomAttValue"
+                       }];
+
+    MPKitExecStatus *execStatus = [kit logBaseEvent:event];
+
+    XCTAssertEqual(execStatus.returnCode, MPKitReturnCodeSuccess);
+
+    [mockClient verify];
+
+    [mockClient stopMocking];
+}
+
+- (void)testlogCommerceEventWithBundledProducts {
+    MPKitAppboy *kit = [[MPKitAppboy alloc] init];
+    kit.configuration = @{@"bundleProductsWithCommerceEvents" : @1};
+
+    BRZConfiguration *configuration = [[BRZConfiguration alloc] init];
+    Braze *testClient = [[Braze alloc] initWithConfiguration:configuration];
+    id mockClient = OCMPartialMock(testClient);
+    [kit setAppboyInstance:mockClient];
+
+    XCTAssertEqualObjects(mockClient, [kit appboyInstance]);
+
+    MPProduct *product = [[MPProduct alloc] initWithName:@"product1" sku:@"1131331343" quantity:@1 price:@13];
+
+    MPCommerceEvent *event = [[MPCommerceEvent alloc] initWithAction:MPCommerceEventActionClick product:product];
+    event.customAttributes = @{@"testKey" : @"testCustomAttValue"};
+
+    MPTransactionAttributes *attributes = [[MPTransactionAttributes alloc] init];
+    attributes.transactionId = @"foo-transaction-id";
+    attributes.revenue = @13.00;
+    attributes.tax = @3;
+    attributes.shipping = @3;
+
+    event.transactionAttributes = attributes;
+
+    [[mockClient expect] logCustomEvent:@"eCommerce - click"
+                          properties:@{@"Attributes" : @{@"testKey" : @"testCustomAttValue"},
+                                       @"products" : @[@{
+                                           @"Id" : @"1131331343",
+                                           @"Item Price" : @"13",
+                                           @"Name" : @"product1",
+                                           @"Quantity" : @"1",
+                                           @"Total Product Amount" : @"13"
+                                          }
+                                       ]
+                       }];
+
+    MPKitExecStatus *execStatus = [kit logBaseEvent:event];
+
+    XCTAssertEqual(execStatus.returnCode, MPKitReturnCodeSuccess);
+
+    [mockClient verify];
+
+    [mockClient stopMocking];
+}
+
+- (void)testlogPurchaseCommerceEvent {
+    MPKitAppboy *kit = [[MPKitAppboy alloc] init];
+
+    BRZConfiguration *configuration = [[BRZConfiguration alloc] init];
+    Braze *testClient = [[Braze alloc] initWithConfiguration:configuration];
+    id mockClient = OCMPartialMock(testClient);
+    [kit setAppboyInstance:mockClient];
+
+    XCTAssertEqualObjects(mockClient, [kit appboyInstance]);
+
+    MPProduct *product = [[MPProduct alloc] initWithName:@"product1" sku:@"1131331343" quantity:@1 price:@13];
+
+    MPCommerceEvent *event = [[MPCommerceEvent alloc] initWithAction:MPCommerceEventActionPurchase product:product];
+    event.customAttributes = @{@"testKey" : @"testCustomAttValue"};
+
+    MPTransactionAttributes *attributes = [[MPTransactionAttributes alloc] init];
+    attributes.transactionId = @"foo-transaction-id";
+    attributes.revenue = @13.00;
+    attributes.tax = @3;
+    attributes.shipping = @3;
+
+    event.transactionAttributes = attributes;
+
+    [[mockClient expect] logPurchase:@"1131331343"
+                            currency:@"USD"
+                               price:[@"13" doubleValue]
+                            quantity:1
+                          properties:@{@"Shipping Amount" : @3,
+                                       @"Total Amount" : @13.00,
+                                       @"Total Product Amount" : @"13",
+                                       @"Tax Amount" : @3,
+                                       @"Transaction Id" : @"foo-transaction-id"
+                       }];
+
+    MPKitExecStatus *execStatus = [kit logBaseEvent:event];
+
+    XCTAssertEqual(execStatus.returnCode, MPKitReturnCodeSuccess);
+
+    [mockClient verify];
+
+    [mockClient stopMocking];
+}
+
+- (void)testlogPurchaseCommerceEventWithBundledProducts {
+    MPKitAppboy *kit = [[MPKitAppboy alloc] init];
+    kit.configuration = @{@"bundleProductsWithCommerceEvents" : @1};
+
+    BRZConfiguration *configuration = [[BRZConfiguration alloc] init];
+    Braze *testClient = [[Braze alloc] initWithConfiguration:configuration];
+    id mockClient = OCMPartialMock(testClient);
+    [kit setAppboyInstance:mockClient];
+
+    XCTAssertEqualObjects(mockClient, [kit appboyInstance]);
+
+    MPProduct *product = [[MPProduct alloc] initWithName:@"product1" sku:@"1131331343" quantity:@1 price:@13];
+
+    MPCommerceEvent *event = [[MPCommerceEvent alloc] initWithAction:MPCommerceEventActionPurchase product:product];
+    event.customAttributes = @{@"testKey" : @"testCustomAttValue"};
+
+    MPTransactionAttributes *attributes = [[MPTransactionAttributes alloc] init];
+    attributes.transactionId = @"foo-transaction-id";
+    attributes.revenue = @13.00;
+    attributes.tax = @3;
+    attributes.shipping = @3;
+
+    event.transactionAttributes = attributes;
+
+    NSDictionary *testResultDict = @{@"Attributes" : @{@"testKey" : @"testCustomAttValue"},
+                                     @"Shipping Amount" : @3,
+                                     @"Total Amount" : @13.00,
+                                     @"Tax Amount" : @3,
+                                     @"Transaction Id" : @"foo-transaction-id",
+                                     @"products" : @[@{
+                                         @"Id" : @"1131331343",
+                                         @"Item Price" : @"13",
+                                         @"Name" : @"product1",
+                                         @"Quantity" : @"1",
+                                         @"Total Product Amount" : @"13"
+                                        }
+                                     ]
+    };
+    BOOL (^testBlock)(id value) = ^BOOL(id value) {
+        if ([value isKindOfClass:[NSDictionary class]]) {
+            for (NSString *key in [(NSDictionary *)value allKeys]) {
+                if ([key isEqualToString: @"products"]) {
+                    NSArray *productArray = (NSArray *)((NSDictionary *)value[key]);
+                    for (int i = 0; i < productArray.count; i++) {
+                        NSDictionary *productDict = productArray[i];
+                        for (NSString *productDictKey in [productDict allKeys]) {
+                            if (![productDict[productDictKey] isEqual:testResultDict[key][i][productDictKey]]) {
+                                NSLog(@"Invalid Object in Product: %@ Key: %@", productDict, productDictKey);
+                                return false;
+                            }
+                        }
+                    }
+                }
+                if (![(NSDictionary *)value[key] isEqual:testResultDict[key]]) {
+                    NSLog(@"Invalid Object in Key: %@", key);
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    };
+    
+    OCMExpect(([mockClient logPurchase:@"eCommerce - purchase"
+                              currency:@"USD"
+                                 price:[@"13" doubleValue]
+                            properties:[OCMArg checkWithBlock:testBlock]
+               ]));
+              
+    MPKitExecStatus *execStatus = [kit logBaseEvent:event];
+
+    XCTAssertEqual(execStatus.returnCode, MPKitReturnCodeSuccess);
+
+    OCMVerifyAll(mockClient);
+
+    [mockClient stopMocking];
+}
+
+- (void)testlogCommerceEventWithMultipleBundledProducts {
+    MPKitAppboy *kit = [[MPKitAppboy alloc] init];
+    kit.configuration = @{@"bundleProductsWithCommerceEvents" : @1};
+
+    BRZConfiguration *configuration = [[BRZConfiguration alloc] init];
+    Braze *testClient = [[Braze alloc] initWithConfiguration:configuration];
+    id mockClient = OCMPartialMock(testClient);
+    [kit setAppboyInstance:mockClient];
+
+    XCTAssertEqualObjects(mockClient, [kit appboyInstance]);
+
+    MPProduct *product1 = [[MPProduct alloc] initWithName:@"product1" sku:@"1131331343" quantity:@1 price:@13];
+    MPProduct *product2 = [[MPProduct alloc] initWithName:@"product2" sku:@"1131331888" quantity:@1 price:@13];
+    product2.userDefinedAttributes[@"testKey"] = @"testCustomAttValue";
+
+    MPCommerceEvent *event = [[MPCommerceEvent alloc] initWithAction:MPCommerceEventActionPurchase];
+    [event addProducts:@[product1, product2]];
+    event.customAttributes = @{@"testKey" : @"testCustomAttValue"};
+
+    MPTransactionAttributes *attributes = [[MPTransactionAttributes alloc] init];
+    attributes.transactionId = @"foo-transaction-id";
+    attributes.revenue = @26.00;
+    attributes.tax = @3;
+    attributes.shipping = @3;
+
+    event.transactionAttributes = attributes;
+
+    NSDictionary *testResultDict = @{@"Attributes" : @{@"testKey" : @"testCustomAttValue"},
+                                     @"Shipping Amount" : @3,
+                                     @"Total Amount" : @26.00,
+                                     @"Tax Amount" : @3,
+                                     @"Transaction Id" : @"foo-transaction-id",
+                                     @"products" : @[@{
+                                                         @"Id" : @"1131331343",
+                                                         @"Item Price" : @"13",
+                                                         @"Name" : @"product1",
+                                                         @"Quantity" : @"1",
+                                                         @"Total Product Amount" : @"13"
+                                                    },
+                                                     @{
+                                                         @"Id" : @"1131331888",
+                                                         @"Item Price" : @"13",
+                                                         @"Name" : @"product2",
+                                                         @"Quantity" : @"1",
+                                                         @"Total Product Amount" : @"13",
+                                                         @"Attributes" : @{@"testKey" : @"testCustomAttValue"}
+                                                     }
+                                     ]
+    };
+    BOOL (^testBlock)(id value) = ^BOOL(id value) {
+        if ([value isKindOfClass:[NSDictionary class]]) {
+            for (NSString *key in [(NSDictionary *)value allKeys]) {
+                if ([key isEqualToString: @"products"]) {
+                    NSArray *productArray = (NSArray *)((NSDictionary *)value[key]);
+                    for (int i = 0; i < productArray.count; i++) {
+                        NSDictionary *productDict = productArray[i];
+                        for (NSString *productDictKey in [productDict allKeys]) {
+                            if (![productDict[productDictKey] isEqual:testResultDict[key][i][productDictKey]]) {
+                                NSLog(@"Invalid Object in Product: %@ Key: %@", productDict, productDictKey);
+                                return false;
+                            }
+                        }
+                    }
+                }
+                if (![(NSDictionary *)value[key] isEqual:testResultDict[key]]) {
+                    NSLog(@"Invalid Object in Key: %@", key);
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    };
+    
+    OCMExpect(([mockClient logPurchase:@"eCommerce - purchase"
+                              currency:@"USD"
+                                 price:[@"26" doubleValue]
+                            properties:[OCMArg checkWithBlock:testBlock]
+               ]));
+              
+    MPKitExecStatus *execStatus = [kit logBaseEvent:event];
+
+    XCTAssertEqual(execStatus.returnCode, MPKitReturnCodeSuccess);
+
+    OCMVerifyAll(mockClient);
+
+    [mockClient stopMocking];
+}
+
+- (void)testlogPromotionCommerceEventWithBundledProducts {
+    MPKitAppboy *kit = [[MPKitAppboy alloc] init];
+    kit.configuration = @{@"bundleProductsWithCommerceEvents" : @1};
+
+    BRZConfiguration *configuration = [[BRZConfiguration alloc] init];
+    Braze *testClient = [[Braze alloc] initWithConfiguration:configuration];
+    id mockClient = OCMPartialMock(testClient);
+    [kit setAppboyInstance:mockClient];
+
+    XCTAssertEqualObjects(mockClient, [kit appboyInstance]);
+
+    MPPromotion *promotion = [[MPPromotion alloc] init];
+    promotion.promotionId = @"my_promo_1";
+    promotion.creative = @"sale_banner_1";
+    promotion.name = @"App-wide 50% off sale";
+    promotion.position = @"dashboard_bottom";
+
+    MPPromotionContainer *container =
+        [[MPPromotionContainer alloc] initWithAction:MPPromotionActionView
+                                           promotion:promotion];
+    
+    MPCommerceEvent *event = [[MPCommerceEvent alloc] initWithPromotionContainer:container];
+    event.customAttributes = @{@"testKey" : @"testCustomAttValue"};
+
+    [[mockClient expect] logCustomEvent:@"eCommerce - view"
+                          properties:@{@"Attributes" : @{@"testKey" : @"testCustomAttValue"},
+                                       @"promotions" : @[@{
+                                           @"Creative" : @"sale_banner_1",
+                                           @"Name" : @"App-wide 50% off sale",
+                                           @"Position" : @"dashboard_bottom",
+                                           @"Id" : @"my_promo_1"
+                                          }
+                                       ]
+                       }];
+
+    MPKitExecStatus *execStatus = [kit logBaseEvent:event];
+
+    XCTAssertEqual(execStatus.returnCode, MPKitReturnCodeSuccess);
+
+    [mockClient verify];
+
+    [mockClient stopMocking];
+}
+
+- (void)testlogImpressionCommerceEventWithBundledProducts {
+    MPKitAppboy *kit = [[MPKitAppboy alloc] init];
+    kit.configuration = @{@"bundleProductsWithCommerceEvents" : @1};
+
+    BRZConfiguration *configuration = [[BRZConfiguration alloc] init];
+    Braze *testClient = [[Braze alloc] initWithConfiguration:configuration];
+    id mockClient = OCMPartialMock(testClient);
+    [kit setAppboyInstance:mockClient];
+
+    XCTAssertEqualObjects(mockClient, [kit appboyInstance]);
+
+    MPProduct *product = [[MPProduct alloc] initWithName:@"product1" sku:@"1131331343" quantity:@1 price:@13];
+    product.userDefinedAttributes = [@{@"productTestKey" : @"productTestCustomAttValue"} mutableCopy];
+
+    MPCommerceEvent *event = [[MPCommerceEvent alloc] initWithImpressionName:@"Suggested Products List" product:product];
+    event.customAttributes = @{@"testKey" : @"testCustomAttValue"};
+
+    [[mockClient expect] logCustomEvent:@"eCommerce - impression"
+                          properties:@{@"Attributes" : @{@"testKey" : @"testCustomAttValue"},
+                                       @"impressions" : @[@{
+                                           @"Product Impression List" : @"Suggested Products List",
+                                           @"products" : @[@{
+                                               @"Id" : @"1131331343",
+                                               @"Item Price" : @"13",
+                                               @"Name" : @"product1",
+                                               @"Quantity" : @"1",
+                                               @"Total Product Amount" : @"13",
+                                               @"Attributes" : @{@"productTestKey" : @"productTestCustomAttValue"}
+                                              }
+                                           ]
+                                          }
+                                       ]
+                       }];
+
+    MPKitExecStatus *execStatus = [kit logBaseEvent:event];
+
+    XCTAssertEqual(execStatus.returnCode, MPKitReturnCodeSuccess);
+
+    [mockClient verify];
+
+    [mockClient stopMocking];
+}
+
 //- (void)testTypeDetection {
 //    MPKitAppboy *kit = [[MPKitAppboy alloc] init];
 //

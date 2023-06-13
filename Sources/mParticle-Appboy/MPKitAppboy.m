@@ -15,6 +15,7 @@ static NSString *const hostConfigKey = @"host";
 static NSString *const userIdTypeKey = @"userIdentificationType";
 static NSString *const emailIdTypeKey = @"emailIdentificationType";
 static NSString *const enableTypeDetectionKey = @"enableTypeDetection";
+static NSString *const bundleProductsWithCommerceEvents = @"bundleProductsWithCommerceEvents";
 
 // The possible values for userIdentificationType
 static NSString *const userIdValueOther = @"Other";
@@ -39,6 +40,12 @@ static NSString *const userIdValueMPID = @"MPID";
 
 // User Attribute key with reserved functionality for Braze kit
 static NSString *const brazeUserAttributeDob = @"dob";
+
+// Strings used when sending enhanced commerce events
+static NSString *const attributesKey = @"Attributes";
+static NSString *const productKey = @"products";
+static NSString *const promotionKey = @"promotions";
+static NSString *const impressionKey = @"impressions";
 
 #if TARGET_OS_IOS
 __weak static id<BrazeInAppMessageUIDelegate> inAppMessageControllerDelegate = nil;
@@ -399,10 +406,9 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
 - (MPKitExecStatus *)routeCommerceEvent:(MPCommerceEvent *)commerceEvent {
     MPKitExecStatus *execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess forwardCount:0];
     
-    NSDictionary *detectedEventInfo = commerceEvent.customAttributes;
-    if (self->_enableTypeDetection) {
-        detectedEventInfo = [self simplifiedDictionary:commerceEvent.customAttributes];
-    }
+    NSMutableDictionary *mutDict = [_configuration mutableCopy];
+    mutDict[bundleProductsWithCommerceEvents] = @true;
+    _configuration = mutDict;
     
     if (commerceEvent.action == MPCommerceEventActionPurchase) {
         NSMutableDictionary *baseProductAttributes = [[NSMutableDictionary alloc] init];
@@ -425,37 +431,113 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
         NSString *currency = commerceEvent.currency ? : @"USD";
         NSMutableDictionary *properties;
         
-        for (MPProduct *product in products) {
-            // Add relevant attributes from the commerce event
-            properties = [[NSMutableDictionary alloc] init];
-            if (baseProductAttributes.count > 0) {
-                [properties addEntriesFromDictionary:baseProductAttributes];
+        // Add relevant attributes from the commerce event
+        properties = [[NSMutableDictionary alloc] init];
+        if (baseProductAttributes.count > 0) {
+            [properties addEntriesFromDictionary:baseProductAttributes];
+        }
+        
+        if ([_configuration[bundleProductsWithCommerceEvents] boolValue]) {
+            if (commerceEvent.customAttributes.count > 0) {
+                [properties removeObjectsForKeys:[commerceEvent.customAttributes allKeys]];
+                [properties setValue:commerceEvent.customAttributes forKey:attributesKey];
+            }
+            NSArray *productArray = [self getProductListParameters:products];
+            if (productArray.count > 0) {
+                [properties setValue:productArray forKey:productKey];
+            }
+            NSArray *promotionArray = [self getPromotionListParameters:commerceEvent.promotionContainer.promotions];
+            if (promotionArray.count > 0) {
+                [properties setValue:promotionArray forKey:promotionKey];
+            }
+            NSArray *impressionArray = [self getImpressionListParameters:commerceEvent.impressions];
+            if (impressionArray.count > 0) {
+                [properties setValue:impressionArray forKey:impressionKey];
             }
             
-            // Add attributes from the product itself
-            NSDictionary *productDictionary = [product beautifiedDictionaryRepresentation];
-            if (productDictionary) {
-                [properties addEntriesFromDictionary:productDictionary];
-            }
+            NSString *eventName = [NSString stringWithFormat:@"eCommerce - %@", [self eventNameForAction:commerceEvent.action]];
             
-            // Strips key/values already being passed to Appboy, plus key/values initialized to default values
-            keys = @[kMPExpProductSKU, kMPProductCurrency, kMPExpProductUnitPrice, kMPExpProductQuantity, kMPProductAffiliation, kMPExpProductCategory, kMPExpProductName];
-            [properties removeObjectsForKeys:keys];
-            
-            [appboyInstance logPurchase:product.sku
+            [appboyInstance logPurchase:eventName
                                currency:currency
-                                  price:[product.price doubleValue]
-                               quantity:[product.quantity integerValue]
+                                  price:[commerceEvent.transactionAttributes.revenue doubleValue]
                              properties:properties];
             
             [execStatus incrementForwardCount];
+        } else {
+            for (MPProduct *product in products) {
+                // Add attributes from the product itself
+                NSDictionary *productDictionary = [product beautifiedDictionaryRepresentation];
+                if (productDictionary) {
+                    [properties addEntriesFromDictionary:productDictionary];
+                }
+                
+                // Strips key/values already being passed to Appboy, plus key/values initialized to default values
+                keys = @[kMPExpProductSKU, kMPProductCurrency, kMPExpProductUnitPrice, kMPExpProductQuantity, kMPProductAffiliation, kMPExpProductCategory, kMPExpProductName];
+                [properties removeObjectsForKeys:keys];
+                
+                [appboyInstance logPurchase:product.sku
+                                   currency:currency
+                                      price:[product.price doubleValue]
+                                   quantity:[product.quantity integerValue]
+                                 properties:properties];
+                
+                [execStatus incrementForwardCount];
+            }
         }
     } else {
-        NSArray *expandedInstructions = [commerceEvent expandedInstructions];
-        
-        for (MPCommerceEventInstruction *commerceEventInstruction in expandedInstructions) {
-            [self logBaseEvent:commerceEventInstruction.event];
+        if ([_configuration[bundleProductsWithCommerceEvents] boolValue]) {
+            NSDictionary *transformedEventInfo = [commerceEvent.customAttributes transformValuesToString];
+            
+            NSMutableDictionary *eventInfo = [[NSMutableDictionary alloc] initWithCapacity:commerceEvent.customAttributes.count];
+            [transformedEventInfo enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, id _Nonnull obj, BOOL * _Nonnull stop) {
+                NSString *strippedKey = [self stripCharacter:@"$" fromString:key];
+                eventInfo[strippedKey] = obj;
+            }];
+            
+            if (self->_enableTypeDetection) {
+                eventInfo = [[self simplifiedDictionary:eventInfo] mutableCopy];
+            }
+            
+            if (commerceEvent.customAttributes.count > 0) {
+                [eventInfo removeObjectsForKeys:[commerceEvent.customAttributes allKeys]];
+                [eventInfo setValue:commerceEvent.customAttributes forKey:attributesKey];
+            }
+            NSArray *productArray = [self getProductListParameters:commerceEvent.products];
+            if (productArray.count > 0) {
+                [eventInfo setValue:productArray forKey:productKey];
+            }
+            NSArray *promotionArray = [self getPromotionListParameters:commerceEvent.promotionContainer.promotions];
+            if (promotionArray.count > 0) {
+                [eventInfo setValue:promotionArray forKey:promotionKey];
+            }
+            NSArray *impressionArray = [self getImpressionListParameters:commerceEvent.impressions];
+            if (impressionArray.count > 0) {
+                [eventInfo setValue:impressionArray forKey:impressionKey];
+            }
+            
+            NSString *eventName = [NSString stringWithFormat:@"eCommerce - %@", [self eventNameForAction:commerceEvent.action]];
+            if ([eventName isEqualToString:@"eCommerce - unknown"]) {
+                if (commerceEvent.impressions) {
+                    eventName = @"eCommerce - impression";
+                } else if (commerceEvent.promotionContainer.action) {
+                    eventName = [NSString stringWithFormat:@"eCommerce - %@", [self eventNameForPromotionAction:commerceEvent.promotionContainer.action]];
+                }
+            }
+            
+            // Appboy expects that the properties are non empty when present.
+            if (eventInfo.count > 0) {
+                [self->appboyInstance logCustomEvent:eventName properties:eventInfo];
+            } else {
+                [self->appboyInstance logCustomEvent:eventName];
+            }
             [execStatus incrementForwardCount];
+        } else {
+            NSArray *expandedInstructions = [commerceEvent expandedInstructions];
+            
+            for (MPCommerceEventInstruction *commerceEventInstruction in expandedInstructions) {
+                [self logBaseEvent:commerceEventInstruction.event];
+                [execStatus incrementForwardCount];
+            }
         }
     }
     
@@ -929,6 +1011,76 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
 
 - (void)setEnableTypeDetection:(BOOL)enableTypeDetection {
     _enableTypeDetection = enableTypeDetection;
+}
+
+- (NSArray *)getProductListParameters:(NSArray<MPProduct *> *)products {
+    NSMutableArray *productArray = [[NSMutableArray alloc] init];
+    for (MPProduct *product in products) {
+        // Add attributes from the products themselves
+        NSMutableDictionary *productDictionary = [[product beautifiedDictionaryRepresentation] mutableCopy];
+        
+        if (product.userDefinedAttributes.count > 0) {
+            [productDictionary removeObjectsForKeys:[product.userDefinedAttributes allKeys]];
+            [productDictionary setValue:product.userDefinedAttributes forKey:attributesKey];
+        }
+                        
+        // Adds the product dictionary to the product array being supplied to Braze
+        if (productDictionary) {
+            [productArray addObject:productDictionary];
+        }
+    }
+    return productArray;
+}
+
+- (NSArray *)getPromotionListParameters:(NSArray<MPPromotion *> *)promotions {
+    NSMutableArray *promotionArray = [[NSMutableArray alloc] init];
+    for (MPPromotion *promotion in promotions) {
+        // Add attributes from the promotions themselves
+        NSMutableDictionary *promotionDictionary = [[NSMutableDictionary alloc] init];
+        promotionDictionary[@"Creative"] = promotion.creative;
+        promotionDictionary[@"Name"] = promotion.name;
+        promotionDictionary[@"Position"] = promotion.position;
+        promotionDictionary[@"Id"] = promotion.promotionId;
+                        
+        // Adds the promotion dictionary to the promotion array being supplied to Braze
+        [promotionArray addObject:promotionDictionary];
+    }
+    return promotionArray;
+}
+
+- (NSArray *)getImpressionListParameters:(NSDictionary<NSString *, __kindof NSSet<MPProduct *> *> *)impressions {
+    NSMutableArray *impressionArray = [[NSMutableArray alloc] init];
+    for (NSString *impressionName in impressions.allKeys) {
+        // Add attributes from the products themselves
+        NSMutableDictionary *impressionDictionary = [[NSMutableDictionary alloc] init];
+        impressionDictionary[@"Product Impression List"] = impressionName;
+        NSArray<MPProduct *> *impressionProducts = [[impressions[impressionName] allObjects] copy];
+        impressionDictionary[productKey] = [self getProductListParameters:impressionProducts];
+
+        // Adds the impression dictionary to the impression array being supplied to Braze
+        [impressionArray addObject:impressionDictionary];
+    }
+    return impressionArray;
+}
+
+- (NSString *)eventNameForAction:(MPCommerceEventAction)action {
+    NSArray *actionNames = @[@"add_to_cart", @"remove_from_cart", @"add_to_wishlist", @"remove_from_wishlist", @"checkout", @"checkout_option", @"click", @"view_detail", @"purchase", @"refund"];
+    
+    if (action >= actionNames.count) {
+        return @"unknown";
+    }
+    
+    return actionNames[(NSUInteger)action];
+}
+
+- (NSString *)eventNameForPromotionAction:(MPPromotionAction)action {
+    NSArray *actionNames = @[@"click", @"view"];
+    
+    if (action >= actionNames.count) {
+        return @"unknown";
+    }
+    
+    return actionNames[(NSUInteger)action];
 }
 
 @end
