@@ -432,7 +432,7 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
             [properties addEntriesFromDictionary:baseProductAttributes];
         }
         
-        if (_configuration[bundleProductsWithCommerceEvents] && [_configuration[bundleProductsWithCommerceEvents] boolValue]) {
+        if ([_configuration[bundleProductsWithCommerceEvents] boolValue]) {
             NSArray *productArray = [self getProductListParameters:products];
             if (productArray.count > 0) {
                 [properties setValue:productArray forKey:productKey];
@@ -476,7 +476,7 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
             }
         }
     } else {
-        if (_configuration[bundleProductsWithCommerceEvents] && [_configuration[bundleProductsWithCommerceEvents] boolValue]) {
+        if ([_configuration[bundleProductsWithCommerceEvents] boolValue]) {
             NSDictionary *transformedEventInfo = [commerceEvent.customAttributes transformValuesToString];
             
             NSMutableDictionary *eventInfo = [[NSMutableDictionary alloc] initWithCapacity:commerceEvent.customAttributes.count];
@@ -504,7 +504,7 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
             
             NSString *eventName = [NSString stringWithFormat:@"eCommerce - %@", [self eventNameForAction:commerceEvent.action]];
             if ([eventName isEqualToString:@"eCommerce - unknown"]) {
-                if (commerceEvent.impressions != nil) {
+                if (commerceEvent.impressions) {
                     eventName = @"eCommerce - impression";
                 } else if (commerceEvent.promotionContainer.action) {
                     eventName = [NSString stringWithFormat:@"eCommerce - %@", [self eventNameForPromotionAction:commerceEvent.promotionContainer.action]];
@@ -512,7 +512,7 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
             }
             
             // Appboy expects that the properties are non empty when present.
-            if (eventInfo && eventInfo.count > 0) {
+            if (eventInfo.count > 0) {
                 [self->appboyInstance logCustomEvent:eventName properties:eventInfo];
             } else {
                 [self->appboyInstance logCustomEvent:eventName];
