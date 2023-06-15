@@ -354,7 +354,7 @@
 
 - (void)testlogCommerceEventWithBundledProducts {
     MPKitAppboy *kit = [[MPKitAppboy alloc] init];
-    kit.configuration = @{@"bundleProductsWithCommerceEvents" : @1};
+    kit.configuration = @{@"bundleCommerceEventData" : @1};
 
     BRZConfiguration *configuration = [[BRZConfiguration alloc] init];
     Braze *testClient = [[Braze alloc] initWithConfiguration:configuration];
@@ -442,7 +442,7 @@
 
 - (void)testlogPurchaseCommerceEventWithBundledProducts {
     MPKitAppboy *kit = [[MPKitAppboy alloc] init];
-    kit.configuration = @{@"bundleProductsWithCommerceEvents" : @1};
+    kit.configuration = @{@"bundleCommerceEventData" : @1};
 
     BRZConfiguration *configuration = [[BRZConfiguration alloc] init];
     Braze *testClient = [[Braze alloc] initWithConfiguration:configuration];
@@ -520,7 +520,7 @@
 
 - (void)testlogCommerceEventWithMultipleBundledProducts {
     MPKitAppboy *kit = [[MPKitAppboy alloc] init];
-    kit.configuration = @{@"bundleProductsWithCommerceEvents" : @1};
+    kit.configuration = @{@"bundleCommerceEventData" : @1};
 
     BRZConfiguration *configuration = [[BRZConfiguration alloc] init];
     Braze *testClient = [[Braze alloc] initWithConfiguration:configuration];
@@ -609,7 +609,7 @@
 
 - (void)testlogPromotionCommerceEventWithBundledProducts {
     MPKitAppboy *kit = [[MPKitAppboy alloc] init];
-    kit.configuration = @{@"bundleProductsWithCommerceEvents" : @1};
+    kit.configuration = @{@"bundleCommerceEventData" : @1};
 
     BRZConfiguration *configuration = [[BRZConfiguration alloc] init];
     Braze *testClient = [[Braze alloc] initWithConfiguration:configuration];
@@ -653,7 +653,7 @@
 
 - (void)testlogImpressionCommerceEventWithBundledProducts {
     MPKitAppboy *kit = [[MPKitAppboy alloc] init];
-    kit.configuration = @{@"bundleProductsWithCommerceEvents" : @1};
+    kit.configuration = @{@"bundleCommerceEventData" : @1};
 
     BRZConfiguration *configuration = [[BRZConfiguration alloc] init];
     Braze *testClient = [[Braze alloc] initWithConfiguration:configuration];
