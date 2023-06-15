@@ -15,7 +15,7 @@ static NSString *const hostConfigKey = @"host";
 static NSString *const userIdTypeKey = @"userIdentificationType";
 static NSString *const emailIdTypeKey = @"emailIdentificationType";
 static NSString *const enableTypeDetectionKey = @"enableTypeDetection";
-static NSString *const bundleProductsWithCommerceEvents = @"bundleProductsWithCommerceEvents";
+static NSString *const bundleCommerceEventData = @"bundleCommerceEventData";
 
 // The possible values for userIdentificationType
 static NSString *const userIdValueOther = @"Other";
@@ -407,7 +407,7 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
     MPKitExecStatus *execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess forwardCount:0];
     
     NSMutableDictionary *mutDict = [_configuration mutableCopy];
-    mutDict[bundleProductsWithCommerceEvents] = @true;
+    mutDict[bundleCommerceEventData] = @true;
     _configuration = mutDict;
     
     if (commerceEvent.action == MPCommerceEventActionPurchase) {
@@ -437,7 +437,7 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
             [properties addEntriesFromDictionary:baseProductAttributes];
         }
         
-        if ([_configuration[bundleProductsWithCommerceEvents] boolValue]) {
+        if ([_configuration[bundleCommerceEventData] boolValue]) {
             if (commerceEvent.customAttributes.count > 0) {
                 [properties removeObjectsForKeys:[commerceEvent.customAttributes allKeys]];
                 [properties setValue:commerceEvent.customAttributes forKey:attributesKey];
@@ -485,7 +485,7 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
             }
         }
     } else {
-        if ([_configuration[bundleProductsWithCommerceEvents] boolValue]) {
+        if ([_configuration[bundleCommerceEventData] boolValue]) {
             NSDictionary *transformedEventInfo = [commerceEvent.customAttributes transformValuesToString];
             
             NSMutableDictionary *eventInfo = [[NSMutableDictionary alloc] initWithCapacity:commerceEvent.customAttributes.count];
