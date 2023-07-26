@@ -30,9 +30,6 @@ module.exports = {
         "@semantic-release/github",
         {
           assets: [
-            "mParticle_Appboy.framework.zip",
-            "mParticle_Appboy.xcframework.zip",
-            "generated-docs.zip",
           ],
         },
       ],
