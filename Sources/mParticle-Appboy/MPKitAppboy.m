@@ -405,10 +405,6 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
 - (MPKitExecStatus *)routeCommerceEvent:(MPCommerceEvent *)commerceEvent {
     MPKitExecStatus *execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess forwardCount:0];
     
-    NSMutableDictionary *mutDict = [_configuration mutableCopy];
-    mutDict[bundleCommerceEventData] = @true;
-    _configuration = mutDict;
-    
     if (commerceEvent.action == MPCommerceEventActionPurchase) {
         NSMutableDictionary *baseProductAttributes = [[NSMutableDictionary alloc] init];
         NSDictionary *transactionAttributes = [self simplifiedDictionary:[commerceEvent.transactionAttributes beautifiedDictionaryRepresentation]];
