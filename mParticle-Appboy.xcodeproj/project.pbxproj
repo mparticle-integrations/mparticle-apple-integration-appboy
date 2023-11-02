@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -727,7 +727,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mparticle.mParticle-Appboy";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				"VALID_ARCHS[sdk=iphonesimulator*]" = x86_64;
 			};
 			name = Debug;
 		};
@@ -745,7 +744,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mparticle.mParticle-Appboy";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				"VALID_ARCHS[sdk=iphonesimulator*]" = x86_64;
 			};
 			name = Release;
 		};
@@ -787,8 +785,6 @@
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 3;
-				VALID_ARCHS = arm64;
-				"VALID_ARCHS[sdk=appletvsimulator*]" = x86_64;
 			};
 			name = Debug;
 		};
@@ -830,8 +826,6 @@
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 3;
-				VALID_ARCHS = arm64;
-				"VALID_ARCHS[sdk=appletvsimulator*]" = x86_64;
 			};
 			name = Release;
 		};

@@ -313,6 +313,7 @@
 
 - (void)testlogCommerceEvent {
     MPKitAppboy *kit = [[MPKitAppboy alloc] init];
+    kit.configuration = @{@"bundleCommerceEventData" : @0};
 
     BRZConfiguration *configuration = [[BRZConfiguration alloc] init];
     Braze *testClient = [[Braze alloc] initWithConfiguration:configuration];
@@ -399,6 +400,7 @@
 
 - (void)testlogPurchaseCommerceEvent {
     MPKitAppboy *kit = [[MPKitAppboy alloc] init];
+    kit.configuration = @{@"bundleCommerceEventData" : @0};
 
     BRZConfiguration *configuration = [[BRZConfiguration alloc] init];
     Braze *testClient = [[Braze alloc] initWithConfiguration:configuration];
