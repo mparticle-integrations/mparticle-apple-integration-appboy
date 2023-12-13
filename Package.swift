@@ -21,7 +21,7 @@ let package = Package(
                .upToNextMajor(from: "8.0.0")),
       .package(name: "braze-swift-sdk",
                url: "https://github.com/braze-inc/braze-swift-sdk",
-               .upToNextMajor(from: "6.1.0")),
+               .upToNextMajor(from: "7.3.0")),
     ],
     targets: [
         .target(
