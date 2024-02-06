@@ -430,7 +430,8 @@
                                        @"Total Amount" : @13.00,
                                        @"Total Product Amount" : @"13",
                                        @"Tax Amount" : @3,
-                                       @"Transaction Id" : @"foo-transaction-id"
+                                       @"Transaction Id" : @"foo-transaction-id",
+                                       @"Name" : @"product1"
                        }];
 
     MPKitExecStatus *execStatus = [kit logBaseEvent:event];

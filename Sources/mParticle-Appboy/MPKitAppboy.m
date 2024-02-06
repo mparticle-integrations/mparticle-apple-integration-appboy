@@ -467,7 +467,7 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
                 }
                 
                 // Strips key/values already being passed to Appboy, plus key/values initialized to default values
-                keys = @[kMPExpProductSKU, kMPProductCurrency, kMPExpProductUnitPrice, kMPExpProductQuantity, kMPProductAffiliation, kMPExpProductCategory, kMPExpProductName];
+                keys = @[kMPExpProductSKU, kMPProductCurrency, kMPExpProductUnitPrice, kMPExpProductQuantity];
                 [properties removeObjectsForKeys:keys];
                 
                 [appboyInstance logPurchase:product.sku
