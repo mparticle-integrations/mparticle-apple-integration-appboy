@@ -410,6 +410,7 @@
     XCTAssertEqualObjects(mockClient, [kit appboyInstance]);
 
     MPProduct *product = [[MPProduct alloc] initWithName:@"product1" sku:@"1131331343" quantity:@1 price:@13];
+    product.category = @"category1";
 
     MPCommerceEvent *event = [[MPCommerceEvent alloc] initWithAction:MPCommerceEventActionPurchase product:product];
     event.customAttributes = @{@"testKey" : @"testCustomAttValue"};
@@ -430,7 +431,9 @@
                                        @"Total Amount" : @13.00,
                                        @"Total Product Amount" : @"13",
                                        @"Tax Amount" : @3,
-                                       @"Transaction Id" : @"foo-transaction-id"
+                                       @"Transaction Id" : @"foo-transaction-id",
+                                       @"Name" : @"product1",
+                                       @"Category" : @"category1"
                        }];
 
     MPKitExecStatus *execStatus = [kit logBaseEvent:event];
