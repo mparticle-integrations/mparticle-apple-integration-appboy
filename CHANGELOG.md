@@ -1,3 +1,10 @@
+## [8.3.1](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.3.0...v8.3.1) (2024-02-07)
+
+
+### Bug Fixes
+
+* Deleting property stripping from product when sent unbundled ([#86](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/issues/86)) ([d0b477b](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/commit/d0b477b78b6e3364de9b5f0eaeabdf64c9ec45a0))
+
 # [8.3.0](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.2.5...v8.3.0) (2023-12-13)
 
 
