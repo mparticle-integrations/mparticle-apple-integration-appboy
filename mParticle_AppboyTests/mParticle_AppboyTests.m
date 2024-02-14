@@ -16,6 +16,7 @@
 - (NSMutableDictionary<NSString *, NSNumber *> *)optionsDictionary;
 + (id<BrazeInAppMessageUIDelegate>)inAppMessageControllerDelegate;
 - (void)setEnableTypeDetection:(BOOL)enableTypeDetection;
++ (BOOL)shouldDisableNotificationHandling;
 
 @end
 
@@ -273,6 +274,18 @@
     });
     
     [self waitForExpectationsWithTimeout:1 handler:nil];
+}
+
+- (void)testSetDisableNotificationHandling {
+    XCTAssertEqual([MPKitAppboy shouldDisableNotificationHandling], NO);
+    
+    [MPKitAppboy setShouldDisableNotificationHandling:YES];
+    
+    XCTAssertEqual([MPKitAppboy shouldDisableNotificationHandling], YES);
+    
+    [MPKitAppboy setShouldDisableNotificationHandling:NO];
+    
+    XCTAssertEqual([MPKitAppboy shouldDisableNotificationHandling], NO);
 }
 
 - (void)testUserIdCustomerId {

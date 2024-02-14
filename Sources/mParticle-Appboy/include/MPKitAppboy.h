@@ -18,6 +18,7 @@
 
 #if TARGET_OS_IOS
 + (void)setInAppMessageControllerDelegate:(nonnull id)delegate;
++ (void)setShouldDisableNotificationHandling:(BOOL)isDisabled;
 #endif
 + (void)setURLDelegate:(nonnull id)delegate;
 

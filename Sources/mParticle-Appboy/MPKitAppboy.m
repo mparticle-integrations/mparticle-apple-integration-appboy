@@ -49,6 +49,7 @@ static NSString *const impressionKey = @"impressions";
 
 #if TARGET_OS_IOS
 __weak static id<BrazeInAppMessageUIDelegate> inAppMessageControllerDelegate = nil;
+static BOOL shouldDisableNotificationHandling = NO;
 #endif
 __weak static id<BrazeDelegate> urlDelegate = nil;
 
@@ -83,6 +84,15 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
 + (id<BrazeInAppMessageUIDelegate>)inAppMessageControllerDelegate {
     return inAppMessageControllerDelegate;
 }
+
++ (void)setShouldDisableNotificationHandling:(BOOL)isDisabled {
+    shouldDisableNotificationHandling = isDisabled;
+}
+
++ (BOOL)shouldDisableNotificationHandling {
+    return shouldDisableNotificationHandling;
+}
+
 #endif
 
 + (void)setURLDelegate:(id)delegate {
@@ -557,6 +567,10 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
 
 - (MPKitExecStatus *)receivedUserNotification:(NSDictionary *)userInfo {
     MPKitExecStatus *execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
+    
+    if (!shouldDisableNotificationHandling) {
+        return execStatus;
+    }
 
 #if TARGET_OS_IOS
     if (![appboyInstance.notifications handleBackgroundNotificationWithUserInfo:userInfo fetchCompletionHandler:^(UIBackgroundFetchResult fetchResult) {}]) {
@@ -575,11 +589,16 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
 }
 
 - (MPKitExecStatus *)setDeviceToken:(NSData *)deviceToken {
+    MPKitExecStatus *execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
+    
+    if (!shouldDisableNotificationHandling) {
+        return execStatus;
+    }
+    
 #if TARGET_OS_IOS
     [appboyInstance.notifications registerDeviceToken:deviceToken];
 #endif
     
-    MPKitExecStatus *execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
     return execStatus;
 }
 
@@ -931,6 +950,10 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
 #if TARGET_OS_IOS
 - (nonnull MPKitExecStatus *)userNotificationCenter:(nonnull UNUserNotificationCenter *)center willPresentNotification:(nonnull UNNotification *)notification {
     MPKitExecStatus *execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
+        
+    if (!shouldDisableNotificationHandling) {
+        return execStatus;
+    }
 
     if (![appboyInstance.notifications handleBackgroundNotificationWithUserInfo:notification.request.content.userInfo fetchCompletionHandler:^(UIBackgroundFetchResult fetchResult) {}]) {
         NSLog(@"mParticle -> Invalid Braze remote notification: %@", notification.request.content.userInfo);
@@ -941,6 +964,10 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
 
 - (nonnull MPKitExecStatus *)userNotificationCenter:(nonnull UNUserNotificationCenter *)center didReceiveNotificationResponse:(nonnull UNNotificationResponse *)response API_AVAILABLE(ios(10.0)) {
     MPKitExecStatus *execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
+    
+    if (!shouldDisableNotificationHandling) {
+        return execStatus;
+    }
 
     if (![appboyInstance.notifications handleUserNotificationWithResponse:response withCompletionHandler:^{}]) {
         NSLog(@"mParticle -> Notification Response rejected by Braze: %@", response);
