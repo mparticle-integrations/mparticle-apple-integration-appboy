@@ -104,8 +104,10 @@ static Braze *brazeInstance = nil;
     return urlDelegate;
 }
 
-+ (void)setBrazeInstance:(Braze *)instance {
-    brazeInstance = instance;
++ (void)setBrazeInstance:(id)instance {
+    if ([instance isKindOfClass:[Braze class]]) {
+        brazeInstance = instance;
+    }
 }
 
 + (Braze *)brazeInstance {
