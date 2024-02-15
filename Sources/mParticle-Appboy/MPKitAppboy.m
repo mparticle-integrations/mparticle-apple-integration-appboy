@@ -52,6 +52,7 @@ __weak static id<BrazeInAppMessageUIDelegate> inAppMessageControllerDelegate = n
 static BOOL shouldDisableNotificationHandling = NO;
 #endif
 __weak static id<BrazeDelegate> urlDelegate = nil;
+static Braze *brazeInstance = nil;
 
 @interface MPKitAppboy() {
     Braze *appboyInstance;
@@ -101,6 +102,14 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
 
 + (id<BrazeDelegate>)urlDelegate {
     return urlDelegate;
+}
+
++ (void)setBrazeInstance:(Braze *)instance {
+    brazeInstance = instance;
+}
+
++ (Braze *)brazeInstance {
+    return brazeInstance;
 }
 
 #pragma mark Private methods
@@ -249,6 +258,10 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
 
 #pragma mark MPKitInstanceProtocol methods
 - (MPKitExecStatus *)didFinishLaunchingWithConfiguration:(NSDictionary *)configuration {
+    
+    // Use the static braze instance if set
+    [self setAppboyInstance:brazeInstance];
+    
     MPKitExecStatus *execStatus = nil;
     
     if (!configuration[eabAPIKey]) {
@@ -275,6 +288,8 @@ __weak static id<BrazeDelegate> urlDelegate = nil;
     } else {
         _started = NO;
     }
+    
+   
     
     execStatus = [[MPKitExecStatus alloc] initWithSDKCode:[[self class] kitCode] returnCode:MPKitReturnCodeSuccess];
     return execStatus;

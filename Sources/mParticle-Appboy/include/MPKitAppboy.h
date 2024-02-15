@@ -10,6 +10,7 @@
     #import "mParticle_Apple_SDK-Swift.h"
 #endif
 
+@class Braze;
 @interface MPKitAppboy : NSObject <MPKitProtocol>
 
 @property (nonatomic, strong, nonnull) NSDictionary *configuration;
@@ -21,5 +22,6 @@
 + (void)setShouldDisableNotificationHandling:(BOOL)isDisabled;
 #endif
 + (void)setURLDelegate:(nonnull id)delegate;
++ (void)setBrazeInstance:(nonnull Braze *)instance;
 
 @end
