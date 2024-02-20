@@ -16,6 +16,8 @@
 - (NSMutableDictionary<NSString *, NSNumber *> *)optionsDictionary;
 + (id<BrazeInAppMessageUIDelegate>)inAppMessageControllerDelegate;
 - (void)setEnableTypeDetection:(BOOL)enableTypeDetection;
++ (BOOL)shouldDisableNotificationHandling;
++ (Braze *)brazeInstance;
 
 @end
 
@@ -28,6 +30,7 @@
 - (void)setUp {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
+    [MPKitAppboy setBrazeInstance:nil];
 }
 
 - (void)tearDown {
@@ -273,6 +276,49 @@
     });
     
     [self waitForExpectationsWithTimeout:1 handler:nil];
+}
+
+- (void)testSetDisableNotificationHandling {
+    XCTAssertEqual([MPKitAppboy shouldDisableNotificationHandling], NO);
+    
+    [MPKitAppboy setShouldDisableNotificationHandling:YES];
+    
+    XCTAssertEqual([MPKitAppboy shouldDisableNotificationHandling], YES);
+    
+    [MPKitAppboy setShouldDisableNotificationHandling:NO];
+    
+    XCTAssertEqual([MPKitAppboy shouldDisableNotificationHandling], NO);
+}
+
+- (void)testSetBrazeInstance {
+    BRZConfiguration *configuration = [[BRZConfiguration alloc] init];
+    Braze *testClient = [[Braze alloc] initWithConfiguration:configuration];
+    
+    XCTAssertEqualObjects([MPKitAppboy brazeInstance], nil);
+
+    [MPKitAppboy setBrazeInstance:testClient];
+    
+    MPKitAppboy *appBoy = [[MPKitAppboy alloc] init];
+    
+    XCTAssertEqualObjects(appBoy.appboyInstance, nil);
+    XCTAssertEqualObjects(appBoy.providerKitInstance, nil);
+    XCTAssertEqualObjects([MPKitAppboy brazeInstance], testClient);
+
+    NSDictionary *kitConfiguration = @{@"apiKey":@"BrazeID",
+                                       @"id":@42,
+                                       @"ABKCollectIDFA":@"true",
+                                       @"ABKRequestProcessingPolicyOptionKey": @"1",
+                                       @"ABKFlushIntervalOptionKey":@"2",
+                                       @"ABKSessionTimeoutKey":@"3",
+                                       @"ABKMinimumTriggerTimeIntervalKey":@"4",
+                                       @"userIdentificationType":@"CustomerId"
+                                       };
+
+    [appBoy didFinishLaunchingWithConfiguration:kitConfiguration];
+    
+    XCTAssertEqualObjects(appBoy.appboyInstance, testClient);
+    XCTAssertEqualObjects(appBoy.providerKitInstance, testClient);
+    XCTAssertEqualObjects([MPKitAppboy brazeInstance], testClient);
 }
 
 - (void)testUserIdCustomerId {
