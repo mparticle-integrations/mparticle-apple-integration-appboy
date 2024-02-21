@@ -1,3 +1,10 @@
+# [8.4.0](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.3.1...v8.4.0) (2024-02-21)
+
+
+### Features
+
+* Allow setting Braze instance and override notification handling ([#87](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/issues/87)) ([c3c76c1](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/commit/c3c76c1724ce3c822b9c62cb40582871c7e032fe))
+
 ## [8.3.1](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.3.0...v8.3.1) (2024-02-07)
 
 
