@@ -22,6 +22,8 @@
 		539B2EA12A13D6AB00C8339D /* BrazeKitCompat in Frameworks */ = {isa = PBXBuildFile; productRef = 539B2EA02A13D6AB00C8339D /* BrazeKitCompat */; };
 		D31A98A92153F73400358293 /* mParticle_AppboyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D31A98A82153F73400358293 /* mParticle_AppboyTests.m */; };
 		D31A98AB2153F73400358293 /* mParticle_Appboy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB94016C1CB703F2007ABB18 /* mParticle_Appboy.framework */; };
+		D34423302B960F44006CD046 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = D344232F2B960F44006CD046 /* PrivacyInfo.xcprivacy */; };
+		D34423312B960F44006CD046 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = D344232F2B960F44006CD046 /* PrivacyInfo.xcprivacy */; };
 		DB76F1CF25D2E71D00CAB3EB /* MPKitAppboy.h in Headers */ = {isa = PBXBuildFile; fileRef = DB76F1CB25D2E71D00CAB3EB /* MPKitAppboy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DB76F1D025D2E71D00CAB3EB /* mParticle_Appboy.h in Headers */ = {isa = PBXBuildFile; fileRef = DB76F1CC25D2E71D00CAB3EB /* mParticle_Appboy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DB76F1D125D2E71D00CAB3EB /* MPKitAppboy.m in Sources */ = {isa = PBXBuildFile; fileRef = DB76F1CD25D2E71D00CAB3EB /* MPKitAppboy.m */; };
@@ -59,6 +61,7 @@
 		D31A98A62153F73400358293 /* mParticle_AppboyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = mParticle_AppboyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D31A98A82153F73400358293 /* mParticle_AppboyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = mParticle_AppboyTests.m; sourceTree = "<group>"; };
 		D31A98AA2153F73400358293 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D344232F2B960F44006CD046 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		DB76F1CB25D2E71D00CAB3EB /* MPKitAppboy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPKitAppboy.h; sourceTree = "<group>"; };
 		DB76F1CC25D2E71D00CAB3EB /* mParticle_Appboy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mParticle_Appboy.h; sourceTree = "<group>"; };
 		DB76F1CD25D2E71D00CAB3EB /* MPKitAppboy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPKitAppboy.m; sourceTree = "<group>"; };
@@ -138,6 +141,7 @@
 			children = (
 				DB76F1C925D2E71D00CAB3EB /* mParticle-Appboy */,
 				DB76F1CE25D2E71D00CAB3EB /* Info.plist */,
+				D344232F2B960F44006CD046 /* PrivacyInfo.xcprivacy */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -389,6 +393,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D34423302B960F44006CD046 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -396,6 +401,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D34423312B960F44006CD046 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
