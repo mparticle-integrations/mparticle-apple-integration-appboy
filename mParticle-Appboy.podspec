@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
     s.ios.dependency 'mParticle-Apple-SDK', '~> 8.0'
     s.ios.dependency 'BrazeKit', '~> 8.0'
     s.ios.dependency 'BrazeKitCompat', '~> 8.0'
-    s.ios.dependency 'BrazeUI', '~>8.0'
+    s.ios.dependency 'BrazeUI', '~> 8.0'
     
     s.tvos.deployment_target = "12.0"
     s.tvos.source_files      = 'Sources/**/*.{h,m,mm}'
