@@ -1,3 +1,10 @@
+# [8.5.0](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.4.0...v8.5.0) (2024-03-06)
+
+
+### Features
+
+* Update Braze with Privacy Manifest ([#88](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/issues/88)) ([aeaaca2](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/commit/aeaaca2d7c98c7e95f3ecc5d49ae312356fd2e22))
+
 # [8.4.0](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.3.1...v8.4.0) (2024-02-21)
 
 
