@@ -318,7 +318,7 @@ static Braze *brazeInstance = nil;
         configuration.api.sdkFlavor = ((NSNumber *)optionsDict[ABKSDKFlavorKey]).intValue;
         
         // enable verbose loggings added by Nahuel TSE mParticle
-        configuration.logger.level = .debug;
+        configuration.logger.level = BRZLoggerLevelDebug;
         
         self->appboyInstance = [[Braze alloc] initWithConfiguration:configuration];
     }
