@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "mParticle-Appboy",
-    platforms: [ .iOS(.v11), .tvOS(.v11) ], 
+    platforms: [ .iOS(.v12), .tvOS(.v12) ],
     products: [
         .library(
             name: "mParticle-Appboy",
@@ -21,7 +21,7 @@ let package = Package(
                .upToNextMajor(from: "8.0.0")),
       .package(name: "braze-swift-sdk",
                url: "https://github.com/braze-inc/braze-swift-sdk",
-               .upToNextMajor(from: "6.1.0")),
+               .upToNextMajor(from: "8.0.0")),
     ],
     targets: [
         .target(

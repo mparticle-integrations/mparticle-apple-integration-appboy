@@ -16,6 +16,8 @@
 - (NSMutableDictionary<NSString *, NSNumber *> *)optionsDictionary;
 + (id<BrazeInAppMessageUIDelegate>)inAppMessageControllerDelegate;
 - (void)setEnableTypeDetection:(BOOL)enableTypeDetection;
++ (BOOL)shouldDisableNotificationHandling;
++ (Braze *)brazeInstance;
 
 @end
 
@@ -28,6 +30,7 @@
 - (void)setUp {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
+    [MPKitAppboy setBrazeInstance:nil];
 }
 
 - (void)tearDown {
@@ -275,6 +278,49 @@
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
+- (void)testSetDisableNotificationHandling {
+    XCTAssertEqual([MPKitAppboy shouldDisableNotificationHandling], NO);
+    
+    [MPKitAppboy setShouldDisableNotificationHandling:YES];
+    
+    XCTAssertEqual([MPKitAppboy shouldDisableNotificationHandling], YES);
+    
+    [MPKitAppboy setShouldDisableNotificationHandling:NO];
+    
+    XCTAssertEqual([MPKitAppboy shouldDisableNotificationHandling], NO);
+}
+
+- (void)testSetBrazeInstance {
+    BRZConfiguration *configuration = [[BRZConfiguration alloc] init];
+    Braze *testClient = [[Braze alloc] initWithConfiguration:configuration];
+    
+    XCTAssertEqualObjects([MPKitAppboy brazeInstance], nil);
+
+    [MPKitAppboy setBrazeInstance:testClient];
+    
+    MPKitAppboy *appBoy = [[MPKitAppboy alloc] init];
+    
+    XCTAssertEqualObjects(appBoy.appboyInstance, nil);
+    XCTAssertEqualObjects(appBoy.providerKitInstance, nil);
+    XCTAssertEqualObjects([MPKitAppboy brazeInstance], testClient);
+
+    NSDictionary *kitConfiguration = @{@"apiKey":@"BrazeID",
+                                       @"id":@42,
+                                       @"ABKCollectIDFA":@"true",
+                                       @"ABKRequestProcessingPolicyOptionKey": @"1",
+                                       @"ABKFlushIntervalOptionKey":@"2",
+                                       @"ABKSessionTimeoutKey":@"3",
+                                       @"ABKMinimumTriggerTimeIntervalKey":@"4",
+                                       @"userIdentificationType":@"CustomerId"
+                                       };
+
+    [appBoy didFinishLaunchingWithConfiguration:kitConfiguration];
+    
+    XCTAssertEqualObjects(appBoy.appboyInstance, testClient);
+    XCTAssertEqualObjects(appBoy.providerKitInstance, testClient);
+    XCTAssertEqualObjects([MPKitAppboy brazeInstance], testClient);
+}
+
 - (void)testUserIdCustomerId {
     MPKitAppboy *appBoy = [[MPKitAppboy alloc] init];
 
@@ -313,6 +359,7 @@
 
 - (void)testlogCommerceEvent {
     MPKitAppboy *kit = [[MPKitAppboy alloc] init];
+    kit.configuration = @{@"bundleCommerceEventData" : @0};
 
     BRZConfiguration *configuration = [[BRZConfiguration alloc] init];
     Braze *testClient = [[Braze alloc] initWithConfiguration:configuration];
@@ -399,6 +446,7 @@
 
 - (void)testlogPurchaseCommerceEvent {
     MPKitAppboy *kit = [[MPKitAppboy alloc] init];
+    kit.configuration = @{@"bundleCommerceEventData" : @0};
 
     BRZConfiguration *configuration = [[BRZConfiguration alloc] init];
     Braze *testClient = [[Braze alloc] initWithConfiguration:configuration];
@@ -408,6 +456,7 @@
     XCTAssertEqualObjects(mockClient, [kit appboyInstance]);
 
     MPProduct *product = [[MPProduct alloc] initWithName:@"product1" sku:@"1131331343" quantity:@1 price:@13];
+    product.category = @"category1";
 
     MPCommerceEvent *event = [[MPCommerceEvent alloc] initWithAction:MPCommerceEventActionPurchase product:product];
     event.customAttributes = @{@"testKey" : @"testCustomAttValue"};
@@ -428,7 +477,9 @@
                                        @"Total Amount" : @13.00,
                                        @"Total Product Amount" : @"13",
                                        @"Tax Amount" : @3,
-                                       @"Transaction Id" : @"foo-transaction-id"
+                                       @"Transaction Id" : @"foo-transaction-id",
+                                       @"Name" : @"product1",
+                                       @"Category" : @"category1"
                        }];
 
     MPKitExecStatus *execStatus = [kit logBaseEvent:event];
