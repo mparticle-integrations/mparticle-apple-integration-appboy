@@ -4,6 +4,7 @@
     @import BrazeKit;
     @import BrazeKitCompat;
     @import BrazeUI;
+    @import BrazeLocation;
 #else
     @import BrazeKit;
     @import BrazeKitCompat;
@@ -309,9 +310,15 @@ static Braze *brazeInstance = nil;
         configuration.api.flushInterval = ((NSNumber *)optionsDict[ABKFlushIntervalOptionKey]).doubleValue;
         configuration.sessionTimeout = ((NSNumber *)optionsDict[ABKSessionTimeoutKey]).doubleValue;
         configuration.triggerMinimumTimeInterval = ((NSNumber *)optionsDict[ABKMinimumTriggerTimeIntervalKey]).doubleValue;
-        configuration.location.automaticLocationCollection = optionsDict[ABKEnableAutomaticLocationCollectionKey];
+        configuration.location.automaticLocationCollection = ((NSNumber *)optionsDict[ABKEnableAutomaticLocationCollectionKey]).boolValue;
+        if (configuration.location.automaticLocationCollection) {
+            configuration.location.brazeLocationProvider = [[BrazeLocationProvider alloc] init];
+        }
         [configuration.api addSDKMetadata:@[BRZSDKMetadata.mparticle]];
         configuration.api.sdkFlavor = ((NSNumber *)optionsDict[ABKSDKFlavorKey]).intValue;
+        
+        // enable verbose loggings added by Nahuel TSE mParticle
+        configuration.logger.level = BRZLoggerLevelDebug;
         
         self->appboyInstance = [[Braze alloc] initWithConfiguration:configuration];
     }
