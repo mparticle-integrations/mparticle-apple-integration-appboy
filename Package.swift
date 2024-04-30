@@ -18,10 +18,10 @@ let package = Package(
     dependencies: [
       .package(name: "mParticle-Apple-SDK",
                url: "https://github.com/mParticle/mparticle-apple-sdk",
-               .upToNextMajor(from: "8.0.0")),
+               .upToNextMajor(from: "8.19.0")),
       .package(name: "braze-swift-sdk",
                url: "https://github.com/braze-inc/braze-swift-sdk",
-               .upToNextMajor(from: "8.0.0")),
+               .upToNextMajor(from: "9.0.0")),
     ],
     targets: [
         .target(
@@ -31,7 +31,8 @@ let package = Package(
               .product(name: "BrazeUI", package: "braze-swift-sdk", condition: .when(platforms: [.iOS])),
               .product(name: "BrazeKit", package: "braze-swift-sdk"),
               .product(name: "BrazeKitCompat", package: "braze-swift-sdk"),
-            ]
+            ],
+            resources: [.process("PrivacyInfo.xcprivacy")]
         ),
         .target(
             name: "mParticle-Appboy-NoLocation",
@@ -41,7 +42,8 @@ let package = Package(
               .product(name: "BrazeKit", package: "braze-swift-sdk"),
               .product(name: "BrazeKitCompat", package: "braze-swift-sdk"),
             ],
-            path: "SPM/mParticle-Appboy-NoLocation"
+            path: "SPM/mParticle-Appboy-NoLocation",
+            resources: [.process("PrivacyInfo.xcprivacy")]
         )
     ]
 )

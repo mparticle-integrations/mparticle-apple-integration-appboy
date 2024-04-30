@@ -141,7 +141,6 @@
 			children = (
 				DB76F1C925D2E71D00CAB3EB /* mParticle-Appboy */,
 				DB76F1CE25D2E71D00CAB3EB /* Info.plist */,
-				D344232F2B960F44006CD046 /* PrivacyInfo.xcprivacy */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -151,6 +150,7 @@
 			children = (
 				DB76F1CA25D2E71D00CAB3EB /* include */,
 				DB76F1CD25D2E71D00CAB3EB /* MPKitAppboy.m */,
+				D344232F2B960F44006CD046 /* PrivacyInfo.xcprivacy */,
 			);
 			path = "mParticle-Appboy";
 			sourceTree = "<group>";
@@ -921,7 +921,7 @@
 			repositoryURL = "https://github.com/braze-inc/braze-swift-sdk";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 6.0.0;
+				minimumVersion = 9.0.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
