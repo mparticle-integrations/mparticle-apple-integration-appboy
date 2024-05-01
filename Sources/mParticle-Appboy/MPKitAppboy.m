@@ -53,6 +53,8 @@ static BOOL shouldDisableNotificationHandling = NO;
 #endif
 __weak static id<BrazeDelegate> urlDelegate = nil;
 static Braze *brazeInstance = nil;
+static id brazeLocationProvider = nil;
+static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
 
 @interface MPKitAppboy() {
     Braze *appboyInstance;
@@ -112,6 +114,19 @@ static Braze *brazeInstance = nil;
 
 + (Braze *)brazeInstance {
     return brazeInstance;
+}
+
++ (void)setBrazeLocationProvider:(nonnull id)instance {
+    brazeLocationProvider = instance;
+}
+
++ (void)setBrazeTrackingPropertyAllowList:(nonnull NSSet<BRZTrackingProperty*> *)allowList {
+    for (id property in allowList) {
+        if (![property isKindOfClass:[BRZTrackingProperty class]]) {
+            return;
+        }
+    }
+    brazeTrackingPropertyAllowList = allowList;
 }
 
 #pragma mark Private methods
@@ -258,6 +273,25 @@ static Braze *brazeInstance = nil;
     return _advertiserId;
 }
 
+- (BOOL)isAppTrackingEnabled {
+    BOOL appTrackingEnabled = NO;
+    Class ATTrackingManager = NSClassFromString(@"ATTrackingManager");
+    
+    if (ATTrackingManager) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+        SEL selector = NSSelectorFromString(@"trackingAuthorizationStatus");
+        NSUInteger trackingAuthorizationStatus = (NSUInteger)[ATTrackingManager performSelector:selector];
+        appTrackingEnabled = (trackingAuthorizationStatus == 3); // ATTrackingManagerAuthorizationStatusAuthorized
+#pragma clang diagnostic pop
+#pragma clang diagnostic pop
+    }
+    
+    return appTrackingEnabled;
+}
+
 #pragma mark MPKitInstanceProtocol methods
 - (MPKitExecStatus *)didFinishLaunchingWithConfiguration:(NSDictionary *)configuration {
     
@@ -291,8 +325,6 @@ static Braze *brazeInstance = nil;
         _started = NO;
     }
     
-   
-    
     execStatus = [[MPKitExecStatus alloc] initWithSDKCode:[[self class] kitCode] returnCode:MPKitReturnCodeSuccess];
     return execStatus;
 }
@@ -305,14 +337,24 @@ static Braze *brazeInstance = nil;
     if (!self->appboyInstance) {
         NSDictionary *optionsDict = [self optionsDictionary];
         BRZConfiguration *configuration = [[BRZConfiguration alloc] initWithApiKey:self.configuration[eabAPIKey] endpoint:optionsDict[ABKEndpointKey]];
-        configuration.api.requestPolicy = ((NSNumber *)optionsDict[ABKRequestProcessingPolicyOptionKey]).intValue;
-        configuration.api.flushInterval = ((NSNumber *)optionsDict[ABKFlushIntervalOptionKey]).doubleValue;
-        configuration.sessionTimeout = ((NSNumber *)optionsDict[ABKSessionTimeoutKey]).doubleValue;
-        configuration.triggerMinimumTimeInterval = ((NSNumber *)optionsDict[ABKMinimumTriggerTimeIntervalKey]).doubleValue;
-        configuration.location.automaticLocationCollection = optionsDict[ABKEnableAutomaticLocationCollectionKey];
+        
         [configuration.api addSDKMetadata:@[BRZSDKMetadata.mparticle]];
         configuration.api.sdkFlavor = ((NSNumber *)optionsDict[ABKSDKFlavorKey]).intValue;
+        configuration.api.requestPolicy = ((NSNumber *)optionsDict[ABKRequestProcessingPolicyOptionKey]).intValue;
+        NSNumber *flushIntervalOption = (NSNumber *)optionsDict[ABKFlushIntervalOptionKey] ?: @10; // If not set, use the default 10 seconds specified in Braze SDK header
+        configuration.api.flushInterval = flushIntervalOption.doubleValue < 1.0 ? 1.0 : flushIntervalOption.doubleValue; // Ensure value is above the minimum of 1.0 per run time warning from Braze SDK
+        configuration.api.trackingPropertyAllowList = brazeTrackingPropertyAllowList;
+
+        configuration.sessionTimeout = ((NSNumber *)optionsDict[ABKSessionTimeoutKey]).doubleValue;
         
+        configuration.triggerMinimumTimeInterval = ((NSNumber *)optionsDict[ABKMinimumTriggerTimeIntervalKey]).doubleValue;
+        
+        NSNumber *automaticLocationTrackingOption = (NSNumber *)optionsDict[ABKEnableAutomaticLocationCollectionKey];
+        if (automaticLocationTrackingOption != nil && automaticLocationTrackingOption.boolValue && brazeLocationProvider) {
+            configuration.location.automaticLocationCollection = YES;
+            configuration.location.brazeLocationProvider = brazeLocationProvider;
+        }
+                
         self->appboyInstance = [[Braze alloc] initWithConfiguration:configuration];
     }
     
@@ -322,8 +364,8 @@ static Braze *brazeInstance = nil;
     
     if (self->collectIDFA) {
         [self->appboyInstance setIdentifierForAdvertiser:[self advertisingIdentifierString]];
-        [self->appboyInstance setAdTrackingEnabled:[self isAdvertisingTrackingEnabled]];
     }
+    [self->appboyInstance setAdTrackingEnabled:[self isAppTrackingEnabled]];
     
 #if TARGET_OS_IOS
     BrazeInAppMessageUI *inAppMessageUI = [[BrazeInAppMessageUI alloc] init];
@@ -993,6 +1035,14 @@ static Braze *brazeInstance = nil;
     return execStatus;
 }
 #endif
+
+- (MPKitExecStatus *)setATTStatus:(MPATTAuthorizationStatus)status withATTStatusTimestampMillis:(NSNumber *)attStatusTimestampMillis {
+    BOOL isEnabled = status == MPATTAuthorizationStatusAuthorized;
+    [appboyInstance setAdTrackingEnabled:isEnabled];
+    return [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
+}
+
+#pragma mark Configuration Dictionary
 
 - (NSMutableDictionary *)simplifiedDictionary:(NSDictionary *)originalDictionary {
     __block NSMutableDictionary *transformedDictionary = [[NSMutableDictionary alloc] init];
