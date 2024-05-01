@@ -1,3 +1,10 @@
+# [8.6.0](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.5.0...v8.6.0) (2024-05-01)
+
+
+### Features
+
+* Update to Braze 9.x.x SDK, improve privacy manifest support ([#89](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/issues/89)) ([979b259](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/commit/979b259de22c31fe4b1a8686756bcf5093b9642f))
+
 # [8.5.0](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.4.0...v8.5.0) (2024-03-07)
 
 
