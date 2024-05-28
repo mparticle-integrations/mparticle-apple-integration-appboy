@@ -1,3 +1,10 @@
+## [8.6.1](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.6.0...v8.6.1) (2024-05-28)
+
+
+### Bug Fixes
+
+* Setting urlDelegate on Braze instance ([#90](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/issues/90)) ([596c250](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/commit/596c250ba2b6543cfbb534af4bc74781eed2b12d))
+
 # [8.6.0](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.5.0...v8.6.0) (2024-05-01)
 
 
