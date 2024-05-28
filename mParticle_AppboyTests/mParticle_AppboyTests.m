@@ -31,6 +31,7 @@
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
     [MPKitAppboy setBrazeInstance:nil];
+    [MPKitAppboy setURLDelegate:nil];
 }
 
 - (void)tearDown {
@@ -261,7 +262,7 @@
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
-- (void)testWeakMessageDelegate {
+- (void)testStrongMessageDelegate {
     id<BrazeInAppMessageUIDelegate> delegate = (id)[NSObject new];
     
     [MPKitAppboy setInAppMessageControllerDelegate:delegate];
@@ -271,7 +272,7 @@
     XCTestExpectation *expectation = [self expectationWithDescription:@"async work"];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        XCTAssertNil([MPKitAppboy inAppMessageControllerDelegate]);
+        XCTAssertNotNil([MPKitAppboy inAppMessageControllerDelegate]);
         [expectation fulfill];
     });
     
