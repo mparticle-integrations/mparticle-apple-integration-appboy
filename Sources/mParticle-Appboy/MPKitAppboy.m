@@ -48,10 +48,10 @@ static NSString *const promotionKey = @"promotions";
 static NSString *const impressionKey = @"impressions";
 
 #if TARGET_OS_IOS
-__weak static id<BrazeInAppMessageUIDelegate> inAppMessageControllerDelegate = nil;
+static id<BrazeInAppMessageUIDelegate> inAppMessageControllerDelegate = nil;
 static BOOL shouldDisableNotificationHandling = NO;
 #endif
-__weak static id<BrazeDelegate> urlDelegate = nil;
+static id<BrazeDelegate> urlDelegate = nil;
 static Braze *brazeInstance = nil;
 static id brazeLocationProvider = nil;
 static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
@@ -367,6 +367,10 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
     }
     [self->appboyInstance setAdTrackingEnabled:[self isAppTrackingEnabled]];
     
+    if ([MPKitAppboy urlDelegate]) {
+        self->appboyInstance.delegate = [MPKitAppboy urlDelegate];
+    }
+    
 #if TARGET_OS_IOS
     BrazeInAppMessageUI *inAppMessageUI = [[BrazeInAppMessageUI alloc] init];
     inAppMessageUI.delegate = [MPKitAppboy inAppMessageControllerDelegate];
@@ -446,10 +450,6 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
         }
     }
 #endif
-    
-    if ([MPKitAppboy urlDelegate]) {
-        optionsDictionary[ABKURLDelegateKey] = (NSObject *)[MPKitAppboy urlDelegate];
-    }
     
     return optionsDictionary;
 }
