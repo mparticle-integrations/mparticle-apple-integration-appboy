@@ -1,3 +1,10 @@
+# [8.7.0](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.6.1...v8.7.0) (2024-06-12)
+
+
+### Features
+
+* Update External iD on Initialization ([#91](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/issues/91)) ([5e1d301](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/commit/5e1d301aacb2efa1a5c4dcd1686012da5bc24654))
+
 ## [8.6.1](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.6.0...v8.6.1) (2024-05-28)
 
 
