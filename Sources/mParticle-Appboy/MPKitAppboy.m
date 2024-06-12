@@ -377,6 +377,9 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
     [self->appboyInstance setInAppMessagePresenter:inAppMessageUI];
 #endif
     
+    FilteredMParticleUser *currentUser = [[self kitApi] getCurrentUserWithKit:self];
+    [self updateUser:currentUser request:currentUser.userIdentities];
+    
     self->_started = YES;
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -818,26 +821,26 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
 }
 
 - (nonnull MPKitExecStatus *)onIdentifyComplete:(FilteredMParticleUser *)user request:(FilteredMPIdentityApiRequest *)request {
-    return [self updateUser:user request:request];
+    return [self updateUser:user request:request.userIdentities];
 }
 
 - (nonnull MPKitExecStatus *)onLoginComplete:(FilteredMParticleUser *)user request:(FilteredMPIdentityApiRequest *)request {
-    return [self updateUser:user request:request];
+    return [self updateUser:user request:request.userIdentities];
 }
 
 - (nonnull MPKitExecStatus *)onLogoutComplete:(FilteredMParticleUser *)user request:(FilteredMPIdentityApiRequest *)request {
-    return [self updateUser:user request:request];
+    return [self updateUser:user request:request.userIdentities];
 }
 
 - (nonnull MPKitExecStatus *)onModifyComplete:(FilteredMParticleUser *)user request:(FilteredMPIdentityApiRequest *)request {
-    return [self updateUser:user request:request];
+    return [self updateUser:user request:request.userIdentities];
 }
 
-- (nonnull MPKitExecStatus *)updateUser:(FilteredMParticleUser *)user request:(FilteredMPIdentityApiRequest *)request {
+- (nonnull MPKitExecStatus *)updateUser:(FilteredMParticleUser *)user request:(NSDictionary<NSNumber *,NSString *> *)userIdentities {
     MPKitExecStatus *execStatus = nil;
     
-    if (request.userIdentities) {
-        NSMutableDictionary *userIDsCopy = [request.userIdentities copy];
+    if (userIdentities) {
+        NSMutableDictionary *userIDsCopy = [userIdentities copy];
         NSString *userId;
         
         if (_configuration[userIdTypeKey]) {
