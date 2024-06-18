@@ -366,6 +366,8 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
         self->forwardScreenViews = [self.configuration[@"forwardScreenViews"] caseInsensitiveCompare:@"true"] == NSOrderedSame;
     }
     
+    self->collectIDFA = self.configuration[@"ABKCollectIDFA"] && [self.configuration[@"ABKCollectIDFA"] caseInsensitiveCompare:@"true"] == NSOrderedSame;
+    
     if (self->collectIDFA) {
         [self->appboyInstance setIdentifierForAdvertiser:[self advertisingIdentifierString]];
     }
@@ -419,23 +421,11 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
         }
     }];
     
-    self->collectIDFA = self.configuration[@"ABKCollectIDFA"] && [self.configuration[@"ABKCollectIDFA"] caseInsensitiveCompare:@"true"] == NSOrderedSame;
-    if (self->collectIDFA) {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wincompatible-pointer-types"
-        optionsDictionary[ABKIDFADelegateKey] = (id)self;
-#pragma clang diagnostic pop
-    }
-    
     if (self.host.length) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wincompatible-pointer-types"
         optionsDictionary[ABKEndpointKey] = self.host;
 #pragma clang diagnostic pop
-    }
-    
-    if (self.configuration[@"forwardScreenViews"]) {
-        self->forwardScreenViews = [self.configuration[@"forwardScreenViews"] caseInsensitiveCompare:@"true"] == NSOrderedSame;
     }
     
     if (optionsDictionary.count == 0) {
