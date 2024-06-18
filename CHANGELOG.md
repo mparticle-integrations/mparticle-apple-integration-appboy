@@ -1,3 +1,10 @@
+## [8.7.1](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.7.0...v8.7.1) (2024-06-18)
+
+
+### Bug Fixes
+
+* Forward screen events and collect IDFA configs when using an external Braze instance ([#92](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/issues/92)) ([a8c4706](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/commit/a8c4706518c804b977831b33d071f8fbbce61d54))
+
 # [8.7.0](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.6.1...v8.7.0) (2024-06-12)
 
 
