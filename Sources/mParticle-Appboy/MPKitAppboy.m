@@ -362,6 +362,10 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
         return;
     }
     
+    if (self.configuration[@"forwardScreenViews"]) {
+        self->forwardScreenViews = [self.configuration[@"forwardScreenViews"] caseInsensitiveCompare:@"true"] == NSOrderedSame;
+    }
+    
     if (self->collectIDFA) {
         [self->appboyInstance setIdentifierForAdvertiser:[self advertisingIdentifierString]];
     }
