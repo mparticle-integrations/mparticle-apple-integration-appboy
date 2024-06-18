@@ -362,9 +362,7 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
         return;
     }
     
-    if (self.configuration[@"forwardScreenViews"]) {
-        self->forwardScreenViews = [self.configuration[@"forwardScreenViews"] caseInsensitiveCompare:@"true"] == NSOrderedSame;
-    }
+    self->forwardScreenViews = self.configuration[@"forwardScreenViews"] && [self.configuration[@"forwardScreenViews"] caseInsensitiveCompare:@"true"] == NSOrderedSame;
     
     self->collectIDFA = self.configuration[@"ABKCollectIDFA"] && [self.configuration[@"ABKCollectIDFA"] caseInsensitiveCompare:@"true"] == NSOrderedSame;
     
