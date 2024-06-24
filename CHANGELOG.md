@@ -1,3 +1,10 @@
+## [8.7.2](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.7.1...v8.7.2) (2024-06-24)
+
+
+### Bug Fixes
+
+* Kit fails to start due to missing kitApi property ([#93](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/issues/93)) ([10bf509](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/commit/10bf5091b2e29b7e60a0b214b1b205fa8b360c05))
+
 ## [8.7.1](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.7.0...v8.7.1) (2024-06-18)
 
 
