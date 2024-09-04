@@ -47,6 +47,12 @@ static NSString *const productKey = @"products";
 static NSString *const promotionKey = @"promotions";
 static NSString *const impressionKey = @"impressions";
 
+// Strings used for Google Consent
+static NSString *const MPGoogleAdUserDataKey = @"google_ad_user_data";
+static NSString *const MPGoogleAdPersonalizationKey = @"google_ad_personalization";
+static NSString *const BGoogleAdUserDataKey = @"$google_ad_user_data";
+static NSString *const BGoogleAdPersonalizationKey = @"$google_ad_personalization";
+
 #if TARGET_OS_IOS
 static id<BrazeInAppMessageUIDelegate> inAppMessageControllerDelegate = nil;
 static BOOL shouldDisableNotificationHandling = NO;
@@ -324,6 +330,9 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
     } else {
         _started = NO;
     }
+    
+    // Update Consent on launch
+    [self updateConsent];
     
     execStatus = [[MPKitExecStatus alloc] initWithSDKCode:[[self class] kitCode] returnCode:MPKitReturnCodeSuccess];
     return execStatus;
@@ -1035,6 +1044,27 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
     BOOL isEnabled = status == MPATTAuthorizationStatusAuthorized;
     [appboyInstance setAdTrackingEnabled:isEnabled];
     return [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
+}
+
+- (MPKitExecStatus *)setConsentState:(nullable MPConsentState *)state {
+    [self updateConsent];
+
+    return [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
+}
+
+- (void)updateConsent {
+    MParticleUser *currentUser = [[[MParticle sharedInstance] identity] currentUser];
+    NSDictionary<NSString *, MPGDPRConsent *> *userConsentMap = currentUser.consentState.gdprConsentState;
+
+    // Update from mParticle consent
+    if (self.configuration[MPGoogleAdUserDataKey] && userConsentMap[self.configuration[MPGoogleAdUserDataKey]]) {
+        MPGDPRConsent *consent = userConsentMap[self.configuration[MPGoogleAdUserDataKey]];
+        [appboyInstance.user setCustomAttributeWithKey:BGoogleAdUserDataKey boolValue:consent.consented];
+    }
+    if (self.configuration[MPGoogleAdPersonalizationKey] && userConsentMap[self.configuration[MPGoogleAdPersonalizationKey]]) {
+        MPGDPRConsent *consent = userConsentMap[self.configuration[MPGoogleAdPersonalizationKey]];
+        [appboyInstance.user setCustomAttributeWithKey:BGoogleAdPersonalizationKey boolValue:consent.consented];
+    }
 }
 
 #pragma mark Configuration Dictionary
