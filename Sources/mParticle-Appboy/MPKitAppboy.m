@@ -47,6 +47,15 @@ static NSString *const productKey = @"products";
 static NSString *const promotionKey = @"promotions";
 static NSString *const impressionKey = @"impressions";
 
+// Strings used for Google Consent
+static NSString *const MPMapKey = @"map";
+static NSString *const MPValueKey = @"value";
+static NSString *const MPConsentMappingSDKKey = @"consentMappingSDK";
+static NSString *const MPGoogleAdUserDataKey = @"google_ad_user_data";
+static NSString *const MPGoogleAdPersonalizationKey = @"google_ad_personalization";
+static NSString *const BGoogleAdUserDataKey = @"$google_ad_user_data";
+static NSString *const BGoogleAdPersonalizationKey = @"$google_ad_personalization";
+
 #if TARGET_OS_IOS
 static id<BrazeInAppMessageUIDelegate> inAppMessageControllerDelegate = nil;
 static BOOL shouldDisableNotificationHandling = NO;
@@ -324,6 +333,9 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
     } else {
         _started = NO;
     }
+    
+    // Update Consent on launch
+    [self updateConsent];
     
     execStatus = [[MPKitExecStatus alloc] initWithSDKCode:[[self class] kitCode] returnCode:MPKitReturnCodeSuccess];
     return execStatus;
@@ -1035,6 +1047,40 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
     BOOL isEnabled = status == MPATTAuthorizationStatusAuthorized;
     [appboyInstance setAdTrackingEnabled:isEnabled];
     return [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
+}
+
+- (MPKitExecStatus *)setConsentState:(nullable MPConsentState *)state {
+    [self updateConsent];
+
+    return [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeSuccess];
+}
+
+- (void)updateConsent {
+    MParticleUser *currentUser = [[[MParticle sharedInstance] identity] currentUser];
+    NSDictionary<NSString *, MPGDPRConsent *> *userConsentMap = currentUser.consentState.gdprConsentState;
+    
+    // Update from mParticle consent
+    if (self.configuration && self.configuration[MPConsentMappingSDKKey]) {
+        // Retrieve the array of Consent Map Dictionaries from the Config
+        NSData *objectData = [self.configuration[MPConsentMappingSDKKey] dataUsingEncoding:NSUTF8StringEncoding];
+        NSArray *consentMappingArray = [NSJSONSerialization JSONObjectWithData:objectData
+                                              options:NSJSONReadingMutableContainers
+                                                error:nil];
+        
+        // For each valid Consent Map check if mParticle has a corresponding consent setting and, if so, send to Braze
+        for (NSDictionary *consentMappingDict in consentMappingArray) {
+            NSString *consentPurpose = consentMappingDict[MPMapKey];
+            if (consentMappingDict[MPValueKey] && userConsentMap[consentPurpose.lowercaseString]) {
+                NSString *brazeConsentName = consentMappingDict[MPValueKey];
+                MPGDPRConsent *consent = userConsentMap[consentPurpose.lowercaseString];
+                if ([brazeConsentName isEqualToString:MPGoogleAdUserDataKey]) {
+                    [appboyInstance.user setCustomAttributeWithKey:BGoogleAdUserDataKey boolValue:consent.consented];
+                } else if ([brazeConsentName isEqualToString:MPGoogleAdPersonalizationKey]) {
+                    [appboyInstance.user setCustomAttributeWithKey:BGoogleAdPersonalizationKey boolValue:consent.consented];
+                }
+            }
+        }
+    }
 }
 
 #pragma mark Configuration Dictionary
