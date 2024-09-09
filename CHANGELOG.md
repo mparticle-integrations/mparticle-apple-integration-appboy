@@ -1,3 +1,10 @@
+# [8.8.0](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.7.2...v8.8.0) (2024-09-09)
+
+
+### Features
+
+* Implement Google EU Consent ([#94](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/issues/94)) ([2f97151](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/commit/2f971517f1b6c7f25d0f489539c765510e1931d9))
+
 ## [8.7.2](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.7.1...v8.7.2) (2024-06-24)
 
 
