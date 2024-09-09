@@ -1061,7 +1061,7 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
     
     // Update from mParticle consent
     if (self.configuration && self.configuration[MPConsentMappingSDKKey]) {
-        // Retrieve the array of Consent Map Dicitonaries from the Config
+        // Retrieve the array of Consent Map Dictionaries from the Config
         NSData *objectData = [self.configuration[MPConsentMappingSDKKey] dataUsingEncoding:NSUTF8StringEncoding];
         NSArray *consentMappingArray = [NSJSONSerialization JSONObjectWithData:objectData
                                               options:NSJSONReadingMutableContainers
@@ -1075,8 +1075,7 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
                 MPGDPRConsent *consent = userConsentMap[consentPurpose.lowercaseString];
                 if ([brazeConsentName isEqualToString:MPGoogleAdUserDataKey]) {
                     [appboyInstance.user setCustomAttributeWithKey:BGoogleAdUserDataKey boolValue:consent.consented];
-                }
-                if ([brazeConsentName isEqualToString:MPGoogleAdPersonalizationKey]) {
+                } else if ([brazeConsentName isEqualToString:MPGoogleAdPersonalizationKey]) {
                     [appboyInstance.user setCustomAttributeWithKey:BGoogleAdPersonalizationKey boolValue:consent.consented];
                 }
             }
