@@ -191,7 +191,7 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
         if (self->_enableTypeDetection) {
             detectedEventInfo = [self simplifiedDictionary:eventInfo];
         }
-
+        
         // Appboy expects that the properties are non empty when present.
         if (detectedEventInfo && detectedEventInfo.count > 0) {
             [self->appboyInstance logCustomEvent:event.name properties:detectedEventInfo];
@@ -315,7 +315,7 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
     }
     
     _configuration = configuration;
-
+    
     collectIDFA = NO;
     forwardScreenViews = NO;
     
@@ -356,7 +356,7 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
         NSNumber *flushIntervalOption = (NSNumber *)optionsDict[ABKFlushIntervalOptionKey] ?: @10; // If not set, use the default 10 seconds specified in Braze SDK header
         configuration.api.flushInterval = flushIntervalOption.doubleValue < 1.0 ? 1.0 : flushIntervalOption.doubleValue; // Ensure value is above the minimum of 1.0 per run time warning from Braze SDK
         configuration.api.trackingPropertyAllowList = brazeTrackingPropertyAllowList;
-
+        
         configuration.sessionTimeout = ((NSNumber *)optionsDict[ABKSessionTimeoutKey]).doubleValue;
         
         configuration.triggerMinimumTimeInterval = ((NSNumber *)optionsDict[ABKMinimumTriggerTimeIntervalKey]).doubleValue;
@@ -366,7 +366,7 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
             configuration.location.automaticLocationCollection = YES;
             configuration.location.brazeLocationProvider = brazeLocationProvider;
         }
-                
+        
         self->appboyInstance = [[Braze alloc] initWithConfiguration:configuration];
     }
     
@@ -405,6 +405,12 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
                                                             object:nil
                                                           userInfo:userInfo];
     });
+}
+
+- (void)stop {
+    self->appboyInstance = nil;
+    _started = NO;
+    _configuration = nil;
 }
 
 - (NSMutableDictionary<NSString *, NSObject *> *)optionsDictionary {
