@@ -1,3 +1,10 @@
+## [8.8.1](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.8.0...v8.8.1) (2024-09-30)
+
+
+### Bug Fixes
+
+* Update Package.swift to match Podspec ([#96](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/issues/96)) ([eddc5e5](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/commit/eddc5e57dfa24841fc2228109931994ff039bff0))
+
 # [8.8.0](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.7.2...v8.8.0) (2024-09-09)
 
 
