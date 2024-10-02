@@ -1,3 +1,10 @@
+# [8.9.0](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.8.1...v8.9.0) (2024-10-02)
+
+
+### Features
+
+* Support workspace switching ([#95](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/issues/95)) ([a80ce1d](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/commit/a80ce1d35ee3b42e971849bf09e68c922901876c))
+
 ## [8.8.1](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.8.0...v8.8.1) (2024-09-30)
 
 
