@@ -1,3 +1,10 @@
+# [8.10.0](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.9.0...v8.10.0) (2024-10-16)
+
+
+### Features
+
+* Update Braze Kit to V11 ([#97](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/issues/97)) ([d93e071](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/commit/d93e0718f420c5a175c9e78d9387d021684cd351))
+
 # [8.9.0](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.8.1...v8.9.0) (2024-10-02)
 
 
