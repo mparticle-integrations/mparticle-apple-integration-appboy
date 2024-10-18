@@ -334,9 +334,6 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
         _started = NO;
     }
     
-    // Update Consent on launch
-    [self updateConsent];
-    
     execStatus = [[MPKitExecStatus alloc] initWithSDKCode:[[self class] kitCode] returnCode:MPKitReturnCodeSuccess];
     return execStatus;
 }
@@ -397,6 +394,9 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
     [self updateUser:currentUser request:currentUser.userIdentities];
     
     self->_started = YES;
+    
+    // Update Consent on start
+    [self updateConsent];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         NSDictionary *userInfo = @{mParticleKitInstanceKey:[[self class] kitCode]};
