@@ -1,3 +1,10 @@
+## [8.10.1](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.10.0...v8.10.1) (2024-10-18)
+
+
+### Bug Fixes
+
+* Update consent attributes after kit is initialized ([#98](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/issues/98)) ([0d74b3c](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/commit/0d74b3c925e7c014c8d236a30bcf335d4dc4a4d5))
+
 # [8.10.0](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.9.0...v8.10.0) (2024-10-16)
 
 
