@@ -391,7 +391,9 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
 #endif
     
     FilteredMParticleUser *currentUser = [[self kitApi] getCurrentUserWithKit:self];
-    [self updateUser:currentUser request:currentUser.userIdentities];
+    if (currentUser.userId.integerValue != 0) {
+        [self updateUser:currentUser request:currentUser.userIdentities];
+    }
     
     self->_started = YES;
     
