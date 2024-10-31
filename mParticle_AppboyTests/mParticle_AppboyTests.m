@@ -74,7 +74,6 @@
     
     NSDictionary *testOptionsDictionary = @{ABKEnableAutomaticLocationCollectionKey:@(YES),
                                             ABKSDKFlavorKey:@7,
-                                            ABKIDFADelegateKey: appBoy,
                                             @"ABKRquestProcessingPolicy": @(1),
                                             @"ABKFlushInterval":@(2),
                                             @"ABKSessionTimeout":@(3),
