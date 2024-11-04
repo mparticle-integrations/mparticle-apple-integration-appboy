@@ -18,6 +18,7 @@
 - (void)setEnableTypeDetection:(BOOL)enableTypeDetection;
 + (BOOL)shouldDisableNotificationHandling;
 + (Braze *)brazeInstance;
++ (MPKitExecStatus *)updateUser:(FilteredMParticleUser *)user request:(NSDictionary<NSNumber *,NSString *> *)userIdentities;
 
 @end
 
@@ -73,7 +74,6 @@
     
     NSDictionary *testOptionsDictionary = @{ABKEnableAutomaticLocationCollectionKey:@(YES),
                                             ABKSDKFlavorKey:@7,
-                                            ABKIDFADelegateKey: appBoy,
                                             @"ABKRquestProcessingPolicy": @(1),
                                             @"ABKFlushInterval":@(2),
                                             @"ABKSessionTimeout":@(3),
@@ -82,6 +82,93 @@
     
     NSDictionary *optionsDictionary = [appBoy optionsDictionary];
     XCTAssertEqualObjects(optionsDictionary, testOptionsDictionary);
+}
+
+- (void)testMpidForwardingOnStartUserIdZero {
+    NSDictionary *kitConfiguration = @{@"apiKey":@"BrazeID",
+                                       @"id":@42,
+                                       @"ABKCollectIDFA":@"true",
+                                       @"ABKRequestProcessingPolicyOptionKey": @"1",
+                                       @"ABKFlushIntervalOptionKey":@"2",
+                                       @"ABKSessionTimeoutKey":@"3",
+                                       @"ABKMinimumTriggerTimeIntervalKey":@"4",
+                                       @"userIdentificationType":@"MPID"
+                                       };
+    
+    MPKitAppboy *kitInstance = [[MPKitAppboy alloc] init];
+    
+    [kitInstance didFinishLaunchingWithConfiguration:kitConfiguration];
+    
+    MParticleUser *testUser = [[MParticleUser alloc] init];
+    [testUser setValue:@(0) forKey:@"userId"];
+    
+    FilteredMParticleUser *filteredUser = [[FilteredMParticleUser alloc] initWithMParticleUser:testUser kitConfiguration:kitConfiguration];
+    id mockKitApi = OCMClassMock([MPKitAPI class]);
+    OCMStub([mockKitApi getCurrentUserWithKit:kitInstance]).andReturn(filteredUser);
+    kitInstance.kitApi = mockKitApi;
+    
+    id mockKitInstance = OCMPartialMock(kitInstance);
+    [[mockKitInstance reject] updateUser:[OCMArg any] request:[OCMArg any]];
+    [kitInstance start];
+    [mockKitInstance verify];
+}
+
+- (void)testMpidForwardingOnStartUserIdPositive {
+    NSDictionary *kitConfiguration = @{@"apiKey":@"BrazeID",
+                                       @"id":@42,
+                                       @"ABKCollectIDFA":@"true",
+                                       @"ABKRequestProcessingPolicyOptionKey": @"1",
+                                       @"ABKFlushIntervalOptionKey":@"2",
+                                       @"ABKSessionTimeoutKey":@"3",
+                                       @"ABKMinimumTriggerTimeIntervalKey":@"4",
+                                       @"userIdentificationType":@"MPID"
+                                       };
+    
+    MPKitAppboy *kitInstance = [[MPKitAppboy alloc] init];
+    
+    [kitInstance didFinishLaunchingWithConfiguration:kitConfiguration];
+    
+    MParticleUser *testUser = [[MParticleUser alloc] init];
+    [testUser setValue:@(1) forKey:@"userId"];
+    
+    FilteredMParticleUser *filteredUser = [[FilteredMParticleUser alloc] initWithMParticleUser:testUser kitConfiguration:kitConfiguration];
+    id mockKitApi = OCMClassMock([MPKitAPI class]);
+    OCMStub([mockKitApi getCurrentUserWithKit:kitInstance]).andReturn(filteredUser);
+    kitInstance.kitApi = mockKitApi;
+    
+    id mockKitInstance = OCMPartialMock(kitInstance);
+    [[mockKitInstance expect] updateUser:[OCMArg any] request:[OCMArg any]];
+    [kitInstance start];
+    [mockKitInstance verify];
+}
+
+- (void)testMpidForwardingOnStartUserIdNegative {
+    NSDictionary *kitConfiguration = @{@"apiKey":@"BrazeID",
+                                       @"id":@42,
+                                       @"ABKCollectIDFA":@"true",
+                                       @"ABKRequestProcessingPolicyOptionKey": @"1",
+                                       @"ABKFlushIntervalOptionKey":@"2",
+                                       @"ABKSessionTimeoutKey":@"3",
+                                       @"ABKMinimumTriggerTimeIntervalKey":@"4",
+                                       @"userIdentificationType":@"MPID"
+                                       };
+    
+    MPKitAppboy *kitInstance = [[MPKitAppboy alloc] init];
+    
+    [kitInstance didFinishLaunchingWithConfiguration:kitConfiguration];
+    
+    MParticleUser *testUser = [[MParticleUser alloc] init];
+    [testUser setValue:@(-1) forKey:@"userId"];
+    
+    FilteredMParticleUser *filteredUser = [[FilteredMParticleUser alloc] initWithMParticleUser:testUser kitConfiguration:kitConfiguration];
+    id mockKitApi = OCMClassMock([MPKitAPI class]);
+    OCMStub([mockKitApi getCurrentUserWithKit:kitInstance]).andReturn(filteredUser);
+    kitInstance.kitApi = mockKitApi;
+    
+    id mockKitInstance = OCMPartialMock(kitInstance);
+    [[mockKitInstance expect] updateUser:[OCMArg any] request:[OCMArg any]];
+    [kitInstance start];
+    [mockKitInstance verify];
 }
 
 //- (void)testEndpointOverride {
