@@ -1,3 +1,10 @@
+## [8.10.2](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.10.1...v8.10.2) (2024-11-06)
+
+
+### Bug Fixes
+
+* prevent mpid with value 0 to forward to Braze ([#99](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/issues/99)) ([69255c2](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/commit/69255c28df2376fdf47b5fff25c3d67a6383069d))
+
 ## [8.10.1](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.10.0...v8.10.1) (2024-10-18)
 
 
