@@ -579,6 +579,54 @@
     [mockClient stopMocking];
 }
 
+- (void)testlogPurchaseCommerceEventSendingProductName {
+    MPKitAppboy *kit = [[MPKitAppboy alloc] init];
+    kit.configuration = @{@"bundleCommerceEventData" : @0,
+                          @"forwardSkuAsProductName": @"True"};
+
+    BRZConfiguration *configuration = [[BRZConfiguration alloc] init];
+    Braze *testClient = [[Braze alloc] initWithConfiguration:configuration];
+    id mockClient = OCMPartialMock(testClient);
+    [kit setAppboyInstance:mockClient];
+
+    XCTAssertEqualObjects(mockClient, [kit appboyInstance]);
+
+    MPProduct *product = [[MPProduct alloc] initWithName:@"product1" sku:@"1131331343" quantity:@1 price:@13];
+    product.category = @"category1";
+
+    MPCommerceEvent *event = [[MPCommerceEvent alloc] initWithAction:MPCommerceEventActionPurchase product:product];
+    event.customAttributes = @{@"testKey" : @"testCustomAttValue"};
+
+    MPTransactionAttributes *attributes = [[MPTransactionAttributes alloc] init];
+    attributes.transactionId = @"foo-transaction-id";
+    attributes.revenue = @13.00;
+    attributes.tax = @3;
+    attributes.shipping = @3;
+
+    event.transactionAttributes = attributes;
+
+    [[mockClient expect] logPurchase:@"product1"
+                            currency:@"USD"
+                               price:[@"13" doubleValue]
+                            quantity:1
+                          properties:@{@"Shipping Amount" : @3,
+                                       @"Total Amount" : @13.00,
+                                       @"Total Product Amount" : @"13",
+                                       @"Tax Amount" : @3,
+                                       @"Transaction Id" : @"foo-transaction-id",
+                                       @"Name" : @"product1",
+                                       @"Category" : @"category1"
+                       }];
+
+    MPKitExecStatus *execStatus = [kit logBaseEvent:event];
+
+    XCTAssertEqual(execStatus.returnCode, MPKitReturnCodeSuccess);
+
+    [mockClient verify];
+
+    [mockClient stopMocking];
+}
+
 - (void)testlogPurchaseCommerceEventWithBundledProducts {
     MPKitAppboy *kit = [[MPKitAppboy alloc] init];
     kit.configuration = @{@"bundleCommerceEventData" : @1};
