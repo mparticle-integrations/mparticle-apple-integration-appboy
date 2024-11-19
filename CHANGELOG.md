@@ -1,3 +1,15 @@
+# [8.11.0](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.10.2...v8.11.0) (2024-11-19)
+
+
+### Bug Fixes
+
+* Bump min Braze SDK to 11.2 ([#102](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/issues/102)) ([03c3ab2](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/commit/03c3ab265131364e7caf00f7b67e017698916bb7))
+
+
+### Features
+
+* Add sendProductName Option to Braze ([#100](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/issues/100)) ([f8deb1e](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/commit/f8deb1ea38ed016939e1ea9f25cfeacbaf8d7834))
+
 ## [8.10.2](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.10.1...v8.10.2) (2024-11-06)
 
 
