@@ -16,7 +16,7 @@ static NSString *const userIdTypeKey = @"userIdentificationType";
 static NSString *const emailIdTypeKey = @"emailIdentificationType";
 static NSString *const enableTypeDetectionKey = @"enableTypeDetection";
 static NSString *const bundleCommerceEventData = @"bundleCommerceEventData";
-static NSString *const replaceSkuAsProductName = @"forwardSkuAsProductName";
+static NSString *const replaceSkuWithProductName = @"replaceSkuWithProductName";
 
 // The possible values for userIdentificationType
 static NSString *const userIdValueOther = @"Other";
@@ -552,7 +552,7 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
                 }
                 
                 NSString *sanitizedProductName = product.sku;
-                if ([@"True" isEqualToString:_configuration[replaceSkuAsProductName]]) {
+                if ([@"True" isEqualToString:_configuration[replaceSkuWithProductName]]) {
                     sanitizedProductName = product.name;
                 }
                 
