@@ -1,3 +1,10 @@
+# [8.12.0](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.11.0...v8.12.0) (2024-12-11)
+
+
+### Features
+
+* Use replaceSkuWithProductName ([#101](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/issues/101)) ([1033ef6](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/commit/1033ef6d23799637f21ff563b5836853b90159b3))
+
 # [8.11.0](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.10.2...v8.11.0) (2024-11-19)
 
 
