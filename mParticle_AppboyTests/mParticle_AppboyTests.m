@@ -19,6 +19,7 @@
 + (BOOL)shouldDisableNotificationHandling;
 + (Braze *)brazeInstance;
 + (MPKitExecStatus *)updateUser:(FilteredMParticleUser *)user request:(NSDictionary<NSNumber *,NSString *> *)userIdentities;
++ (MPKitExecStatus *)setUserAttribute:(NSString *)key value:(NSString *)value;
 
 @end
 
@@ -170,6 +171,69 @@
     [kitInstance start];
     [mockKitInstance verify];
 }
+
+- (void)testEmailSubscribtionUserAttribute {
+    NSDictionary *kitConfiguration = @{@"apiKey":@"BrazeID",
+                                       @"id":@42,
+                                       @"ABKCollectIDFA":@"true",
+                                       @"ABKRequestProcessingPolicyOptionKey": @"1",
+                                       @"ABKFlushIntervalOptionKey":@"2",
+                                       @"ABKSessionTimeoutKey":@"3",
+                                       @"ABKMinimumTriggerTimeIntervalKey":@"4",
+                                       @"userIdentificationType":@"MPID"
+                                       };
+    MPKitAppboy *kitInstance = [[MPKitAppboy alloc] init];
+    [kitInstance didFinishLaunchingWithConfiguration:kitConfiguration];
+    
+    BRZConfiguration *configuration = [[BRZConfiguration alloc] init];
+    Braze *testClient = [[Braze alloc] initWithConfiguration:configuration];
+    id mockClient = OCMPartialMock(testClient);
+    [kitInstance setAppboyInstance:mockClient];
+    XCTAssertEqualObjects(mockClient, [kitInstance appboyInstance]);
+    
+    // Should succeed since opted_in is a valid value
+    MPKitExecStatus *execStatus1 = [kitInstance setUserAttribute:@"email_subscribe" value:@"opted_in"];
+    XCTAssertEqual(execStatus1.returnCode, MPKitReturnCodeSuccess);
+    // Should fail since testValue is an invalid value
+    MPKitExecStatus *execStatus2 = [kitInstance setUserAttribute:@"email_subscribe" value:@"testValue"];
+    XCTAssertEqual(execStatus2.returnCode, MPKitReturnCodeFail);
+
+    [mockClient verify];
+
+    [mockClient stopMocking];
+}
+
+- (void)testPushSubscribtionUserAttribute {
+    NSDictionary *kitConfiguration = @{@"apiKey":@"BrazeID",
+                                       @"id":@42,
+                                       @"ABKCollectIDFA":@"true",
+                                       @"ABKRequestProcessingPolicyOptionKey": @"1",
+                                       @"ABKFlushIntervalOptionKey":@"2",
+                                       @"ABKSessionTimeoutKey":@"3",
+                                       @"ABKMinimumTriggerTimeIntervalKey":@"4",
+                                       @"userIdentificationType":@"MPID"
+                                       };
+    MPKitAppboy *kitInstance = [[MPKitAppboy alloc] init];
+    [kitInstance didFinishLaunchingWithConfiguration:kitConfiguration];
+    
+    BRZConfiguration *configuration = [[BRZConfiguration alloc] init];
+    Braze *testClient = [[Braze alloc] initWithConfiguration:configuration];
+    id mockClient = OCMPartialMock(testClient);
+    [kitInstance setAppboyInstance:mockClient];
+    XCTAssertEqualObjects(mockClient, [kitInstance appboyInstance]);
+    
+    // Should succeed since opted_in is a valid value
+    MPKitExecStatus *execStatus1 = [kitInstance setUserAttribute:@"push_subscribe" value:@"opted_in"];
+    XCTAssertEqual(execStatus1.returnCode, MPKitReturnCodeSuccess);
+    // Should fail since testValue is an invalid value
+    MPKitExecStatus *execStatus2 = [kitInstance setUserAttribute:@"push_subscribe" value:@"testValue"];
+    XCTAssertEqual(execStatus2.returnCode, MPKitReturnCodeFail);
+
+    [mockClient verify];
+
+    [mockClient stopMocking];
+}
+
 
 //- (void)testEndpointOverride {
 //    MPKitAppboy *appBoy = [[MPKitAppboy alloc] init];
@@ -582,7 +646,7 @@
 - (void)testlogPurchaseCommerceEventSendingProductName {
     MPKitAppboy *kit = [[MPKitAppboy alloc] init];
     kit.configuration = @{@"bundleCommerceEventData" : @0,
-                          @"forwardSkuAsProductName": @"True"};
+                          @"replaceSkuWithProductName": @"True"};
 
     BRZConfiguration *configuration = [[BRZConfiguration alloc] init];
     Braze *testClient = [[Braze alloc] initWithConfiguration:configuration];

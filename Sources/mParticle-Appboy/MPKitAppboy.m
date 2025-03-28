@@ -41,6 +41,8 @@ static NSString *const userIdValueMPID = @"MPID";
 
 // User Attribute key with reserved functionality for Braze kit
 static NSString *const brazeUserAttributeDob = @"dob";
+static NSString *const brazeUserAttributeEmailSubscribe = @"email_subscribe";
+static NSString *const brazeUserAttributePushSubscribe = @"push_subscribe";
 
 // Strings used when sending enhanced commerce events
 static NSString *const attributesKey = @"Attributes";
@@ -796,6 +798,30 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
         [appboyInstance.user setPhoneNumber:value];
     } else if ([key isEqualToString:mParticleUserAttributeZip]){
         [appboyInstance.user setCustomAttributeWithKey:@"Zip" stringValue:value];
+    } else if ([key isEqualToString:brazeUserAttributeEmailSubscribe]) {
+        if([value isEqualToString:@"opted_in"]) {
+            [appboyInstance.user setEmailSubscriptionState:BRZUserSubscriptionStateOptedIn];
+        } else if ([value isEqualToString:@"unsubscribed"]) {
+            [appboyInstance.user setEmailSubscriptionState:BRZUserSubscriptionStateUnsubscribed];
+        } else if ([value isEqualToString:@"subscribed"]) {
+            [appboyInstance.user setEmailSubscriptionState:BRZUserSubscriptionStateSubscribed];
+        } else {
+            NSLog(@"mParticle -> Invalid email_subscribe value: %@", value);
+            execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeFail];
+            return execStatus;
+        }
+    } else if ([key isEqualToString:brazeUserAttributePushSubscribe]) {
+        if([value isEqualToString:@"opted_in"]) {
+            [appboyInstance.user setPushNotificationSubscriptionState:BRZUserSubscriptionStateOptedIn];
+        } else if ([value isEqualToString:@"unsubscribed"]) {
+            [appboyInstance.user setPushNotificationSubscriptionState:BRZUserSubscriptionStateUnsubscribed];
+        } else if ([value isEqualToString:@"subscribed"]) {
+            [appboyInstance.user setPushNotificationSubscriptionState:BRZUserSubscriptionStateSubscribed];
+        } else {
+            NSLog(@"mParticle -> Invalid push_subscribe value: %@", value);
+            execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeFail];
+            return execStatus;
+        }
     } else {
         key = [self stripCharacter:@"$" fromString:key];
         
