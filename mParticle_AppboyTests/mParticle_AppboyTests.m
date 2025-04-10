@@ -234,6 +234,42 @@
     [mockClient stopMocking];
 }
 
+- (void)testSubscriptionGroupIdsMappedUserAttributes {
+    NSDictionary *kitConfiguration = @{@"apiKey":@"BrazeID",
+                                       @"id":@42,
+                                       @"ABKCollectIDFA":@"true",
+                                       @"ABKRequestProcessingPolicyOptionKey": @"1",
+                                       @"ABKFlushIntervalOptionKey":@"2",
+                                       @"ABKSessionTimeoutKey":@"3",
+                                       @"ABKMinimumTriggerTimeIntervalKey":@"4",
+                                       @"userIdentificationType":@"MPID",
+                                       @"subscriptionGroupMapping" : @"[{\"jsmap\":null,\"map\":\"testAttribute1\",\"maptype\":\"UserAttributeClass.Name\",\"value\":\"00000000-0000-0000-0000-00000000000\"},{\"jsmap\":null,\"map\":\"testAttribute2\",\"maptype\":\"UserAttributeClass.Name\",\"value\":\"00000000-0000-0000-0000-00000000001\"}]"
+                                       };
+    
+    MPKitAppboy *kitInstance = [[MPKitAppboy alloc] init];
+    [kitInstance didFinishLaunchingWithConfiguration:kitConfiguration];
+    
+    BRZConfiguration *configuration = [[BRZConfiguration alloc] init];
+    Braze *testClient = [[Braze alloc] initWithConfiguration:configuration];
+    id mockClient = OCMPartialMock(testClient);
+    [kitInstance setAppboyInstance:mockClient];
+    XCTAssertEqualObjects(mockClient, [kitInstance appboyInstance]);
+    
+    // Should succeed since Bool false is a valid value
+    MPKitExecStatus *execStatus1 = [kitInstance setUserAttribute:@"testAttribute1" value:@NO];
+    XCTAssertEqual(execStatus1.returnCode, MPKitReturnCodeSuccess);
+    // Should succeed since Bool true is a valid value
+    MPKitExecStatus *execStatus2 = [kitInstance setUserAttribute:@"testAttribute2" value:@YES];
+    XCTAssertEqual(execStatus2.returnCode, MPKitReturnCodeSuccess);
+    // Should fail since testValue is not type BOOL
+    MPKitExecStatus *execStatus3 = [kitInstance setUserAttribute:@"testAttribute2" value:@"testValue"];
+    XCTAssertEqual(execStatus3.returnCode, MPKitReturnCodeFail);
+
+    [mockClient verify];
+
+    [mockClient stopMocking];
+}
+
 
 //- (void)testEndpointOverride {
 //    MPKitAppboy *appBoy = [[MPKitAppboy alloc] init];
