@@ -17,6 +17,7 @@ static NSString *const emailIdTypeKey = @"emailIdentificationType";
 static NSString *const enableTypeDetectionKey = @"enableTypeDetection";
 static NSString *const bundleCommerceEventData = @"bundleCommerceEventData";
 static NSString *const replaceSkuWithProductName = @"replaceSkuWithProductName";
+static NSString *const subscriptionGroupMapping = @"subscriptionGroupMapping";
 
 // The possible values for userIdentificationType
 static NSString *const userIdValueOther = @"Other";
@@ -72,6 +73,7 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
     Braze *appboyInstance;
     BOOL collectIDFA;
     BOOL forwardScreenViews;
+    NSMutableDictionary *subscriptionGroupDictionary;
 }
 
 @property (nonatomic) NSString *host;
@@ -178,6 +180,27 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
     } else {
         return originalString;
     }
+}
+
+- (NSMutableDictionary *)getSubscriptionGroupIds:(NSString *)subscriptionGroupMap {
+    NSMutableDictionary *subscriptionGroupDictionary = [NSMutableDictionary dictionary];
+    
+    if (!subscriptionGroupMap.length) {
+        return subscriptionGroupDictionary;
+    }
+    
+    NSData *subsctiprionGroupData = [subscriptionGroupMap dataUsingEncoding:NSUTF8StringEncoding];
+
+    NSError *error = nil;
+    NSArray *subsctiprionGroupDataArray = [NSJSONSerialization JSONObjectWithData:subsctiprionGroupData options:0 error:&error];
+
+    for (NSDictionary *item in subsctiprionGroupDataArray) {
+        NSString *key = item[@"map"];
+        NSString *value = item[@"value"];
+        subscriptionGroupDictionary[key] = value;
+    }
+
+    return subscriptionGroupDictionary;
 }
 
 - (MPKitExecStatus *)logAppboyCustomEvent:(MPEvent *)event eventType:(NSUInteger)eventType {
@@ -386,6 +409,8 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
     if ([MPKitAppboy urlDelegate]) {
         self->appboyInstance.delegate = [MPKitAppboy urlDelegate];
     }
+    
+    self->subscriptionGroupDictionary = [self getSubscriptionGroupIds:self.configuration[subscriptionGroupMapping]];
     
 #if TARGET_OS_IOS
     BrazeInAppMessageUI *inAppMessageUI = [[BrazeInAppMessageUI alloc] init];
@@ -708,6 +733,7 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
     }
     
     value = [self stringRepresentation:value];
+    
     if (!value) {
         execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeFail];
         return execStatus;
@@ -819,6 +845,17 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
             [appboyInstance.user setPushNotificationSubscriptionState:BRZUserSubscriptionStateSubscribed];
         } else {
             NSLog(@"mParticle -> Invalid push_subscribe value: %@", value);
+            execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeFail];
+            return execStatus;
+        }
+    } else if (subscriptionGroupDictionary[key]){
+        NSString *subscriptionGroupId = subscriptionGroupDictionary[key];
+        if ([value isEqualToString:@"1"]) {
+            [appboyInstance.user addToSubscriptionGroupWithGroupId:subscriptionGroupId];
+        } else if ([value isEqualToString:@"0"]) {
+            [appboyInstance.user removeFromSubscriptionGroupWithGroupId:subscriptionGroupId];
+        } else {
+            NSLog(@"mParticle -> Invalid value type for subscriptionGroupId mapped user attribute key: %@, expected value should be of type BOOL", key);
             execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceAppboy) returnCode:MPKitReturnCodeFail];
             return execStatus;
         }
