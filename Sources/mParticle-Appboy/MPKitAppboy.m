@@ -183,10 +183,10 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
 }
 
 - (NSMutableDictionary *)getSubscriptionGroupIds:(NSString *)subscriptionGroupMap {
-    NSMutableDictionary *subsctiprionGroupDictionary = [NSMutableDictionary dictionary];
+    NSMutableDictionary *subscriptionGroupDictionary = [NSMutableDictionary dictionary];
     
     if (!subscriptionGroupMap.length) {
-        return subsctiprionGroupDictionary;
+        return subscriptionGroupDictionary;
     }
     
     NSData *subsctiprionGroupData = [subscriptionGroupMap dataUsingEncoding:NSUTF8StringEncoding];
@@ -197,10 +197,10 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
     for (NSDictionary *item in subsctiprionGroupDataArray) {
         NSString *key = item[@"map"];
         NSString *value = item[@"value"];
-        subsctiprionGroupDictionary[key] = value;
+        subscriptionGroupDictionary[key] = value;
     }
 
-    return subsctiprionGroupDictionary;
+    return subscriptionGroupDictionary;
 }
 
 - (MPKitExecStatus *)logAppboyCustomEvent:(MPEvent *)event eventType:(NSUInteger)eventType {
