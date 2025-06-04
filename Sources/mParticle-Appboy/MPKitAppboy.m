@@ -534,6 +534,11 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
             }
         }
         
+        NSDictionary *commerceCustomAttribues = [commerceEvent.customAttributes transformValuesToString];
+        for (NSString *key in commerceCustomAttribues) {
+            baseProductAttributes[key] = commerceCustomAttribues[key];
+        }
+        
         NSArray *products = commerceEvent.products;
         NSString *currency = commerceEvent.currency ? : @"USD";
         NSMutableDictionary *properties;

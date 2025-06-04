@@ -667,7 +667,8 @@
                                        @"Tax Amount" : @3,
                                        @"Transaction Id" : @"foo-transaction-id",
                                        @"Name" : @"product1",
-                                       @"Category" : @"category1"
+                                       @"Category" : @"category1",
+                                       @"testKey" : @"testCustomAttValue"
                        }];
 
     MPKitExecStatus *execStatus = [kit logBaseEvent:event];
@@ -715,7 +716,8 @@
                                        @"Tax Amount" : @3,
                                        @"Transaction Id" : @"foo-transaction-id",
                                        @"Name" : @"product1",
-                                       @"Category" : @"category1"
+                                       @"Category" : @"category1",
+                                       @"testKey" : @"testCustomAttValue"
                        }];
 
     MPKitExecStatus *execStatus = [kit logBaseEvent:event];
