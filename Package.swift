@@ -18,7 +18,7 @@ let package = Package(
     dependencies: [
       .package(name: "mParticle-Apple-SDK",
                url: "https://github.com/mParticle/mparticle-apple-sdk",
-               .upToNextMajor(from: "8.19.0")),
+               .upToNextMajor(from: "9.0.0")),
       .package(name: "braze-swift-sdk",
                url: "https://github.com/braze-inc/braze-swift-sdk",
                .upToNextMajor(from: "12.0.0")),
