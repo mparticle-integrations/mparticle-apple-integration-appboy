@@ -30,7 +30,6 @@ let package = Package(
               .product(name: "mParticle-Apple-SDK", package: "mParticle-Apple-SDK"),
               .product(name: "BrazeUI", package: "braze-swift-sdk", condition: .when(platforms: [.iOS])),
               .product(name: "BrazeKit", package: "braze-swift-sdk"),
-              .product(name: "BrazeKitCompat", package: "braze-swift-sdk"),
             ],
             resources: [.process("PrivacyInfo.xcprivacy")]
         ),
@@ -40,7 +39,6 @@ let package = Package(
               .product(name: "mParticle-Apple-SDK-NoLocation", package: "mParticle-Apple-SDK"),
               .product(name: "BrazeUI", package: "braze-swift-sdk", condition: .when(platforms: [.iOS])),
               .product(name: "BrazeKit", package: "braze-swift-sdk"),
-              .product(name: "BrazeKitCompat", package: "braze-swift-sdk"),
             ],
             path: "SPM/mParticle-Appboy-NoLocation",
             resources: [.process("PrivacyInfo.xcprivacy")]

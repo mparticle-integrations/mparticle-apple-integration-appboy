@@ -3,11 +3,17 @@
 @import XCTest;
 @import OCMock;
 #if TARGET_OS_IOS
-    @import BrazeKitCompat;
     @import BrazeUI;
-#else
-    @import BrazeKitCompat;
 #endif
+
+// Keys matching MPKitAppboy optionsDictionary (Braze Full Migration - no BrazeKitCompat)
+static NSString *const kMPBrazeConfigEndpoint = @"endpoint";
+static NSString *const kMPBrazeConfigSDKFlavor = @"sdkFlavor";
+static NSString *const kMPBrazeConfigRequestPolicy = @"requestPolicy";
+static NSString *const kMPBrazeConfigFlushInterval = @"flushInterval";
+static NSString *const kMPBrazeConfigSessionTimeout = @"sessionTimeout";
+static NSString *const kMPBrazeConfigTriggerMinimumTimeInterval = @"triggerMinimumTimeInterval";
+static NSString *const kMPBrazeConfigAutomaticLocationCollection = @"automaticLocationCollection";
 
 @interface MPKitAppboy ()
 
@@ -50,8 +56,8 @@
     
     [appBoy didFinishLaunchingWithConfiguration:kitConfiguration];
     
-    NSDictionary *testOptionsDictionary = @{ABKEnableAutomaticLocationCollectionKey:@(YES),
-                                            ABKSDKFlavorKey:@7
+    NSDictionary *testOptionsDictionary = @{kMPBrazeConfigAutomaticLocationCollection: @(YES),
+                                            kMPBrazeConfigSDKFlavor: @7
                                        };
     
     NSDictionary *optionsDictionary = [appBoy optionsDictionary];
@@ -73,12 +79,12 @@
     
     [appBoy didFinishLaunchingWithConfiguration:kitConfiguration];
     
-    NSDictionary *testOptionsDictionary = @{ABKEnableAutomaticLocationCollectionKey:@(YES),
-                                            ABKSDKFlavorKey:@7,
-                                            @"ABKRquestProcessingPolicy": @(1),
-                                            @"ABKFlushInterval":@(2),
-                                            @"ABKSessionTimeout":@(3),
-                                            @"ABKMinimumTriggerTimeInterval":@(4)
+    NSDictionary *testOptionsDictionary = @{kMPBrazeConfigAutomaticLocationCollection: @(YES),
+                                            kMPBrazeConfigSDKFlavor: @7,
+                                            kMPBrazeConfigRequestPolicy: @(1),
+                                            kMPBrazeConfigFlushInterval: @(2),
+                                            kMPBrazeConfigSessionTimeout: @(3),
+                                            kMPBrazeConfigTriggerMinimumTimeInterval: @(4)
                                             };
     
     NSDictionary *optionsDictionary = [appBoy optionsDictionary];
