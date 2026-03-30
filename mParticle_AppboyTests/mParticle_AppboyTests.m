@@ -8,7 +8,6 @@
 
 // Keys matching MPKitAppboy optionsDictionary (Braze Full Migration - no BrazeKitCompat)
 static NSString *const kMPBrazeConfigEndpoint = @"endpoint";
-static NSString *const kMPBrazeConfigSDKFlavor = @"sdkFlavor";
 static NSString *const kMPBrazeConfigRequestPolicy = @"requestPolicy";
 static NSString *const kMPBrazeConfigFlushInterval = @"flushInterval";
 static NSString *const kMPBrazeConfigSessionTimeout = @"sessionTimeout";
@@ -56,8 +55,7 @@ static NSString *const kMPBrazeConfigAutomaticLocationCollection = @"automaticLo
     
     [appBoy didFinishLaunchingWithConfiguration:kitConfiguration];
     
-    NSDictionary *testOptionsDictionary = @{kMPBrazeConfigAutomaticLocationCollection: @(YES),
-                                            kMPBrazeConfigSDKFlavor: @7
+    NSDictionary *testOptionsDictionary = @{kMPBrazeConfigAutomaticLocationCollection: @(YES)
                                        };
     
     NSDictionary *optionsDictionary = [appBoy optionsDictionary];
@@ -80,7 +78,6 @@ static NSString *const kMPBrazeConfigAutomaticLocationCollection = @"automaticLo
     [appBoy didFinishLaunchingWithConfiguration:kitConfiguration];
     
     NSDictionary *testOptionsDictionary = @{kMPBrazeConfigAutomaticLocationCollection: @(YES),
-                                            kMPBrazeConfigSDKFlavor: @7,
                                             kMPBrazeConfigRequestPolicy: @(1),
                                             kMPBrazeConfigFlushInterval: @(2),
                                             kMPBrazeConfigSessionTimeout: @(3),

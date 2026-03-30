@@ -60,14 +60,11 @@ static NSString *const BGoogleAdPersonalizationKey = @"$google_ad_personalizatio
 
 // Braze configuration option keys (replaces BrazeKitCompat ABK* constants for Full Migration)
 static NSString *const kMPBrazeConfigEndpoint = @"endpoint";
-static NSString *const kMPBrazeConfigSDKFlavor = @"sdkFlavor";
 static NSString *const kMPBrazeConfigRequestPolicy = @"requestPolicy";
 static NSString *const kMPBrazeConfigFlushInterval = @"flushInterval";
 static NSString *const kMPBrazeConfigSessionTimeout = @"sessionTimeout";
 static NSString *const kMPBrazeConfigTriggerMinimumTimeInterval = @"triggerMinimumTimeInterval";
 static NSString *const kMPBrazeConfigAutomaticLocationCollection = @"automaticLocationCollection";
-// Braze SDK flavor value for mParticle (replaces BrazeKitCompat MPARTICLE)
-static const int kMPBrazeSDKFlavorMParticle = 7;
 
 #if TARGET_OS_IOS
 static id<BrazeInAppMessageUIDelegate> inAppMessageControllerDelegate = nil;
@@ -383,7 +380,6 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
         BRZConfiguration *configuration = [[BRZConfiguration alloc] initWithApiKey:self.configuration[eabAPIKey] endpoint:optionsDict[kMPBrazeConfigEndpoint]];
         
         [configuration.api addSDKMetadata:@[BRZSDKMetadata.mparticle]];
-        configuration.api.sdkFlavor = ((NSNumber *)optionsDict[kMPBrazeConfigSDKFlavor]).intValue;
         configuration.api.requestPolicy = ((NSNumber *)optionsDict[kMPBrazeConfigRequestPolicy]).intValue;
         NSNumber *flushIntervalOption = (NSNumber *)optionsDict[kMPBrazeConfigFlushInterval] ?: @10; // If not set, use the default 10 seconds specified in Braze SDK header
         configuration.api.flushInterval = flushIntervalOption.doubleValue < 1.0 ? 1.0 : flushIntervalOption.doubleValue; // Ensure value is above the minimum of 1.0 per run time warning from Braze SDK
@@ -482,8 +478,7 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
     if (optionsDictionary.count == 0) {
         optionsDictionary = [[NSMutableDictionary alloc] initWithCapacity:serverKeys.count];
     }
-    optionsDictionary[kMPBrazeConfigSDKFlavor] = @(kMPBrazeSDKFlavorMParticle);
-    
+
 #if TARGET_OS_IOS
     optionsDictionary[kMPBrazeConfigAutomaticLocationCollection] = @(YES);
     if (self.configuration[@"ABKDisableAutomaticLocationCollectionKey"]) {
