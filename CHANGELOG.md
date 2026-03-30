@@ -1,3 +1,58 @@
+# [8.14.1](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/releases/tag/v8.14.1)
+
+
+### Features
+
+* Remove BrazeKitCompat dependency — complete migration to pure BrazeKit/BrazeUI (Braze Swift SDK 14.0+)
+
+### Bug Fixes
+
+* Remove legacy `ABK*` constants in favor of Braze Swift SDK equivalents
+* Restore `sdkFlavor` reporting to Braze via `BRZSDKFlavorMparticle`
+
+# [8.14.0](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.13.2...v8.14.0) (2025-05-27)
+
+
+### Features
+
+* Update Braze to v14.0.0
+
+# [8.13.2](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.13.1...v8.13.2) (2025-06-12)
+
+
+### Bug Fixes
+
+* Forward commerce event custom attributes for purchase ([#107](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/issues/107))
+
+# [8.13.1](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.13.0...v8.13.1) (2025-05-27)
+
+
+### Features
+
+* Update Braze to v12.0.0 ([#106](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/issues/106))
+
+# [8.13.0](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.12.1...v8.13.0) (2025-04-22)
+
+
+### Features
+
+* Add support to forward SubscriptionGroupIds ([#105](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/issues/105))
+
+# [8.12.1](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.12.0...v8.12.1) (2025-04-03)
+
+
+### Bug Fixes
+
+* Update Braze to 11.9 to include iCloud restore fix ([#104](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/issues/104))
+* Users attributes email and push subscribe mapping ([#103](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/issues/103))
+
+# [8.12.0](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.11.0...v8.12.0) (2024-12-11)
+
+
+### Features
+
+* Use replaceSkuWithProductName option ([#101](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/issues/101))
+
 # [8.11.0](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/compare/v8.10.2...v8.11.0) (2024-11-19)
 
 

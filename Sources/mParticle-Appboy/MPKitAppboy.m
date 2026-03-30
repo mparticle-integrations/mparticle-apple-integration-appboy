@@ -380,6 +380,7 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
         BRZConfiguration *configuration = [[BRZConfiguration alloc] initWithApiKey:self.configuration[eabAPIKey] endpoint:optionsDict[kMPBrazeConfigEndpoint]];
         
         [configuration.api addSDKMetadata:@[BRZSDKMetadata.mparticle]];
+        configuration.api.sdkFlavor = BRZSDKFlavorMparticle;
         configuration.api.requestPolicy = ((NSNumber *)optionsDict[kMPBrazeConfigRequestPolicy]).intValue;
         NSNumber *flushIntervalOption = (NSNumber *)optionsDict[kMPBrazeConfigFlushInterval] ?: @10; // If not set, use the default 10 seconds specified in Braze SDK header
         configuration.api.flushInterval = flushIntervalOption.doubleValue < 1.0 ? 1.0 : flushIntervalOption.doubleValue; // Ensure value is above the minimum of 1.0 per run time warning from Braze SDK
@@ -449,6 +450,7 @@ static NSSet<BRZTrackingProperty*> *brazeTrackingPropertyAllowList;
 }
 
 - (NSMutableDictionary<NSString *, NSObject *> *)optionsDictionary {
+    // This maps the mParticle keys (prefixed with ABK) to the Braze Swift SDK configuration keys (prefixed with kMPBrazeConfig)
     NSArray <NSString *> *serverKeys = @[@"ABKRequestProcessingPolicyOptionKey", @"ABKFlushIntervalOptionKey", @"ABKSessionTimeoutKey", @"ABKMinimumTriggerTimeIntervalKey"];
     NSArray <NSString *> *configKeys = @[kMPBrazeConfigRequestPolicy, kMPBrazeConfigFlushInterval, kMPBrazeConfigSessionTimeout, kMPBrazeConfigTriggerMinimumTimeInterval];
     NSMutableDictionary<NSString *, NSObject *> *optionsDictionary = [[NSMutableDictionary alloc] initWithCapacity:serverKeys.count];
