@@ -17,9 +17,7 @@
 		539B2E952A13D62200C8339D /* OCMock in Frameworks */ = {isa = PBXBuildFile; productRef = 539B2E942A13D62200C8339D /* OCMock */; };
 		539B2E982A13D66300C8339D /* mParticle-Apple-SDK in Frameworks */ = {isa = PBXBuildFile; productRef = 539B2E972A13D66300C8339D /* mParticle-Apple-SDK */; };
 		539B2E9A2A13D66A00C8339D /* mParticle-Apple-SDK in Frameworks */ = {isa = PBXBuildFile; productRef = 539B2E992A13D66A00C8339D /* mParticle-Apple-SDK */; };
-		539B2E9D2A13D69F00C8339D /* BrazeKitCompat in Frameworks */ = {isa = PBXBuildFile; productRef = 539B2E9C2A13D69F00C8339D /* BrazeKitCompat */; };
 		539B2E9F2A13D69F00C8339D /* BrazeUI in Frameworks */ = {isa = PBXBuildFile; productRef = 539B2E9E2A13D69F00C8339D /* BrazeUI */; };
-		539B2EA12A13D6AB00C8339D /* BrazeKitCompat in Frameworks */ = {isa = PBXBuildFile; productRef = 539B2EA02A13D6AB00C8339D /* BrazeKitCompat */; };
 		D31A98A92153F73400358293 /* mParticle_AppboyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D31A98A82153F73400358293 /* mParticle_AppboyTests.m */; };
 		D31A98AB2153F73400358293 /* mParticle_Appboy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB94016C1CB703F2007ABB18 /* mParticle_Appboy.framework */; };
 		D34423302B960F44006CD046 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = D344232F2B960F44006CD046 /* PrivacyInfo.xcprivacy */; };
@@ -96,7 +94,6 @@
 			files = (
 				5387EC022A18051200219E89 /* BrazeKit in Frameworks */,
 				539B2E9F2A13D69F00C8339D /* BrazeUI in Frameworks */,
-				539B2E9D2A13D69F00C8339D /* BrazeKitCompat in Frameworks */,
 				539B2E982A13D66300C8339D /* mParticle-Apple-SDK in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -105,7 +102,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				539B2EA12A13D6AB00C8339D /* BrazeKitCompat in Frameworks */,
 				539B2E9A2A13D66A00C8339D /* mParticle-Apple-SDK in Frameworks */,
 				5387EC002A18050500219E89 /* BrazeKit in Frameworks */,
 			);
@@ -285,7 +281,6 @@
 			name = "mParticle-Appboy";
 			packageProductDependencies = (
 				539B2E972A13D66300C8339D /* mParticle-Apple-SDK */,
-				539B2E9C2A13D69F00C8339D /* BrazeKitCompat */,
 				539B2E9E2A13D69F00C8339D /* BrazeUI */,
 				5387EC012A18051200219E89 /* BrazeKit */,
 			);
@@ -309,7 +304,6 @@
 			name = "mParticle-Appboy-tvOS";
 			packageProductDependencies = (
 				539B2E992A13D66A00C8339D /* mParticle-Apple-SDK */,
-				539B2EA02A13D6AB00C8339D /* BrazeKitCompat */,
 				5387EBFF2A18050500219E89 /* BrazeKit */,
 			);
 			productName = "mParticle-Appboy-tvOS";
@@ -449,10 +443,6 @@
 			isa = PBXTargetDependency;
 			target = 531861FB2A13E147006FFE90 /* AppboyTestHost */;
 			targetProxy = 531862102A13E17D006FFE90 /* PBXContainerItemProxy */;
-		};
-		539B2EA32A13D94E00C8339D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 539B2EA22A13D94E00C8339D /* BrazeKitCompat */;
 		};
 		539B2EA52A13D95200C8339D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -921,7 +911,7 @@
 			repositoryURL = "https://github.com/braze-inc/braze-swift-sdk";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 9.0.0;
+				minimumVersion = 14.0.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -952,25 +942,10 @@
 			package = 539B2E962A13D66300C8339D /* XCRemoteSwiftPackageReference "mparticle-apple-sdk" */;
 			productName = "mParticle-Apple-SDK";
 		};
-		539B2E9C2A13D69F00C8339D /* BrazeKitCompat */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 539B2E9B2A13D69F00C8339D /* XCRemoteSwiftPackageReference "braze-swift-sdk" */;
-			productName = BrazeKitCompat;
-		};
 		539B2E9E2A13D69F00C8339D /* BrazeUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 539B2E9B2A13D69F00C8339D /* XCRemoteSwiftPackageReference "braze-swift-sdk" */;
 			productName = BrazeUI;
-		};
-		539B2EA02A13D6AB00C8339D /* BrazeKitCompat */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 539B2E9B2A13D69F00C8339D /* XCRemoteSwiftPackageReference "braze-swift-sdk" */;
-			productName = BrazeKitCompat;
-		};
-		539B2EA22A13D94E00C8339D /* BrazeKitCompat */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 539B2E9B2A13D69F00C8339D /* XCRemoteSwiftPackageReference "braze-swift-sdk" */;
-			productName = BrazeKitCompat;
 		};
 		539B2EA42A13D95200C8339D /* BrazeUI */ = {
 			isa = XCSwiftPackageProductDependency;
