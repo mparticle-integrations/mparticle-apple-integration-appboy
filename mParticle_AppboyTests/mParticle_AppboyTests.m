@@ -6,7 +6,7 @@
     @import BrazeUI;
 #endif
 
-// Keys matching MPKitAppboy optionsDictionary (Braze Full Migration - no BrazeKitCompat)
+// Keys matching MPKitAppboy optionsDictionary
 static NSString *const kMPBrazeConfigEndpoint = @"endpoint";
 static NSString *const kMPBrazeConfigRequestPolicy = @"requestPolicy";
 static NSString *const kMPBrazeConfigFlushInterval = @"flushInterval";

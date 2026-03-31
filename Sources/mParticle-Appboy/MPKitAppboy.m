@@ -58,7 +58,7 @@ static NSString *const MPGoogleAdPersonalizationKey = @"google_ad_personalizatio
 static NSString *const BGoogleAdUserDataKey = @"$google_ad_user_data";
 static NSString *const BGoogleAdPersonalizationKey = @"$google_ad_personalization";
 
-// Braze configuration option keys (replaces BrazeKitCompat ABK* constants for Full Migration)
+// Braze configuration option keys used internally by the options dictionary
 static NSString *const kMPBrazeConfigEndpoint = @"endpoint";
 static NSString *const kMPBrazeConfigRequestPolicy = @"requestPolicy";
 static NSString *const kMPBrazeConfigFlushInterval = @"flushInterval";

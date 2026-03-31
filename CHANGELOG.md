@@ -1,9 +1,11 @@
-# [8.14.1](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/releases/tag/v8.14.1)
+# [8.15.0](https://github.com/mparticle-integrations/mparticle-apple-integration-appboy/releases/tag/v8.15.0)
 
 
 ### Features
 
 * Remove BrazeKitCompat dependency — complete migration to pure BrazeKit/BrazeUI (Braze Swift SDK 14.0+)
+* Add subscription group mapping support
+* Add email/push subscription state handling via user attributes
 
 ### Bug Fixes
 
